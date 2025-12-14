@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="API Documentation for Express API">
+    <meta name="theme-color" content="#1a202c">
+    <title>YeMo API's.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'mono': ['Ubuntu Mono', 'monospace'],
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            display: none !important;
+        }
+        .glass {
+            backdrop-filter: blur(16px) saturate(180%);
+            background: rgba(23, 25, 35, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.125);
+        }
+        .loader {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #4a5568;
+            border-top: 2px solid #e2e8f0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.4);
+        }
+        .slide-down {
+            animation: slideDown 0.15s ease-out;
+        }
+        .slide-up {
+            animation: slideUp 0.15s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUp {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+        .method-badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0;
+            font-weight: 600;
+            border: 1px solid #4a5568;
+        }
+        .method-get { background-color: #10b981; color: white; }
+        .method-post { background-color: #3b82f6; color: white; }
+        .method-put { background-color: #f59e0b; color: white; }
+        .method-delete { background-color: #ef4444; color: white; }
+        .endpoint-card {
+            transition: all 0.2s ease;
+            border: 1px solid #4a5568;
+        }
+        .endpoint-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2), 0 2px 4px -1px rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-slate-300 antialiased font-mono min-h-screen">
+    <main class="max-w-4xl mx-auto px-8 py-16">
+        <div class="text-left mb-8">
+            <h1 class="text-3xl font-bold gradient-text mb-2">
+                <span id="title"></span></h1>
+            <p class="text-slate-400 text-sm mx-auto mb-4">
+                <span id="description"></span>
+            </p>
+            <p class="mb-4 space-y-1">
+              <a href="https://whatsapp.com/channel/0029Vb7MpjO9RZAXcgJe0n0W" 
+                 class="block text-xs text-slate-300 font-medium underline hover:text-red-500 transition-colors">
+                WhatsApp Information Channel.
+              </a>
+              <a href="https://github.com/yemobyte/YeMo-APIs" 
+                 class="block text-xs text-slate-300 font-medium underline hover:text-red-500 transition-colors">
+                YeMo - Source Code.
+              </a>
+            </p>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-slate-400 mb-2">Servers API's</label>
+                <select id="hostSelect" class="w-full px-4 py-3 border border-gray-700 text-sm focus:outline-none focus:border-red-500 bg-gray-800 text-slate-300 appearance-none">
+                    <option id="valueURL" value="" selected></option>
+                </select>
+            </div>
+        </div>
+        <div class="bg-gray-800 border border-gray-700 p-4 mb-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="text-center">
+              <div class="text-lg font-bold text-slate-300" id="totalEndpoints">0</div>
+              <div class="text-xs text-slate-400">Total Endpoints</div>
+            </div>
+            <div class="text-center">
+              <div class="text-lg font-bold text-slate-300" id="totalCategories">0</div>
+              <div class="text-xs text-slate-400">Categories</div>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex-1 relative">
+                <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                    <span class="material-icons text-gray-500 text-lg">search</span>
+                </div>
+                <input type="text" id="searchInput" placeholder="Search API endpoints..." class="w-full pl-12 pr-5 py-4 text-sm border border-gray-700 bg-gray-800 text-slate-300 placeholder-slate-500 focus:outline-none focus:border-red-500">
+            </div>
+        </div>
+
+        <div id="content" class="space-y-6">
+            <div id="noResults" class="text-center py-16" style="display: none;">
+                <div class="max-w-md mx-auto">
+                    <h3 class="text-sm text-slate-400 mb-2">No results found.</h3>
+                    <p class="text-xs text-slate-500">Try adjusting your search terms.</p>
+                </div>
+            </div>
+
+            <div id="apiList" class="space-y-6">
+                <!-- API endpoints will be dynamically generated here -->
+            </div>
+        </div>
+        <div class="flex flex-col mt-10 text-center space-y-2">
+          <p class="text-slate-400 text-xs">
+            © <span id="year"></span> YeMo API — All Rights Reserved.
+          </p>
+          <p class="text-slate-400 text-xs space-x-3">
+            <a href="/legal/privacy-policy.html" class="hover:underline hover:text-red-500">Privacy Policy</a>
+            <span aria-hidden="true">|</span>
+            <a href="/legal/terms-of-service.html" class="hover:underline hover:text-red-500">Terms of Service</a>
+          </p>
+        </div>
+    </main>
+    <script>
+      async function loadApiData() {
+        try {
+          const res = await fetch("/openapi.json");
+          const apiData = await res.json();
+          
+          const categories = {};
+          apiData.endpoints.forEach(endpoint => {
+            if (!categories[endpoint.category]) {
+              categories[endpoint.category] = [];
+            }
+            categories[endpoint.category].push(endpoint);
+          });
+          
+          const option = document.getElementById('valueURL');
+          option.value = apiData.baseURL;
+          option.textContent = `${apiData.baseURL} - Development Server`;
+    
+          document.getElementById('title').textContent = apiData.title;
+          document.getElementById('description').textContent = apiData.description;
+          document.getElementById("year").textContent = new Date().getFullYear();
+          document.getElementById('totalEndpoints').textContent = apiData.endpoints.length;
+          document.getElementById('totalCategories').textContent = Object.keys(categories).length;
+    
+          const apiList = document.getElementById('apiList');
+          let categoryIndex = 0;
+    
+          for (const [categoryName, endpoints] of Object.entries(categories)) {
+            const categoryGroup = document.createElement('div');
+            categoryGroup.className = 'category-group mb-6';
+            categoryGroup.setAttribute('data-category', categoryName);
+    
+            const categoryHeader = `
+              <div class="mb-4">
+                <div class="bg-gray-800 border border-gray-700 shadow-sm">
+                  <button onclick="toggleCategory(${categoryIndex})" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-700 transition-colors duration-150">
+                    <h2 class="font-bold flex items-center text-base">
+                      <span class="material-icons text-lg mr-3 text-gray-400">folder</span>
+                      <span class="truncate max-w-xs text-sm text-slate-300">${categoryName}</span>
+                      <span class="ml-2 text-xs text-slate-400 px-2 py-1">(${endpoints.length})</span>
+                    </h2>
+                    <span class="material-icons transition-transform duration-150 text-gray-400" id="category-icon-${categoryIndex}">expand_more</span>
+                  </button>
+                  <div id="category-${categoryIndex}" class="hidden p-4 border-t border-gray-700">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            `;
+    
+            let categoryContent = '';
+            let endpointIndex = 0;
+    
+            endpoints.forEach(endpoint => {
+              const methodBadges = endpoint.methods.map(method => {
+                let colorClass = 'method-get';
+                if (method === 'POST') colorClass = 'method-post';
+                else if (method === 'PUT') colorClass = 'method-put';
+                else if (method === 'DELETE') colorClass = 'method-delete';
+    
+                return `<span class="method-badge ${colorClass}">${method}</span>`;
+              }).join(' ');
+    
+              categoryContent += `
+                <div class="endpoint-card bg-gray-800 border border-gray-700 p-4 api-item" 
+                     data-method="${endpoint.methods[0]}" 
+                     data-path="${endpoint.route}" 
+                     data-alias="${endpoint.name}" 
+                     data-category="${endpoint.category}">
+                  <div class="flex justify-between items-start mb-2">
+                    <div class="flex flex-wrap gap-1">
+                      ${methodBadges}
+                    </div>
+                    <button onclick="toggleEndpoint(${categoryIndex}, ${endpointIndex})" 
+                            class="text-gray-500 hover:text-red-500 transition-colors">
+                      <span class="material-icons text-lg" id="endpoint-icon-${categoryIndex}-${endpointIndex}">expand_more</span>
+                    </button>
+                  </div>
+    
+                  <h3 class="font-semibold text-sm font-mono mb-1 truncate text-slate-300" title="${endpoint.route}">${endpoint.route}</h3>
+                  <p class="text-xs text-slate-400 mb-3">${endpoint.description}</p>
+    
+                  <div id="endpoint-${categoryIndex}-${endpointIndex}" class="hidden mt-3 pt-3 border-t border-gray-700">
+                    <div class="text-slate-300 font-bold text-xs mb-2 flex items-center">
+                      <span class="material-icons text-sm mr-1">play_arrow</span>
+                      TRY IT OUT
+                    </div>
+                    <form id="form-${categoryIndex}-${endpointIndex}" 
+                          onsubmit="executeRequest(event, ${categoryIndex}, ${endpointIndex}, '${endpoint.methods[0]}', '${endpoint.route}', 'application/json')">
+                      <div class="mb-3 space-y-2">
+              `;
+    
+              Object.entries(endpoint.paramsSchema).forEach(([paramName, paramSchema]) => {
+                if (paramSchema.type === "file") {
+                  categoryContent += `
+                    <div>
+                      <label class="block text-xs font-medium text-slate-400">
+                        ${paramName} ${paramSchema.required ? '<span class="text-red-500">*</span>' : ''}
+                      </label>
+                      <input type="file" name="${paramName}" 
+                            class="w-full text-xs border border-gray-700 p-1 focus:outline-none bg-gray-700 text-slate-300"
+                            ${paramSchema.required ? 'required' : ''}>
+                    </div>
+                  `;
+                } else {
+                  categoryContent += `
+                    <div>
+                      <label class="block text-xs font-medium text-slate-400">
+                        ${paramName} ${paramSchema.required ? '<span class="text-red-500">*</span>' : ''}
+                      </label>
+                      <div class="text-xs text-slate-500 mb-1">
+                        Type: ${paramSchema.type}${paramSchema.minLength ? `, Min Length: ${paramSchema.minLength}` : ''}
+                      </div>
+                      <input type="text" name="${paramName}" class="w-full px-3 py-2 border border-gray-700 text-xs focus:outline-none focus:border-red-500 bg-gray-700 text-slate-300 placeholder:text-slate-500" 
+                          placeholder="${paramName}" ${paramSchema.required ? 'required' : ''}>
+                    </div>
+                  `;
+                }
+              });
+    
+              if (Object.keys(endpoint.paramsSchema).length === 0) {
+                categoryContent += `
+                  <div class="text-xs text-slate-500 italic">
+                    No parameters required for this endpoint.
+                  </div>
+                `;
+              }
+    
+              categoryContent += `
+                      </div>
+                      <div class="flex">
+                        <button type="submit" class="bg-red-600 hover:bg-red-500 font-semibold text-white px-4 py-2 text-xs font-medium transition-colors duration-150">
+                          Execute
+                        </button>
+                        <button type="button" id="clear-${categoryIndex}-${endpointIndex}" onclick="clearResponse(${categoryIndex}, ${endpointIndex})" class="hidden bg-gray-700 border border-gray-600 hover:border-gray-500 font-semibold text-slate-300 px-4 py-2 text-xs font-medium transition-colors duration-150 ml-2">
+                          Clear
+                        </button>
+                      </div>
+                    </form>
+    
+                    <div id="response-${categoryIndex}-${endpointIndex}" class="hidden mt-3">
+                      <div class="text-slate-300 font-bold text-xs mb-2 flex items-center">
+                        <span class="material-icons text-sm mr-1">code</span>
+                        RESPONSE
+                      </div>
+                      <div class="bg-gray-900 text-white text-xs p-3">
+                        <div class="max-h-60 overflow-auto" id="response-content-${categoryIndex}-${endpointIndex}"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+    
+              endpointIndex++;
+            });
+    
+            const categoryFooter = `
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+    
+            categoryGroup.innerHTML = categoryHeader + categoryContent + categoryFooter;
+            apiList.appendChild(categoryGroup);
+            categoryIndex++;
+          }
+    
+        } catch (err) {
+          console.error("Gagal load openapi.json:", err);
+        }
+      }
+    
+      loadApiData();
+    
+      function toggleCategory(categoryIndex) {
+        const content = document.getElementById(`category-${categoryIndex}`);
+        const icon = document.getElementById(`category-icon-${categoryIndex}`);
+    
+        if (content.classList.contains('hidden')) {
+          content.classList.remove('hidden');
+          content.classList.add('slide-down');
+          icon.style.transform = 'rotate(180deg)';
+        } else {
+          content.classList.add('slide-up');
+          icon.style.transform = 'rotate(0deg)';
+          setTimeout(() => {
+            content.classList.add('hidden');
+            content.classList.remove('slide-up', 'slide-down');
+          }, 150);
+        }
+      }
+    
+      function toggleEndpoint(categoryIndex, endpointIndex) {
+        const content = document.getElementById(`endpoint-${categoryIndex}-${endpointIndex}`);
+        const icon = document.getElementById(`endpoint-icon-${categoryIndex}-${endpointIndex}`);
+    
+        if (content.classList.contains('hidden')) {
+          content.classList.remove('hidden');
+          content.classList.add('slide-down');
+          icon.style.transform = 'rotate(180deg)';
+        } else {
+          content.classList.add('slide-up');
+          icon.style.transform = 'rotate(0deg)';
+          setTimeout(() => {
+            content.classList.add('hidden');
+            content.classList.remove('slide-up', 'slide-down');
+          }, 150);
+        }
+      }
+    
+      function clearResponse(categoryIndex, endpointIndex) {
+        const responseElement = document.getElementById(`response-${categoryIndex}-${endpointIndex}`);
+        const responseContent = document.getElementById(`response-content-${categoryIndex}-${endpointIndex}`);
+        const clearButton = document.getElementById(`clear-${categoryIndex}-${endpointIndex}`);
+    
+        responseElement.classList.add('slide-up');
+        setTimeout(() => {
+          responseElement.classList.add('hidden');
+          responseElement.classList.remove('slide-up', 'slide-down');
+          responseContent.innerHTML = '';
+          clearButton.classList.add('hidden');
+        }, 150);
+      }
+    
+      async function executeRequest(event, categoryIndex, endpointIndex, method, path, contentType) {
+        event.preventDefault();
+    
+        const form = event.target;
+        const responseElement = document.getElementById(`response-${categoryIndex}-${endpointIndex}`);
+        const responseContent = document.getElementById(`response-content-${categoryIndex}-${endpointIndex}`);
+        const clearButton = document.getElementById(`clear-${categoryIndex}-${endpointIndex}`);
+        const hostSelect = document.getElementById('hostSelect');
+        const selectedHost = hostSelect.value;
+        let fullUrl = selectedHost + path;
+    
+        try {
+          let requestConfig = {
+            method: method,
+            headers: {}
+          };
+    
+          if (method === 'GET') {
+            const formData = new FormData(form);
+            const params = new URLSearchParams();
+            for (let [key, value] of formData.entries()) {
+              if (value) {
+                params.append(key, value);
+              }
+            }
+            if (params.toString()) {
+              fullUrl += '?' + params.toString();
+            }
+          } else {
+            const formData = new FormData(form);
+    
+            let hasFile = false;
+            form.querySelectorAll("input[type=file]").forEach(input => {
+              if (input.files.length > 0) hasFile = true;
+            });
+    
+            if (hasFile) {
+              requestConfig.body = formData;
+            } else {
+              const jsonBody = {};
+              for (let [key, value] of formData.entries()) {
+                if (value) {
+                  jsonBody[key] = value;
+                }
+              }
+              if (Object.keys(jsonBody).length > 0) {
+                requestConfig.headers['Content-Type'] = 'application/json';
+                requestConfig.body = JSON.stringify(jsonBody);
+              }
+            }
+          }
+    
+          responseContent.innerHTML = '<span class="text-white">Loading...</span>';
+          responseElement.classList.remove('hidden');
+          responseElement.classList.add('slide-down');
+    
+          const response = await fetch(fullUrl, requestConfig);
+          const respContentType = response.headers.get("content-type");
+    
+          let bodyHtml = "";
+          if (respContentType && respContentType.includes("application/json")) {
+            const responseData = await response.json();
+            const jsonString = JSON.stringify(responseData, null, 2);
+            bodyHtml = `<pre class="text-white whitespace-pre-wrap">${jsonString}</pre>`;
+          } else if (respContentType && respContentType.startsWith("image/")) {
+            const blob = await response.blob();
+            const imageUrl = URL.createObjectURL(blob);
+            bodyHtml = `<img src="${imageUrl}" alt="API Image" class="max-w-full rounded border border-gray-700"/>`;
+          } else {
+            const textData = await response.text();
+            bodyHtml = `<pre class="text-white whitespace-pre-wrap">${textData}</pre>`;
+          }
+    
+          const headerHtml = `<div class="text-gray-400 text-xs mb-2">
+              <div>Method: ${method}</div>
+              <div>URL: ${fullUrl}</div>
+              <div>Status: ${response.status} ${response.statusText}</div>
+          </div>`;
+    
+          responseContent.innerHTML = headerHtml + bodyHtml;
+    
+        } catch (error) {
+          responseContent.innerHTML = `
+              <div class="text-gray-400 text-xs mb-2">
+                  <div>Method: ${method}</div>
+                  <div>URL: ${fullUrl}</div>
+                  <div>Status: Error</div>
+              </div>
+              <div class="text-white">Error: ${error.message}</div>
+          `;
+          responseElement.classList.remove('hidden');
+          responseElement.classList.add('slide-down');
+        } finally {
+          clearButton.classList.remove('hidden');
+        }
+      }
+    
+      let searchInput, apiItems, noResults, apiListContainer;
+    
+      function applyFilters() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+    
+        const categoryGroups = document.querySelectorAll('.category-group');
+    
+        categoryGroups.forEach(group => {
+          let hasVisibleItems = false;
+          let categoryVisibleCount = 0;
+          const groupItems = group.querySelectorAll('.api-item');
+    
+          groupItems.forEach(item => {
+            const path = item.getAttribute('data-path').toLowerCase();
+            const alias = item.getAttribute('data-alias').toLowerCase();
+            const method = item.getAttribute('data-method').toLowerCase();
+            const category = item.getAttribute('data-category').toLowerCase();
+    
+            const searchMatch = path.includes(searchTerm) ||
+                              alias.includes(searchTerm) ||
+                              method.includes(searchTerm) ||
+                              category.includes(searchTerm);
+    
+            if (searchMatch) {
+              item.style.display = 'block';
+              hasVisibleItems = true;
+              visibleCount++;
+              categoryVisibleCount++;
+            } else {
+              item.style.display = 'none';
+            }
+          });
+    
+          const categoryCount = group.querySelector('span.bg-gray-100');
+          if (categoryCount) {
+            categoryCount.textContent = `${categoryVisibleCount} endpoints`;
+          }
+    
+          if (hasVisibleItems) {
+            group.style.display = 'block';
+          } else {
+            group.style.display = 'none';
+          }
+        });
+    
+        if (visibleCount === 0) {
+          noResults.style.display = 'block';
+          apiListContainer.style.display = 'none';
+        } else {
+          noResults.style.display = 'none';
+          apiListContainer.style.display = 'block';
+        }
+      }
+    
+      window.addEventListener('load', () => {
+        searchInput = document.getElementById('searchInput');
+        apiItems = document.querySelectorAll('.api-item');
+        noResults = document.getElementById('noResults');
+        apiListContainer = document.getElementById('apiList');
+    
+        searchInput.addEventListener('input', function() {
+          applyFilters();
+        });
+      });
+    </script>
+</body>
+</html>

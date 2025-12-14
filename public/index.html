@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A lightweight, auto-loading REST API built with Express.js that automatically registers endpoints from the file system.">
+    <meta name="keywords" content="API, REST API, YeMo API, API Documentation, Developer Tools">
+    <meta name="author" content="YeMo">
+    <meta name="theme-color" content="#1a202c">
+    <title>YeMo API</title>
+    
+    <script src="https://cdn.tailwindcss.com/"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'mono': ['Ubuntu Mono', 'monospace'],
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>    
+    
+    <style>
+        ::-webkit-scrollbar {
+            display: none !important;
+        }
+        
+        .glass {
+            backdrop-filter: blur(16px) saturate(180%);
+            background: rgba(23, 25, 35, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.125);
+        }
+        
+        .loader {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #4a5568;
+            border-top: 2px solid #e2e8f0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.4);
+        }
+        
+        #mouse-spotlight {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(600px circle at 0px 0px, rgba(239, 68, 68, 0.08), transparent 80%);
+            transition: background 0.1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-on-load {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transition-delay: var(--delay, 0s);
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-slate-300 antialiased font-mono min-h-screen">
+    
+    <div id="mouse-spotlight"></div>
+    
+    <main class="max-w-2xl mx-auto px-8 py-16">
+        <div class="text-left mb-6">
+            <p class="text-slate-400 text-xs mb-4 animate-on-load" style="animation-delay: 0.1s;">Hi Developer! Welcome To</p>
+            <h2 class="flex flex-wrap items-center gap-1 text-3xl text-slate-300 font-bold mb-1.5 animate-on-load" style="animation-delay: 0.2s;">
+                <span class="flex-grow gradient-text">YeMo API</span>
+            </h2>
+            <p class="text-slate-400 text-xs mx-auto mb-4 animate-on-load" style="animation-delay: 0.3s;">A lightweight, auto-loading REST API built with Express.js</p>
+            
+            <div class="mb-4 animate-on-load" style="animation-delay: 0.4s;">
+                <a href="/docs" class="inline-block btn-gradient text-white px-6 py-2 rounded text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                    <i class="fas fa-rocket mr-2"></i>START
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 border border-gray-700 p-4 my-3 animate-on-scroll">
+            <div class="grid grid-cols-3 gap-4">
+                <div class="text-center">
+                    <div class="text-lg font-bold text-slate-300" id="totalEndpoints">0</div>
+                    <div class="text-xs text-slate-400">Endpoints</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-lg font-bold text-slate-300">99.9%</div>
+                    <div class="text-xs text-slate-400">Uptime</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-lg font-bold text-slate-300">24/7</div>
+                    <div class="text-xs text-slate-400">Support</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-3">
+            <div class="bg-gray-800 border border-gray-700 transition-all duration-300 rounded-none animate-on-scroll hover:border-red-500 hover:shadow-lg hover:transform hover:-translate-y-1">
+                <div class="px-4 py-4 flex items-center justify-between">
+                    <div class="flex items-center min-w-0 flex-1">
+                        <div class="border-2 border-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4">
+                            <i class="fas fa-bolt text-red-500 text-sm"></i>
+                        </div>
+                        <div class="flex flex-col min-w-0 flex-1">
+                            <h3 class="font-bold text-sm text-slate-300 truncate">Fast & Reliable</h3>
+                            <p class="text-xs text-slate-400">High-performance API endpoints with low latency</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 border border-gray-700 transition-all duration-300 rounded-none animate-on-scroll hover:border-red-500 hover:shadow-lg hover:transform hover:-translate-y-1" style="--delay: 0.1s;">
+                <div class="px-4 py-4 flex items-center justify-between">
+                    <div class="flex items-center min-w-0 flex-1">
+                        <div class="border-2 border-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4">
+                            <i class="fas fa-shield-alt text-red-500 text-sm"></i>
+                        </div>
+                        <div class="flex flex-col min-w-0 flex-1">
+                            <h3 class="font-bold text-sm text-slate-300 truncate">Secure</h3>
+                            <p class="text-xs text-slate-400">Enterprise-grade security and encryption</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 border border-gray-700 transition-all duration-300 rounded-none animate-on-scroll hover:border-red-500 hover:shadow-lg hover:transform hover:-translate-y-1" style="--delay: 0.2s;">
+                <div class="px-4 py-4 flex items-center justify-between">
+                    <div class="flex items-center min-w-0 flex-1">
+                        <div class="border-2 border-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4">
+                            <i class="fas fa-code text-red-500 text-sm"></i>
+                        </div>
+                        <div class="flex flex-col min-w-0 flex-1">
+                            <h3 class="font-bold text-sm text-slate-300 truncate">Easy Integration</h3>
+                            <p class="text-xs text-slate-400">Simple REST API with clear documentation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 border border-gray-700 transition-all duration-300 rounded-none animate-on-scroll hover:border-red-500 hover:shadow-lg hover:transform hover:-translate-y-1" style="--delay: 0.3s;">
+                <div class="px-4 py-4 flex items-center justify-between">
+                    <div class="flex items-center min-w-0 flex-1">
+                        <div class="border-2 border-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4">
+                            <i class="fas fa-chart-line text-red-500 text-sm"></i>
+                        </div>
+                        <div class="flex flex-col min-w-0 flex-1">
+                            <h3 class="font-bold text-sm text-slate-300 truncate">Auto-Loading</h3>
+                            <p class="text-xs text-slate-400">Automatically registers endpoints from file system</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="my-8"></div>           
+        <div class="bg-gray-800 border border-gray-700 p-6 mb-6 rounded-none animate-on-scroll">
+            <h3 class="flex items-center gap-2 font-bold text-lg text-slate-300 mb-5">
+                <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                Getting Started
+            </h3>
+            
+            <div class="space-y-4">
+                <div class="flex items-start gap-4">
+                    <div class="border-2 border-dashed border-red-500 text-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold text-sm rounded-none">1</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-sm text-slate-300 mb-1">Choose Your Category</h4>
+                        <p class="text-xs text-slate-400">Browse through available API categories on sidebar and select what you need.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start gap-4">
+                    <div class="border-2 border-dashed border-red-500 text-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold text-sm rounded-none">2</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-sm text-slate-300 mb-1">Read the Docs</h4>
+                        <p class="text-xs text-slate-400">Check endpoint parameters, response format, and example usage.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start gap-4">
+                    <div class="border-2 border-dashed border-red-500 text-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold text-sm rounded-none">3</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-sm text-slate-300 mb-1">Make Your Request</h4>
+                        <p class="text-xs text-slate-400">Send HTTP requests and integrate the JSON response into your app.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex flex-col mt-10 text-center space-y-2 animate-on-scroll">
+          <p class="text-slate-400" style="font-size: 0.7rem; line-height: 1rem;">
+            © <span id="year"></span> YeMo API — All Rights Reserved.
+          </p>
+          <p class="text-slate-400 space-x-3" style="font-size: 0.7rem; line-height: 1rem;">
+            <a href="/legal/privacy-policy.html" class="hover:underline hover:text-red-500">Privacy Policy</a>
+            <span aria-hidden="true">|</span>
+            <a href="/legal/terms-of-service.html" class="hover:underline hover:text-red-500">Terms of Service</a>
+          </p>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("year").textContent = new Date().getFullYear();
+            
+            fetch('/openapi.json')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('totalEndpoints').textContent = data.endpoints.length;
+                })
+                .catch(() => {
+                    document.getElementById('totalEndpoints').textContent = '0';
+                });
+            
+            const spotlight = document.getElementById('mouse-spotlight');
+            if (spotlight) {
+                document.addEventListener('mousemove', (e) => {
+                    spotlight.style.background = `radial-gradient(600px circle at ${e.clientX}px ${e.clientY}px, rgba(239, 68, 68, 0.08), transparent 80%)`;
+                });
+            }
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observerCallback = (entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+            document.querySelectorAll('.animate-on-scroll').forEach(target => {
+                observer.observe(target);
+            });
+        });
+    </script>
+</body>
+</html>

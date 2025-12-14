@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Internal Server Error | YeMo API</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .bg-gradient {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.4);
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake-animation {
+            animation: shake 0.5s ease-in-out infinite;
+        }
+        .divider {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(180deg, transparent, #ef4444, transparent);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-red-50 via-white to-orange-50">
+    <div class="flex flex-col items-center justify-center h-screen text-center px-4">
+        <div class="max-w-2xl mx-auto">
+            <div class="mb-8">
+                <div class="text-9xl font-bold gradient-text mb-4">500</div>
+            </div>
+            
+            <div class="flex items-center justify-center space-x-4 mb-8">
+                <div class="divider"></div>
+                <h2 class="text-2xl font-semibold text-slate-800">Internal Server Error</h2>
+                <div class="divider"></div>
+            </div>
+            
+            <p class="text-slate-600 mb-8 text-lg">
+                Something went wrong on our end. We're working to fix the issue.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="/" class="btn-gradient text-white px-8 py-3 rounded-lg font-semibold flex items-center space-x-2 shadow-lg">
+                    <span class="material-icons text-lg">home</span>
+                    <span>Go to Home</span>
+                </a>
+                <button onclick="location.reload()" class="bg-white border-2 border-slate-300 text-slate-700 px-8 py-3 rounded-lg font-semibold flex items-center space-x-2 hover:border-slate-400 transition-colors">
+                    <span class="material-icons text-lg">refresh</span>
+                    <span>Try Again</span>
+                </button>
+            </div>
+            
+            <div class="mt-12 text-sm text-slate-500">
+                <p>YeMo API • <a href="https://github.com/yemobyte/YeMo-APIs" class="hover:text-slate-700 underline" target="_blank">GitHub</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
