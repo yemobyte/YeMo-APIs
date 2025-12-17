@@ -81,6 +81,42 @@
             transition: background 0.1s ease-out;
         }
         
+        .feedback-btn {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 18px 36px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.45), 0 0 0 0 rgba(239, 68, 68, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Inter', system-ui, sans-serif;
+            letter-spacing: 0.3px;
+        }
+        
+        .feedback-btn:hover {
+            transform: translateY(-6px) scale(1.08);
+            box-shadow: 0 16px 40px rgba(239, 68, 68, 0.6), 0 0 0 8px rgba(239, 68, 68, 0.1);
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .feedback-btn:active {
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.5);
+        }
+        .feedback-btn i {
+            font-size: 20px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
 
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -107,59 +143,15 @@
             main {
                 padding: 1rem !important;
             }
-            h2 {
-                font-size: 1.75rem !important;
-            }
-            .text-3xl {
-                font-size: 1.5rem !important;
-            }
-            .text-xs {
-                font-size: 0.7rem !important;
-            }
-            .text-sm {
-                font-size: 0.8rem !important;
+            .max-w-2xl {
+                max-width: 100%;
             }
             .grid.grid-cols-3 {
                 grid-template-columns: repeat(1, minmax(0, 1fr));
                 gap: 1rem !important;
             }
-            .px-4 {
-                padding-left: 0.75rem !important;
-                padding-right: 0.75rem !important;
-            }
-            .py-4 {
-                padding-top: 0.75rem !important;
-                padding-bottom: 0.75rem !important;
-            }
-            .px-8 {
-                padding-left: 1rem !important;
-                padding-right: 1rem !important;
-            }
-            .py-16 {
-                padding-top: 2rem !important;
-                padding-bottom: 2rem !important;
-            }
-            .mb-6 {
-                margin-bottom: 1.5rem !important;
-            }
-            .mb-4 {
-                margin-bottom: 1rem !important;
-            }
-            .space-y-3 > * + * {
-                margin-top: 0.75rem !important;
-            }
-            .w-8 {
-                width: 1.5rem !important;
-            }
-            .h-8 {
-                height: 1.5rem !important;
-            }
-            .mr-4 {
-                margin-right: 0.75rem !important;
-            }
-            .btn-gradient {
-                padding: 0.5rem 1rem !important;
-                font-size: 0.8rem !important;
+            .text-3xl {
+                font-size: 1.5rem !important;
             }
             #mouse-spotlight {
                 display: none;
@@ -168,9 +160,6 @@
         @media (min-width: 769px) and (max-width: 1024px) {
             main {
                 padding: 2rem !important;
-            }
-            .grid.grid-cols-3 {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
             }
         }
         @media (min-width: 1025px) {
@@ -184,23 +173,23 @@
     
     <div id="mouse-spotlight"></div>
     
-    <main class="max-w-2xl mx-auto px-4 sm:px-6 md:px-8 py-8 md:py-12 lg:py-16">
+    <main class="max-w-2xl mx-auto px-8 py-16">
         <div class="text-left mb-6">
             <p class="text-gray-600 text-xs mb-4 animate-on-load" style="animation-delay: 0.1s;">Hi Developer! Welcome To</p>
-            <h2 class="flex flex-wrap items-center gap-1 text-2xl sm:text-3xl text-gray-900 font-bold mb-1.5 animate-on-load" style="animation-delay: 0.2s;">
+            <h2 class="flex flex-wrap items-center gap-1 text-3xl text-gray-900 font-bold mb-1.5 animate-on-load" style="animation-delay: 0.2s;">
                 <span class="flex-grow gradient-text">YeMo API</span>
             </h2>
-            <p class="text-gray-600 text-xs sm:text-sm mx-auto mb-4 animate-on-load" style="animation-delay: 0.3s;">A lightweight, auto-loading REST API built with Express.js</p>
+            <p class="text-gray-600 text-xs mx-auto mb-4 animate-on-load" style="animation-delay: 0.3s;">A lightweight, auto-loading REST API built with Express.js</p>
             
             <div class="mb-4 animate-on-load" style="animation-delay: 0.4s;">
-                <a href="/docs" class="inline-block btn-gradient text-white px-4 sm:px-6 py-2 rounded text-xs sm:text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                    <i class="fas fa-rocket mr-1 sm:mr-2"></i>START
+                <a href="/docs" class="inline-block btn-gradient text-white px-6 py-2 rounded text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                    <i class="fas fa-rocket mr-2"></i>START
                 </a>
             </div>
         </div>
 
-        <div class="bg-gray-50 border border-gray-200 p-3 sm:p-4 my-3 animate-on-scroll">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div class="bg-gray-50 border border-gray-200 p-4 my-3 animate-on-scroll">
+            <div class="grid grid-cols-3 gap-4">
                 <div class="text-center">
                     <div class="text-lg font-bold text-gray-900" id="totalEndpoints">0</div>
                     <div class="text-xs text-gray-600">Endpoints</div>
@@ -218,13 +207,13 @@
 
         <div class="space-y-3">
             <div class="bg-white border border-gray-200 transition-all duration-300 rounded-none animate-on-scroll hover:border-red-500 hover:shadow-lg hover:transform hover:-translate-y-1">
-                <div class="px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between">
+                <div class="px-4 py-4 flex items-center justify-between">
                     <div class="flex items-center min-w-0 flex-1">
-                        <div class="border-2 border-red-500 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center flex-shrink-0 mr-3 sm:mr-4">
-                            <i class="fas fa-bolt text-red-500 text-xs sm:text-sm"></i>
+                        <div class="border-2 border-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4">
+                            <i class="fas fa-bolt text-red-500 text-sm"></i>
                         </div>
                         <div class="flex flex-col min-w-0 flex-1">
-                            <h3 class="font-bold text-xs sm:text-sm text-gray-900 truncate">Fast & Reliable</h3>
+                            <h3 class="font-bold text-sm text-gray-900 truncate">Fast & Reliable</h3>
                             <p class="text-xs text-gray-600">High-performance API endpoints with low latency</p>
                         </div>
                     </div>
@@ -232,13 +221,13 @@
             </div>
 
             <div class="bg-white border border-gray-200 transition-all duration-300 rounded-none animate-on-scroll hover:border-red-500 hover:shadow-lg hover:transform hover:-translate-y-1" style="--delay: 0.1s;">
-                <div class="px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between">
+                <div class="px-4 py-4 flex items-center justify-between">
                     <div class="flex items-center min-w-0 flex-1">
-                        <div class="border-2 border-red-500 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center flex-shrink-0 mr-3 sm:mr-4">
-                            <i class="fas fa-shield-alt text-red-500 text-xs sm:text-sm"></i>
+                        <div class="border-2 border-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4">
+                            <i class="fas fa-shield-alt text-red-500 text-sm"></i>
                         </div>
                         <div class="flex flex-col min-w-0 flex-1">
-                            <h3 class="font-bold text-xs sm:text-sm text-gray-900 truncate">Secure</h3>
+                            <h3 class="font-bold text-sm text-gray-900 truncate">Secure</h3>
                             <p class="text-xs text-gray-600">Enterprise-grade security and encryption</p>
                         </div>
                     </div>
@@ -246,13 +235,13 @@
             </div>
 
             <div class="bg-white border border-gray-200 transition-all duration-300 rounded-none animate-on-scroll hover:border-red-500 hover:shadow-lg hover:transform hover:-translate-y-1" style="--delay: 0.2s;">
-                <div class="px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between">
+                <div class="px-4 py-4 flex items-center justify-between">
                     <div class="flex items-center min-w-0 flex-1">
-                        <div class="border-2 border-red-500 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center flex-shrink-0 mr-3 sm:mr-4">
-                            <i class="fas fa-code text-red-500 text-xs sm:text-sm"></i>
+                        <div class="border-2 border-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4">
+                            <i class="fas fa-code text-red-500 text-sm"></i>
                         </div>
                         <div class="flex flex-col min-w-0 flex-1">
-                            <h3 class="font-bold text-xs sm:text-sm text-gray-900 truncate">Easy Integration</h3>
+                            <h3 class="font-bold text-sm text-gray-900 truncate">Easy Integration</h3>
                             <p class="text-xs text-gray-600">Simple REST API with clear documentation</p>
                         </div>
                     </div>
@@ -260,13 +249,13 @@
             </div>
 
             <div class="bg-white border border-gray-200 transition-all duration-300 rounded-none animate-on-scroll hover:border-red-500 hover:shadow-lg hover:transform hover:-translate-y-1" style="--delay: 0.3s;">
-                <div class="px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between">
+                <div class="px-4 py-4 flex items-center justify-between">
                     <div class="flex items-center min-w-0 flex-1">
-                        <div class="border-2 border-red-500 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center flex-shrink-0 mr-3 sm:mr-4">
-                            <i class="fas fa-chart-line text-red-500 text-xs sm:text-sm"></i>
+                        <div class="border-2 border-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4">
+                            <i class="fas fa-chart-line text-red-500 text-sm"></i>
                         </div>
                         <div class="flex flex-col min-w-0 flex-1">
-                            <h3 class="font-bold text-xs sm:text-sm text-gray-900 truncate">Auto-Loading</h3>
+                            <h3 class="font-bold text-sm text-gray-900 truncate">Auto-Loading</h3>
                             <p class="text-xs text-gray-600">Automatically registers endpoints from file system</p>
                         </div>
                     </div>
@@ -275,52 +264,57 @@
         </div>
 
         <div class="my-8"></div>           
-        <div class="bg-white border border-gray-200 p-4 sm:p-5 md:p-6 mb-4 sm:mb-6 rounded-none animate-on-scroll">
-            <h3 class="flex items-center gap-2 font-bold text-base sm:text-lg text-gray-900 mb-3 sm:mb-5">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="bg-white border border-gray-200 p-6 mb-6 rounded-none animate-on-scroll">
+            <h3 class="flex items-center gap-2 font-bold text-lg text-gray-900 mb-5">
+                <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                 </svg>
                 Getting Started
             </h3>
             
-            <div class="space-y-3 sm:space-y-4">
-                <div class="flex items-start gap-3 sm:gap-4">
-                    <div class="border-2 border-dashed border-red-500 text-red-500 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center flex-shrink-0 font-bold text-xs sm:text-sm rounded-none">1</div>
+            <div class="space-y-4">
+                <div class="flex items-start gap-4">
+                    <div class="border-2 border-dashed border-red-500 text-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold text-sm rounded-none">1</div>
                     <div class="flex-1">
-                        <h4 class="font-bold text-xs sm:text-sm text-gray-900 mb-1">Choose Your Category</h4>
+                        <h4 class="font-bold text-sm text-gray-900 mb-1">Choose Your Category</h4>
                         <p class="text-xs text-gray-600">Browse through available API categories on sidebar and select what you need.</p>
                     </div>
                 </div>
                 
-                <div class="flex items-start gap-3 sm:gap-4">
-                    <div class="border-2 border-dashed border-red-500 text-red-500 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center flex-shrink-0 font-bold text-xs sm:text-sm rounded-none">2</div>
+                <div class="flex items-start gap-4">
+                    <div class="border-2 border-dashed border-red-500 text-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold text-sm rounded-none">2</div>
                     <div class="flex-1">
-                        <h4 class="font-bold text-xs sm:text-sm text-gray-900 mb-1">Read the Docs</h4>
+                        <h4 class="font-bold text-sm text-gray-900 mb-1">Read the Docs</h4>
                         <p class="text-xs text-gray-600">Check endpoint parameters, response format, and example usage.</p>
                     </div>
                 </div>
                 
-                <div class="flex items-start gap-3 sm:gap-4">
-                    <div class="border-2 border-dashed border-red-500 text-red-500 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center flex-shrink-0 font-bold text-xs sm:text-sm rounded-none">3</div>
+                <div class="flex items-start gap-4">
+                    <div class="border-2 border-dashed border-red-500 text-red-500 w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold text-sm rounded-none">3</div>
                     <div class="flex-1">
-                        <h4 class="font-bold text-xs sm:text-sm text-gray-900 mb-1">Make Your Request</h4>
+                        <h4 class="font-bold text-sm text-gray-900 mb-1">Make Your Request</h4>
                         <p class="text-xs text-gray-600">Send HTTP requests and integrate the JSON response into your app.</p>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="flex flex-col mt-6 sm:mt-8 md:mt-10 text-center space-y-2 animate-on-scroll">
-          <p class="text-gray-600 text-xs sm:text-sm">
+        <div class="flex flex-col mt-10 text-center space-y-2 animate-on-scroll">
+          <p class="text-gray-600" style="font-size: 0.7rem; line-height: 1rem;">
             © <span id="year"></span> YeMo API — All Rights Reserved.
           </p>
-          <p class="text-gray-600 space-x-2 sm:space-x-3 text-xs sm:text-sm">
+          <p class="text-gray-600 space-x-3" style="font-size: 0.7rem; line-height: 1rem;">
             <a href="/legal/privacy-policy.html" class="hover:underline hover:text-red-500">Privacy Policy</a>
             <span aria-hidden="true">|</span>
             <a href="/legal/terms-of-service.html" class="hover:underline hover:text-red-500">Terms of Service</a>
           </p>
         </div>
     </main>
+
+    <button onclick="openFeedback()" class="feedback-btn" aria-label="Send Feedback">
+        <i class="fas fa-comment"></i>
+        <span>Feedback</span>
+    </button>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -364,6 +358,9 @@
             });
         });
         
+        function openFeedback() {
+            window.open('https://github.com/yemobyte/YeMo-APIs/issues/new', '_blank');
+        }
     </script>
 </body>
 </html>

@@ -73,6 +73,43 @@
         .feedback-btn i {
             font-size: 14px;
         }
+        @media (max-width: 768px) {
+            .feedback-btn {
+                bottom: 16px;
+                right: 16px;
+                padding: 8px 16px;
+                font-size: 12px;
+                gap: 6px;
+            }
+            .feedback-btn i {
+                font-size: 12px;
+            }
+            .feedback-btn span {
+                display: none;
+            }
+            main {
+                padding: 1rem !important;
+            }
+            .max-w-4xl {
+                max-width: 100%;
+            }
+            .grid.grid-cols-2 {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+            .grid.grid-cols-1.md\:grid-cols-2 {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+        }
+        @media (min-width: 769px) and (max-width: 1024px) {
+            main {
+                padding: 2rem !important;
+            }
+        }
+        @media (min-width: 1025px) {
+            .grid.grid-cols-1.md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -124,89 +161,14 @@
             box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2), 0 2px 4px -1px rgba(239, 68, 68, 0.1);
             border-color: #ef4444;
         }
-        @media (max-width: 768px) {
-            main {
-                padding: 1rem !important;
-            }
-            h1 {
-                font-size: 1.75rem !important;
-            }
-            .feedback-btn {
-                bottom: 16px;
-                right: 16px;
-                padding: 8px 16px;
-                font-size: 12px;
-                gap: 6px;
-            }
-            .feedback-btn i {
-                font-size: 12px;
-            }
-            .feedback-btn span {
-                display: none;
-            }
-            .grid.grid-cols-2 {
-                grid-template-columns: repeat(1, minmax(0, 1fr));
-            }
-            .grid.grid-cols-1.md\:grid-cols-2 {
-                grid-template-columns: repeat(1, minmax(0, 1fr));
-            }
-            .endpoint-card {
-                padding: 0.75rem !important;
-            }
-            .method-badge {
-                font-size: 0.65rem;
-                padding: 0.2rem 0.4rem;
-            }
-            input[type="text"], select {
-                font-size: 14px !important;
-                padding: 0.75rem !important;
-            }
-            .text-3xl {
-                font-size: 1.5rem !important;
-            }
-            .text-sm {
-                font-size: 0.875rem !important;
-            }
-            .text-xs {
-                font-size: 0.75rem !important;
-            }
-            .px-8 {
-                padding-left: 1rem !important;
-                padding-right: 1rem !important;
-            }
-            .py-16 {
-                padding-top: 2rem !important;
-                padding-bottom: 2rem !important;
-            }
-            .mb-8 {
-                margin-bottom: 1.5rem !important;
-            }
-            .space-y-6 > * + * {
-                margin-top: 1rem !important;
-            }
-        }
-        @media (min-width: 769px) and (max-width: 1024px) {
-            main {
-                padding: 2rem !important;
-            }
-            .feedback-btn {
-                bottom: 20px;
-                right: 20px;
-            }
-        }
-        @media (min-width: 1025px) {
-            .grid.grid-cols-1.md\:grid-cols-2 {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
     </style>
 </head>
 <body class="bg-white text-gray-800 antialiased font-mono min-h-screen">
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 md:py-12 lg:py-16">
+    <main class="max-w-4xl mx-auto px-8 py-16">
         <div class="text-left mb-8">
-            <h1 class="text-2xl sm:text-3xl font-bold gradient-text mb-2">
+            <h1 class="text-3xl font-bold gradient-text mb-2">
                 <span id="title"></span></h1>
-            <p class="text-gray-600 text-xs sm:text-sm mx-auto mb-4">
+            <p class="text-gray-600 text-sm mx-auto mb-4">
                 <span id="description"></span>
             </p>
             <p class="mb-4 space-y-1">
@@ -226,8 +188,8 @@
                 </select>
             </div>
         </div>
-        <div class="bg-gray-50 border border-gray-200 p-3 sm:p-4 mb-4">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        <div class="bg-gray-50 border border-gray-200 p-4 mb-4">
+          <div class="grid grid-cols-2 gap-4">
             <div class="text-center">
               <div class="text-lg font-bold text-gray-900" id="totalEndpoints">0</div>
               <div class="text-xs text-gray-600">Total Endpoints</div>
@@ -262,7 +224,7 @@
         </div>
         <div class="flex flex-col mt-10 text-center space-y-2">
           <p class="text-gray-600 text-xs">
-            Â© <span id="year"></span> YeMo API â€” All Rights Reserved.
+            © <span id="year"></span> YeMo API — All Rights Reserved.
           </p>
           <p class="text-gray-600 text-xs space-x-3">
             <a href="/legal/privacy-policy.html" class="hover:underline hover:text-red-500">Privacy Policy</a>
@@ -310,16 +272,16 @@
             const categoryHeader = `
               <div class="mb-4">
                 <div class="bg-white border border-gray-200 shadow-sm">
-                  <button onclick="toggleCategory(${categoryIndex})" class="w-full px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-150">
-                    <h2 class="font-bold flex items-center text-sm sm:text-base">
-                      <span class="material-icons text-base sm:text-lg mr-2 sm:mr-3 text-gray-500">folder</span>
-                      <span class="truncate max-w-xs sm:max-w-sm text-xs sm:text-sm text-gray-900">${categoryName}</span>
-                      <span class="ml-1 sm:ml-2 text-xs text-gray-600 px-1 sm:px-2 py-0.5 sm:py-1">(${endpoints.length})</span>
+                  <button onclick="toggleCategory(${categoryIndex})" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-150">
+                    <h2 class="font-bold flex items-center text-base">
+                      <span class="material-icons text-lg mr-3 text-gray-500">folder</span>
+                      <span class="truncate max-w-xs text-sm text-gray-900">${categoryName}</span>
+                      <span class="ml-2 text-xs text-gray-600 px-2 py-1">(${endpoints.length})</span>
                     </h2>
-                    <span class="material-icons transition-transform duration-150 text-gray-500 text-base sm:text-lg" id="category-icon-${categoryIndex}">expand_more</span>
+                    <span class="material-icons transition-transform duration-150 text-gray-500" id="category-icon-${categoryIndex}">expand_more</span>
                   </button>
-                  <div id="category-${categoryIndex}" class="hidden p-2 sm:p-3 md:p-4 border-t border-gray-200">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                  <div id="category-${categoryIndex}" class="hidden p-4 border-t border-gray-200">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             `;
     
             let categoryContent = '';
@@ -336,7 +298,7 @@
               }).join(' ');
     
               categoryContent += `
-                <div class="endpoint-card bg-white border border-gray-200 p-3 sm:p-4 api-item" 
+                <div class="endpoint-card bg-white border border-gray-200 p-4 api-item" 
                      data-method="${endpoint.methods[0]}" 
                      data-path="${endpoint.route}" 
                      data-alias="${endpoint.name}" 
@@ -346,13 +308,13 @@
                       ${methodBadges}
                     </div>
                     <button onclick="toggleEndpoint(${categoryIndex}, ${endpointIndex})" 
-                            class="text-gray-500 hover:text-red-500 transition-colors flex-shrink-0">
-                      <span class="material-icons text-base sm:text-lg" id="endpoint-icon-${categoryIndex}-${endpointIndex}">expand_more</span>
+                            class="text-gray-500 hover:text-red-500 transition-colors">
+                      <span class="material-icons text-lg" id="endpoint-icon-${categoryIndex}-${endpointIndex}">expand_more</span>
                     </button>
                   </div>
     
-                  <h3 class="font-semibold text-xs sm:text-sm font-mono mb-1 truncate text-gray-900 break-all" title="${endpoint.route}">${endpoint.route}</h3>
-                  <p class="text-xs text-gray-600 mb-2 sm:mb-3">${endpoint.description}</p>
+                  <h3 class="font-semibold text-sm font-mono mb-1 truncate text-gray-900" title="${endpoint.route}">${endpoint.route}</h3>
+                  <p class="text-xs text-gray-600 mb-3">${endpoint.description}</p>
     
                   <div id="endpoint-${categoryIndex}-${endpointIndex}" class="hidden mt-3 pt-3 border-t border-gray-200">
                     <div class="text-gray-900 font-bold text-xs mb-2 flex items-center">
