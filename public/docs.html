@@ -42,23 +42,33 @@
         }
         .feedback-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 24px;
+            right: 24px;
             z-index: 1000;
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 12px 24px;
-            font-size: 14px;
+            padding: 14px 28px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-            transition: all 0.3s ease;
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', system-ui, sans-serif;
         }
         .feedback-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.45);
+        }
+        .feedback-btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+        .feedback-btn i {
+            font-size: 16px;
         }
         .sponsor-ads {
             background: #f9fafb;
@@ -223,6 +233,25 @@
           document.getElementById("year").textContent = new Date().getFullYear();
           document.getElementById('totalEndpoints').textContent = apiData.endpoints.length;
           document.getElementById('totalCategories').textContent = Object.keys(categories).length;
+          
+          Promise.all([
+            fetch('/sponsor-config.json').then(res => res.json()).catch(() => ({ enabled: true })),
+            fetch('/sponsor.json').then(res => res.json()).catch(() => [])
+          ]).then(([config, data]) => {
+            const sponsorAds = document.getElementById('sponsorAds');
+            if (config.enabled && data && data.length > 0) {
+              let adsHtml = '<h4 class="text-sm font-bold text-gray-900 mb-3">Sponsors</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
+              data.forEach(sponsor => {
+                adsHtml += `<a href="${sponsor.url || '#'}" target="_blank" class="block hover:opacity-80 transition-opacity">
+                    <img src="${sponsor.image}" alt="${sponsor.name || 'Sponsor'}" class="w-full h-auto rounded">
+                </a>`;
+              });
+              adsHtml += '</div>';
+              sponsorAds.innerHTML = adsHtml;
+            } else {
+              sponsorAds.style.display = 'none';
+            }
+          });
     
           const apiList = document.getElementById('apiList');
           let categoryIndex = 0;

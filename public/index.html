@@ -282,10 +282,6 @@
             <a href="/legal/terms-of-service.html" class="hover:underline hover:text-red-500">Terms of Service</a>
           </p>
         </div>
-        
-        <button onclick="openFeedback()" class="feedback-btn">
-            <i class="fas fa-comment mr-2"></i>Feedback
-        </button>
     </main>
 
     <script>
@@ -301,24 +297,24 @@
                     document.getElementById('totalEndpoints').textContent = '0';
                 });
             
-            fetch('/sponsor.json')
-                .then(res => res.json())
-                .then(data => {
-                    const sponsorAds = document.getElementById('sponsorAds');
-                    if (data && data.length > 0) {
-                        let adsHtml = '<h4 class="text-sm font-bold text-gray-900 mb-3">Sponsors</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
-                        data.forEach(sponsor => {
-                            adsHtml += `<a href="${sponsor.url || '#'}" target="_blank" class="block hover:opacity-80 transition-opacity">
-                                <img src="${sponsor.image}" alt="${sponsor.name || 'Sponsor'}" class="w-full h-auto rounded">
-                            </a>`;
-                        });
-                        adsHtml += '</div>';
-                        sponsorAds.innerHTML = adsHtml;
-                    }
-                })
-                .catch(() => {
-                    document.getElementById('sponsorAds').style.display = 'none';
-                });
+            Promise.all([
+                fetch('/sponsor-config.json').then(res => res.json()).catch(() => ({ enabled: true })),
+                fetch('/sponsor.json').then(res => res.json()).catch(() => [])
+            ]).then(([config, data]) => {
+                const sponsorAds = document.getElementById('sponsorAds');
+                if (config.enabled && data && data.length > 0) {
+                    let adsHtml = '<h4 class="text-sm font-bold text-gray-900 mb-3">Sponsors</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
+                    data.forEach(sponsor => {
+                        adsHtml += `<a href="${sponsor.url || '#'}" target="_blank" class="block hover:opacity-80 transition-opacity">
+                            <img src="${sponsor.image}" alt="${sponsor.name || 'Sponsor'}" class="w-full h-auto rounded">
+                        </a>`;
+                    });
+                    adsHtml += '</div>';
+                    sponsorAds.innerHTML = adsHtml;
+                } else {
+                    sponsorAds.style.display = 'none';
+                }
+            });
             
             const spotlight = document.getElementById('mouse-spotlight');
             if (spotlight) {
@@ -349,9 +345,6 @@
             });
         });
         
-        function openFeedback() {
-            window.open('https://github.com/yemobyte/YeMo-APIs/issues/new', '_blank');
-        }
     </script>
 </body>
 </html>

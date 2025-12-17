@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "name": "Example Sponsor 1",
+    "image": "https://via.placeholder.com/728x90/ef4444/ffffff?text=Sponsor+Ad+1",
+    "url": "https://example.com/sponsor1"
+  },
+  {
+    "name": "Example Sponsor 2",
+    "image": "https://via.placeholder.com/728x90/dc2626/ffffff?text=Sponsor+Ad+2",
+    "url": "https://example.com/sponsor2"
+  }
+]
