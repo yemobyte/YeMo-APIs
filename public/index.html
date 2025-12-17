@@ -83,69 +83,33 @@
         
         .feedback-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 24px;
+            right: 24px;
             z-index: 1000;
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             color: white;
             border: none;
-            border-radius: 50px;
-            padding: 12px 24px;
-            font-size: 14px;
+            border-radius: 16px;
+            padding: 16px 32px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Inter', system-ui, sans-serif;
         }
         
         .feedback-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 28px rgba(239, 68, 68, 0.5);
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
         }
-        
-        .sponsor-notification {
-            position: fixed;
-            bottom: 24px;
-            left: 24px;
-            z-index: 1001;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            max-width: 400px;
-            padding: 0;
-            overflow: hidden;
-            transform: translateX(-120%);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .sponsor-notification.show {
-            transform: translateX(0);
-        }
-        .sponsor-notification img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .sponsor-notification-close {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            transition: all 0.2s ease;
-        }
-        .sponsor-notification-close:hover {
-            background: rgba(0, 0, 0, 0.7);
-            transform: scale(1.1);
+        .feedback-btn:active {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
         }
 
         @keyframes fadeInUp {
@@ -206,8 +170,6 @@
                 </div>
             </div>
         </div>
-        
-        <div id="sponsorNotification" class="sponsor-notification"></div>
 
         <div class="space-y-3">
             <div class="bg-white border border-gray-200 transition-all duration-300 rounded-none animate-on-scroll hover:border-red-500 hover:shadow-lg hover:transform hover:-translate-y-1">
@@ -327,36 +289,6 @@
                 .catch(() => {
                     document.getElementById('totalEndpoints').textContent = '0';
                 });
-            
-            Promise.all([
-                fetch('/sponsor-config.json').then(res => res.json()).catch(() => ({ enabled: true })),
-                fetch('/sponsor.json').then(res => res.json()).catch(() => [])
-            ]).then(([config, data]) => {
-                const sponsorNotification = document.getElementById('sponsorNotification');
-                if (config.enabled && data && data.length > 0) {
-                    const randomSponsor = data[Math.floor(Math.random() * data.length)];
-                    const notificationHtml = `
-                        <button class="sponsor-notification-close" onclick="closeSponsorNotification()">×</button>
-                        <a href="${randomSponsor.url || '#'}" target="_blank" onclick="closeSponsorNotification()">
-                            <img src="${randomSponsor.image}" alt="${randomSponsor.name || 'Sponsor'}">
-                        </a>
-                    `;
-                    sponsorNotification.innerHTML = notificationHtml;
-                    setTimeout(() => {
-                        sponsorNotification.classList.add('show');
-                    }, 1000);
-                } else {
-                    sponsorNotification.style.display = 'none';
-                }
-            });
-            
-            function closeSponsorNotification() {
-                const notification = document.getElementById('sponsorNotification');
-                notification.classList.remove('show');
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 400);
-            }
             
             const spotlight = document.getElementById('mouse-spotlight');
             if (spotlight) {
