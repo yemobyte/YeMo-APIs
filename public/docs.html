@@ -60,6 +60,18 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
         }
+        .sponsor-ads {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .sponsor-ads img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -150,6 +162,9 @@
             </div>
           </div>
         </div>
+        
+        <div id="sponsorAds" class="sponsor-ads mb-6"></div>
+        
         <div class="flex items-center justify-between mb-6">
             <div class="flex-1 relative">
                 <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
