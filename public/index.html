@@ -81,6 +81,7 @@
             transition: background 0.1s ease-out;
         }
         
+
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -101,34 +102,6 @@
         .animate-on-scroll.visible {
             opacity: 1;
             transform: translateY(0);
-        }
-        @media (max-width: 768px) {
-            main {
-                padding: 1rem !important;
-            }
-            .max-w-2xl {
-                max-width: 100%;
-            }
-            .grid.grid-cols-3 {
-                grid-template-columns: repeat(1, minmax(0, 1fr));
-                gap: 1rem !important;
-            }
-            .text-3xl {
-                font-size: 1.5rem !important;
-            }
-            #mouse-spotlight {
-                display: none;
-            }
-        }
-        @media (min-width: 769px) and (max-width: 1024px) {
-            main {
-                padding: 2rem !important;
-            }
-        }
-        @media (min-width: 1025px) {
-            .grid.grid-cols-3 {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-            }
         }
     </style>
 </head>
