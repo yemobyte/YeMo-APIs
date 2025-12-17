@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="API Documentation for Express API">
-    <meta name="theme-color" content="#1a202c">
+    <meta name="theme-color" content="#ffffff">
     <title>YeMo API's.</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -30,16 +29,36 @@
         }
         .glass {
             backdrop-filter: blur(16px) saturate(180%);
-            background: rgba(23, 25, 35, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.125);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
         .loader {
             width: 28px;
             height: 28px;
-            border: 2px solid #4a5568;
-            border-top: 2px solid #e2e8f0;
+            border: 2px solid #e5e7eb;
+            border-top: 2px solid #ef4444;
             border-radius: 50%;
             animation: spin 1s linear infinite;
+        }
+        .feedback-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+        }
+        .feedback-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
@@ -77,7 +96,7 @@
             padding: 0.25rem 0.5rem;
             border-radius: 0;
             font-weight: 600;
-            border: 1px solid #4a5568;
+            border: 1px solid #e5e7eb;
         }
         .method-get { background-color: #10b981; color: white; }
         .method-post { background-color: #3b82f6; color: white; }
@@ -85,7 +104,7 @@
         .method-delete { background-color: #ef4444; color: white; }
         .endpoint-card {
             transition: all 0.2s ease;
-            border: 1px solid #4a5568;
+            border: 1px solid #e5e7eb;
         }
         .endpoint-card:hover {
             transform: translateY(-2px);
@@ -94,57 +113,57 @@
         }
     </style>
 </head>
-<body class="bg-gray-900 text-slate-300 antialiased font-mono min-h-screen">
+<body class="bg-white text-gray-800 antialiased font-mono min-h-screen">
     <main class="max-w-4xl mx-auto px-8 py-16">
         <div class="text-left mb-8">
             <h1 class="text-3xl font-bold gradient-text mb-2">
                 <span id="title"></span></h1>
-            <p class="text-slate-400 text-sm mx-auto mb-4">
+            <p class="text-gray-600 text-sm mx-auto mb-4">
                 <span id="description"></span>
             </p>
             <p class="mb-4 space-y-1">
               <a href="https://whatsapp.com/channel/0029Vb7MpjO9RZAXcgJe0n0W" 
-                 class="block text-xs text-slate-300 font-medium underline hover:text-red-500 transition-colors">
+                 class="block text-xs text-gray-800 font-medium underline hover:text-red-500 transition-colors">
                 WhatsApp Information Channel.
               </a>
               <a href="https://github.com/yemobyte/YeMo-APIs" 
-                 class="block text-xs text-slate-300 font-medium underline hover:text-red-500 transition-colors">
+                 class="block text-xs text-gray-800 font-medium underline hover:text-red-500 transition-colors">
                 YeMo - Source Code.
               </a>
             </p>
             <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-400 mb-2">Servers API's</label>
-                <select id="hostSelect" class="w-full px-4 py-3 border border-gray-700 text-sm focus:outline-none focus:border-red-500 bg-gray-800 text-slate-300 appearance-none">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Servers API's</label>
+                <select id="hostSelect" class="w-full px-4 py-3 border border-gray-300 text-sm focus:outline-none focus:border-red-500 bg-white text-gray-900 appearance-none">
                     <option id="valueURL" value="" selected></option>
                 </select>
             </div>
         </div>
-        <div class="bg-gray-800 border border-gray-700 p-4 mb-4">
+        <div class="bg-gray-50 border border-gray-200 p-4 mb-4">
           <div class="grid grid-cols-2 gap-4">
             <div class="text-center">
-              <div class="text-lg font-bold text-slate-300" id="totalEndpoints">0</div>
-              <div class="text-xs text-slate-400">Total Endpoints</div>
+              <div class="text-lg font-bold text-gray-900" id="totalEndpoints">0</div>
+              <div class="text-xs text-gray-600">Total Endpoints</div>
             </div>
             <div class="text-center">
-              <div class="text-lg font-bold text-slate-300" id="totalCategories">0</div>
-              <div class="text-xs text-slate-400">Categories</div>
+              <div class="text-lg font-bold text-gray-900" id="totalCategories">0</div>
+              <div class="text-xs text-gray-600">Categories</div>
             </div>
           </div>
         </div>
         <div class="flex items-center justify-between mb-6">
             <div class="flex-1 relative">
                 <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                    <span class="material-icons text-gray-500 text-lg">search</span>
+                    <span class="material-icons text-gray-400 text-lg">search</span>
                 </div>
-                <input type="text" id="searchInput" placeholder="Search API endpoints..." class="w-full pl-12 pr-5 py-4 text-sm border border-gray-700 bg-gray-800 text-slate-300 placeholder-slate-500 focus:outline-none focus:border-red-500">
+                <input type="text" id="searchInput" placeholder="Search API endpoints..." class="w-full pl-12 pr-5 py-4 text-sm border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:border-red-500">
             </div>
         </div>
 
         <div id="content" class="space-y-6">
             <div id="noResults" class="text-center py-16" style="display: none;">
                 <div class="max-w-md mx-auto">
-                    <h3 class="text-sm text-slate-400 mb-2">No results found.</h3>
-                    <p class="text-xs text-slate-500">Try adjusting your search terms.</p>
+                    <h3 class="text-sm text-gray-600 mb-2">No results found.</h3>
+                    <p class="text-xs text-gray-500">Try adjusting your search terms.</p>
                 </div>
             </div>
 
@@ -153,16 +172,19 @@
             </div>
         </div>
         <div class="flex flex-col mt-10 text-center space-y-2">
-          <p class="text-slate-400 text-xs">
+          <p class="text-gray-600 text-xs">
             © <span id="year"></span> YeMo API — All Rights Reserved.
           </p>
-          <p class="text-slate-400 text-xs space-x-3">
+          <p class="text-gray-600 text-xs space-x-3">
             <a href="/legal/privacy-policy.html" class="hover:underline hover:text-red-500">Privacy Policy</a>
             <span aria-hidden="true">|</span>
             <a href="/legal/terms-of-service.html" class="hover:underline hover:text-red-500">Terms of Service</a>
           </p>
         </div>
     </main>
+    <button onclick="openFeedback()" class="feedback-btn">
+        <i class="fas fa-comment mr-2"></i>Feedback
+    </button>
     <script>
       async function loadApiData() {
         try {
@@ -197,16 +219,16 @@
     
             const categoryHeader = `
               <div class="mb-4">
-                <div class="bg-gray-800 border border-gray-700 shadow-sm">
-                  <button onclick="toggleCategory(${categoryIndex})" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-700 transition-colors duration-150">
+                <div class="bg-white border border-gray-200 shadow-sm">
+                  <button onclick="toggleCategory(${categoryIndex})" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-150">
                     <h2 class="font-bold flex items-center text-base">
-                      <span class="material-icons text-lg mr-3 text-gray-400">folder</span>
-                      <span class="truncate max-w-xs text-sm text-slate-300">${categoryName}</span>
-                      <span class="ml-2 text-xs text-slate-400 px-2 py-1">(${endpoints.length})</span>
+                      <span class="material-icons text-lg mr-3 text-gray-500">folder</span>
+                      <span class="truncate max-w-xs text-sm text-gray-900">${categoryName}</span>
+                      <span class="ml-2 text-xs text-gray-600 px-2 py-1">(${endpoints.length})</span>
                     </h2>
-                    <span class="material-icons transition-transform duration-150 text-gray-400" id="category-icon-${categoryIndex}">expand_more</span>
+                    <span class="material-icons transition-transform duration-150 text-gray-500" id="category-icon-${categoryIndex}">expand_more</span>
                   </button>
-                  <div id="category-${categoryIndex}" class="hidden p-4 border-t border-gray-700">
+                  <div id="category-${categoryIndex}" class="hidden p-4 border-t border-gray-200">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             `;
     
@@ -224,7 +246,7 @@
               }).join(' ');
     
               categoryContent += `
-                <div class="endpoint-card bg-gray-800 border border-gray-700 p-4 api-item" 
+                <div class="endpoint-card bg-white border border-gray-200 p-4 api-item" 
                      data-method="${endpoint.methods[0]}" 
                      data-path="${endpoint.route}" 
                      data-alias="${endpoint.name}" 
@@ -239,11 +261,11 @@
                     </button>
                   </div>
     
-                  <h3 class="font-semibold text-sm font-mono mb-1 truncate text-slate-300" title="${endpoint.route}">${endpoint.route}</h3>
-                  <p class="text-xs text-slate-400 mb-3">${endpoint.description}</p>
+                  <h3 class="font-semibold text-sm font-mono mb-1 truncate text-gray-900" title="${endpoint.route}">${endpoint.route}</h3>
+                  <p class="text-xs text-gray-600 mb-3">${endpoint.description}</p>
     
-                  <div id="endpoint-${categoryIndex}-${endpointIndex}" class="hidden mt-3 pt-3 border-t border-gray-700">
-                    <div class="text-slate-300 font-bold text-xs mb-2 flex items-center">
+                  <div id="endpoint-${categoryIndex}-${endpointIndex}" class="hidden mt-3 pt-3 border-t border-gray-200">
+                    <div class="text-gray-900 font-bold text-xs mb-2 flex items-center">
                       <span class="material-icons text-sm mr-1">play_arrow</span>
                       TRY IT OUT
                     </div>
@@ -256,24 +278,24 @@
                 if (paramSchema.type === "file") {
                   categoryContent += `
                     <div>
-                      <label class="block text-xs font-medium text-slate-400">
+                      <label class="block text-xs font-medium text-gray-700">
                         ${paramName} ${paramSchema.required ? '<span class="text-red-500">*</span>' : ''}
                       </label>
                       <input type="file" name="${paramName}" 
-                            class="w-full text-xs border border-gray-700 p-1 focus:outline-none bg-gray-700 text-slate-300"
+                            class="w-full text-xs border border-gray-300 p-1 focus:outline-none bg-white text-gray-900"
                             ${paramSchema.required ? 'required' : ''}>
                     </div>
                   `;
                 } else {
                   categoryContent += `
                     <div>
-                      <label class="block text-xs font-medium text-slate-400">
+                      <label class="block text-xs font-medium text-gray-700">
                         ${paramName} ${paramSchema.required ? '<span class="text-red-500">*</span>' : ''}
                       </label>
-                      <div class="text-xs text-slate-500 mb-1">
+                      <div class="text-xs text-gray-500 mb-1">
                         Type: ${paramSchema.type}${paramSchema.minLength ? `, Min Length: ${paramSchema.minLength}` : ''}
                       </div>
-                      <input type="text" name="${paramName}" class="w-full px-3 py-2 border border-gray-700 text-xs focus:outline-none focus:border-red-500 bg-gray-700 text-slate-300 placeholder:text-slate-500" 
+                      <input type="text" name="${paramName}" class="w-full px-3 py-2 border border-gray-300 text-xs focus:outline-none focus:border-red-500 bg-white text-gray-900 placeholder:text-gray-500" 
                           placeholder="${paramName}" ${paramSchema.required ? 'required' : ''}>
                     </div>
                   `;
@@ -282,7 +304,7 @@
     
               if (Object.keys(endpoint.paramsSchema).length === 0) {
                 categoryContent += `
-                  <div class="text-xs text-slate-500 italic">
+                  <div class="text-xs text-gray-500 italic">
                     No parameters required for this endpoint.
                   </div>
                 `;
@@ -294,14 +316,14 @@
                         <button type="submit" class="bg-red-600 hover:bg-red-500 font-semibold text-white px-4 py-2 text-xs font-medium transition-colors duration-150">
                           Execute
                         </button>
-                        <button type="button" id="clear-${categoryIndex}-${endpointIndex}" onclick="clearResponse(${categoryIndex}, ${endpointIndex})" class="hidden bg-gray-700 border border-gray-600 hover:border-gray-500 font-semibold text-slate-300 px-4 py-2 text-xs font-medium transition-colors duration-150 ml-2">
+                        <button type="button" id="clear-${categoryIndex}-${endpointIndex}" onclick="clearResponse(${categoryIndex}, ${endpointIndex})" class="hidden bg-gray-100 border border-gray-300 hover:border-gray-400 font-semibold text-gray-900 px-4 py-2 text-xs font-medium transition-colors duration-150 ml-2">
                           Clear
                         </button>
                       </div>
                     </form>
     
                     <div id="response-${categoryIndex}-${endpointIndex}" class="hidden mt-3">
-                      <div class="text-slate-300 font-bold text-xs mb-2 flex items-center">
+                      <div class="text-gray-900 font-bold text-xs mb-2 flex items-center">
                         <span class="material-icons text-sm mr-1">code</span>
                         RESPONSE
                       </div>
@@ -452,7 +474,7 @@
           } else if (respContentType && respContentType.startsWith("image/")) {
             const blob = await response.blob();
             const imageUrl = URL.createObjectURL(blob);
-            bodyHtml = `<img src="${imageUrl}" alt="API Image" class="max-w-full rounded border border-gray-700"/>`;
+            bodyHtml = `<img src="${imageUrl}" alt="API Image" class="max-w-full rounded border border-gray-300"/>`;
           } else {
             const textData = await response.text();
             bodyHtml = `<pre class="text-white whitespace-pre-wrap">${textData}</pre>`;
@@ -547,6 +569,10 @@
           applyFilters();
         });
       });
+      
+      function openFeedback() {
+          window.open('https://github.com/yemobyte/YeMo-APIs/issues/new', '_blank');
+      }
     </script>
 </body>
 </html>
