@@ -8,6 +8,7 @@ import (
 
 	// Import endpoints to trigger init() and registration
 	_ "yemo-api/api/downloader"
+	_ "yemo-api/api/search"
 	_ "yemo-api/api/tools"
 )
 
