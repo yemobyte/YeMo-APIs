@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy Policy - YeMo API</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['Ubuntu Mono', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: { 850: '#1f2937', 900: '#111827', 950: '#0b0f19' },
+                        primary: { 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5' }
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #e2e8f0;
+            background-image: radial-gradient(#1f2937 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .neo-panel {
+            background-color: #111827;
+            border: 2px solid #374151;
+            box-shadow: 6px 6px 0px 0px #1f2937;
+        }
+
+        .neo-btn {
+            background-color: #4f46e5;
+            color: white;
+            border: 2px solid #818cf8;
+            box-shadow: 4px 4px 0px 0px #000;
+            transition: all 0.1s;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .neo-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #000;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Ubuntu Mono', monospace;
+            letter-spacing: -0.02em;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111827;
+            border-left: 1px solid #374151;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border: 2px solid #111827;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+    </style>
+</head>
+
+<body class="font-sans min-h-screen py-12 px-4">
+    <div class="max-w-4xl mx-auto">
+        <div class="neo-panel p-8 md:p-12 mb-8">
+            <h1 class="text-4xl md:text-5xl font-black mb-8 text-primary-400 border-b-4 border-gray-700 pb-4">PRIVACY
+                POLICY</h1>
+            <p
+                class="text-sm font-bold text-gray-500 mb-8 uppercase tracking-widest bg-gray-900 inline-block px-2 py-1 border border-gray-700">
+                Last updated: <span id="date"></span></p>
+
+            <div class="space-y-8 text-gray-300">
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>1. Introduction</h2>
+                    <p class="leading-relaxed">
+                        YeMo API ("we", "our", or "the Service") is committed to protecting your privacy. This Privacy
+                        Policy explains how we collect, use, disclose, and safeguard your information when you use our
+                        REST API service.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>2. Information We Collect</h2>
+                    <h3 class="text-lg font-bold mb-2 mt-4 text-gray-200">2.1 Automatically Collected Information</h3>
+                    <p class="leading-relaxed mb-3">
+                        When you use the Service, we may automatically collect certain information, including:
+                    </p>
+                    <ul class="list-disc pl-6 space-y-2 text-gray-400 marker:text-primary-500">
+                        <li>IP addresses for rate limiting and security purposes</li>
+                        <li>Request methods, paths, and response times</li>
+                        <li>User-Agent strings from HTTP headers</li>
+                        <li>Timestamp of API requests</li>
+                        <li>Error logs and debugging information</li>
+                    </ul>
+
+                    <h3 class="text-lg font-bold mb-2 mt-4 text-gray-200">2.2 Information You Provide</h3>
+                    <p class="leading-relaxed">
+                        When using certain endpoints (such as file upload), you may provide files or data. This
+                        information is processed according to the specific endpoint's functionality and is not stored
+                        longer than necessary.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>3. How We Use Your Information</h2>
+                    <p class="leading-relaxed mb-3">
+                        We use the collected information for the following purposes:
+                    </p>
+                    <ul class="list-disc pl-6 space-y-2 text-gray-400 marker:text-primary-500">
+                        <li>To provide, maintain, and improve the Service</li>
+                        <li>To monitor and analyze usage patterns and trends</li>
+                        <li>To detect, prevent, and address technical issues</li>
+                        <li>To enforce rate limiting and prevent abuse</li>
+                        <li>To comply with legal obligations</li>
+                        <li>To protect the security and integrity of the Service</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>4. Data Storage and Retention</h2>
+                    <p class="leading-relaxed">
+                        We retain log data and request information for a reasonable period necessary to provide the
+                        Service, troubleshoot issues, and ensure security. Uploaded files are automatically deleted
+                        after 5 minutes. We do not store personal information beyond what is necessary for the operation
+                        of the Service.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>5. Data Sharing and Disclosure</h2>
+                    <p class="leading-relaxed mb-3">
+                        We do not sell, trade, or rent your information to third parties. We may share information only
+                        in the following circumstances:
+                    </p>
+                    <ul class="list-disc pl-6 space-y-2 text-gray-400 marker:text-primary-500">
+                        <li>To comply with legal obligations or court orders</li>
+                        <li>To protect our rights, privacy, safety, or property</li>
+                        <li>To prevent or investigate potential violations of our Terms of Service</li>
+                        <li>With your explicit consent</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>6. Security</h2>
+                    <p class="leading-relaxed">
+                        We implement reasonable security measures to protect your information, including rate limiting,
+                        IP-based access controls, and secure data transmission. However, no method of transmission over
+                        the Internet or electronic storage is 100% secure.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>7. Cookies and Tracking</h2>
+                    <p class="leading-relaxed">
+                        The Service does not use cookies or similar tracking technologies. We rely on IP-based
+                        identification for rate limiting and security purposes only.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>8. Open Source License</h2>
+                    <p class="leading-relaxed">
+                        This project is licensed under the GNU General Public License v3.0 (GPL-3.0). The source code is
+                        publicly available.
+                        <a href="https://www.gnu.org/licenses/gpl-3.0.html"
+                            class="text-primary-400 hover:text-white underline font-bold" target="_blank">View
+                            License</a>
+                    </p>
+                </section>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <a href="/docs" class="neo-btn py-3 px-6">← RETURN TO DOCS</a>
+        </div>
+    </div>
+    <script>
+        document.getElementById('date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        let lastStartTime = null;
+        setInterval(() => {
+            fetch('/__health').then(r => r.json()).then(d => {
+                if (!lastStartTime) lastStartTime = d.startTime;
+                else if (lastStartTime !== d.startTime) location.reload();
+            }).catch(() => { });
+        }, 2000);
+    </script>
+</body>
+
+</html>

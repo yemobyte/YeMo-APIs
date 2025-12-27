@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>404 - Not Found</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['Ubuntu Mono', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: { 850: '#1f2937', 900: '#111827', 950: '#0b0f19' },
+                        primary: { 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5' }
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #e2e8f0;
+            background-image: radial-gradient(#1f2937 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .neo-panel {
+            background-color: #111827;
+            border: 2px solid #374151;
+            box-shadow: 6px 6px 0px 0px #1f2937;
+        }
+
+        .neo-btn {
+            background-color: #4f46e5;
+            color: white;
+            border: 2px solid #818cf8;
+            box-shadow: 4px 4px 0px 0px #000;
+            transition: all 0.1s;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .neo-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #000;
+        }
+    </style>
+</head>
+
+<body class="font-mono min-h-screen flex items-center justify-center p-4">
+    <div class="neo-panel p-8 md:p-12 text-center max-w-lg w-full relative overflow-hidden">
+        <h1 class="text-9xl font-black text-white mb-2 relative z-10">404</h1>
+        <div class="text-xl font-bold text-primary-400 mb-8 uppercase tracking-widest relative z-10">Page Not Found
+        </div>
+        <p class="text-gray-400 mb-8 relative z-10">The page you are looking for might have been removed, had its name
+            changed, or is temporarily unavailable.</p>
+
+        <a href="/" class="neo-btn py-4 px-8 inline-block relative z-10">
+            RETURN HOME
+        </a>
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-primary-600/10 rounded-full blur-3xl z-0"></div>
+        <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-red-600/10 rounded-full blur-3xl z-0"></div>
+    </div>
+</body>
+
+</html>

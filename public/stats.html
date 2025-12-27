@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <title>YeMo-APIs | System Status</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700;900&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['Ubuntu Mono', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: {
+                            850: '#1f2937',
+                            900: '#111827',
+                            950: '#0b0f19',
+                        },
+                        primary: {
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                        }
+                    },
+                    boxShadow: {
+                        'neo': '5px 5px 0px 0px #1f2937',
+                        'neo-active': '2px 2px 0px 0px #1f2937',
+                    }
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #e2e8f0;
+            background-image: radial-gradient(#1f2937 1px, transparent 1px);
+            background-size: 24px 24px;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        .neo-panel {
+            background-color: #111827;
+            border: 2px solid #374151;
+            box-shadow: 6px 6px 0px 0px #1f2937;
+            transition: all 0.2s ease;
+        }
+
+        .neo-panel:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px 0px #6366f1;
+            border-color: #6366f1;
+        }
+
+        .neo-btn {
+            background-color: #4f46e5;
+            color: white;
+            border: 2px solid #818cf8;
+            box-shadow: 4px 4px 0px 0px #000;
+            transition: all 0.1s;
+            text-transform: uppercase;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .neo-btn:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 6px 6px 0px 0px #000;
+        }
+
+        .neo-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #000;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+
+        /* Custom Chart Tooltip styling */
+        .apexcharts-tooltip {
+            background: #111827 !important;
+            border-color: #374151 !important;
+            color: #fff;
+        }
+
+        .apexcharts-tooltip-title {
+            background: #1f2937 !important;
+            border-bottom: 1px solid #374151 !important;
+        }
+
+        .apexcharts-text {
+            fill: #9ca3af !important;
+            font-family: 'Ubuntu Mono', monospace !important;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav
+        class="w-full sticky top-0 z-[100] bg-[#050505] border-b-4 border-[#1f2937] shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <div
+                    class="w-10 h-10 bg-primary-600 flex items-center justify-center border-2 border-white shadow-[3px_3px_0px_0px_white] transition-transform group-hover:-translate-y-1 group-hover:-translate-x-1 group-hover:shadow-[5px_5px_0px_0px_white]">
+                    <span class="font-sans font-black text-white text-xl uppercase tracking-tighter italic">Y</span>
+                </div>
+                <span class="font-sans font-black text-2xl tracking-tighter text-white uppercase italic">YeMo <span
+                        class="text-primary-400">API's</span></span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex gap-4 items-center">
+                <a href="/" class="neo-btn px-4 py-2 text-xs">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="/docs" class="neo-btn px-4 py-2 text-xs">
+                    <i class="fas fa-book"></i> Docs
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button
+                class="md:hidden neo-panel p-2 text-white bg-primary-600 border-white shadow-[2px_2px_0px_0px_white] active:shadow-none active:translate-x-[2px] active:translate-y-[2px]"
+                onclick="toggleMobileMenu()">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu"
+            class="fixed inset-0 bg-black/98 z-[110] opacity-0 pointer-events-none transition-all duration-300 md:hidden flex flex-col items-center justify-center gap-12 backdrop-blur-2xl">
+            <button
+                class="absolute top-8 right-8 neo-panel p-3 text-white bg-red-600 border-white shadow-[4px_4px_0px_0px_white]"
+                onclick="toggleMobileMenu()">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <div class="flex flex-col items-center gap-10">
+                <a href="/"
+                    class="text-5xl font-black text-white hover:text-primary-400 transition-all tracking-tighter uppercase italic"
+                    onclick="toggleMobileMenu()">Home</a>
+                <a href="/docs"
+                    class="text-5xl font-black text-white hover:text-primary-400 transition-all tracking-tighter uppercase italic"
+                    onclick="toggleMobileMenu()">Docs</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl mx-auto w-full p-6 space-y-8">
+
+        <!-- Header Info -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="neo-panel p-6 flex flex-col justify-between h-full bg-[#111827]">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-gray-400 font-mono text-sm uppercase">Server Status</h3>
+                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                </div>
+                <div class="text-2xl font-black text-white tracking-tight" id="server-status">ONLINE</div>
+                <div class="text-xs text-gray-500 font-mono mt-1" id="server-uptime">Up: Calculating...</div>
+            </div>
+
+            <div class="neo-panel p-6 flex flex-col justify-between h-full">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-gray-400 font-mono text-sm uppercase">OS Platform</h3>
+                    <i class="fab fa-linux text-gray-500"></i>
+                </div>
+                <div class="text-xl font-bold text-white tracking-tight truncate" id="os-platform">Loading...</div>
+                <div class="text-xs text-gray-500 font-mono mt-1" id="os-distro">...</div>
+            </div>
+
+            <div class="neo-panel p-6 flex flex-col justify-between h-full">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-gray-400 font-mono text-sm uppercase">CPU Load</h3>
+                    <i class="fas fa-microchip text-gray-500"></i>
+                </div>
+                <div class="text-3xl font-black text-primary-400" id="cpu-text">0%</div>
+                <div class="w-full bg-gray-800 h-1 mt-2 rounded-full overflow-hidden">
+                    <div id="cpu-bar" class="h-full bg-primary-500 transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="neo-panel p-6 flex flex-col justify-between h-full">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-gray-400 font-mono text-sm uppercase">Memory Usage</h3>
+                    <i class="fas fa-memory text-gray-500"></i>
+                </div>
+                <div class="text-3xl font-black text-purple-400" id="mem-text">0%</div>
+                <div class="w-full bg-gray-800 h-1 mt-2 rounded-full overflow-hidden">
+                    <div id="mem-bar" class="h-full bg-purple-500 transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Area -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- CPU History Chart -->
+            <div class="neo-panel p-6 min-h-[400px]">
+                <h3 class="text-white font-bold mb-6 flex items-center gap-2">
+                    <i class="fas fa-chart-line text-primary-400"></i> CPU History (Realtime)
+                </h3>
+                <div id="cpuChart" class="w-full h-[300px]"></div>
+            </div>
+
+            <!-- Memory Composition Chart -->
+            <div class="neo-panel p-6 min-h-[400px]">
+                <h3 class="text-white font-bold mb-6 flex items-center gap-2">
+                    <i class="fas fa-chart-pie text-purple-400"></i> Memory Distribution
+                </h3>
+                <div id="memChart" class="w-full h-[300px] flex items-center justify-center"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="mt-auto border-t border-gray-800 bg-[#050505] py-8 text-center">
+        <p class="text-xs text-gray-500 font-mono">POWERED BY YeMo API's ENGINE</p>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init({ duration: 600, once: true });</script>
+
+    <script>
+        // -- Utility Functions --
+        function formatBytes(bytes, decimals = 2) {
+            if (!+bytes) return '0 Bytes';
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+        }
+
+        function formatUptime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = Math.floor(seconds % 60);
+            return `${h}h ${m}m ${s}s`;
+        }
+
+        // -- Chart Setup --
+        // CPU Line Chart
+        const cpuOptions = {
+            series: [{ name: 'CPU Load', data: [] }],
+            chart: {
+                type: 'area',
+                height: 300,
+                animations: { enabled: true, easing: 'linear', dynamicAnimation: { speed: 1000 } },
+                toolbar: { show: false },
+                background: 'transparent',
+                fontFamily: 'Ubuntu Mono, monospace'
+            },
+            colors: ['#6366f1'],
+            stroke: { curve: 'smooth', width: 2 },
+            fill: {
+                type: 'gradient',
+                gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.1, stops: [0, 100] }
+            },
+            dataLabels: { enabled: false },
+            grid: {
+                borderColor: '#374151',
+                strokeDashArray: 4,
+            },
+            xaxis: {
+                range: 10,
+                labels: { show: false },
+                axisBorder: { show: false },
+                axisTicks: { show: false }
+            },
+            yaxis: {
+                max: 100,
+                min: 0,
+                tickAmount: 5,
+                labels: { style: { colors: '#9ca3af' } }
+            },
+            theme: { mode: 'dark' }
+        };
+        const cpuChart = new ApexCharts(document.querySelector("#cpuChart"), cpuOptions);
+        cpuChart.render();
+
+        // Memory Donut Chart
+        const memOptions = {
+            series: [0, 0], // Used, Free
+            labels: ['Used', 'Free'],
+            chart: {
+                type: 'donut',
+                height: 300,
+                background: 'transparent',
+                fontFamily: 'Ubuntu Mono, monospace'
+            },
+            colors: ['#a855f7', '#1f2937'],
+            stroke: { show: true, colors: ['#000'], width: 2 },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '75%',
+                        labels: {
+                            show: true,
+                            name: { color: '#9ca3af' },
+                            value: { color: '#fff', fontSize: '24px', fontWeight: 'bold' },
+                            total: {
+                                show: true,
+                                label: 'Total',
+                                color: '#9ca3af',
+                                formatter: function (w) {
+                                    return w.globals.seriesTotals.reduce((a, b) => a + b, 0).toFixed(1) + " GB";
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            dataLabels: { enabled: false },
+            legend: { position: 'bottom', labels: { colors: '#9ca3af' } },
+            tooltip: {
+                enabled: true,
+                y: {
+                    formatter: function (val) {
+                        return val + " GB"
+                    }
+                }
+            }
+        };
+        const memChart = new ApexCharts(document.querySelector("#memChart"), memOptions);
+        memChart.render();
+
+        // -- Data Fetching --
+        async function fetchStats() {
+            try {
+                const res = await fetch('/v1/system-stats');
+                const data = await res.json();
+
+                // Update Text Info
+                document.getElementById('server-uptime').textContent = "Up: " + formatUptime(data.uptime);
+
+                if (data.os) {
+                    document.getElementById('os-platform').textContent = data.os.platform.toUpperCase();
+                    document.getElementById('os-distro').textContent = `${data.os.distro} ${data.os.release}`;
+                }
+
+                // Update CPU
+                const cpuLoad = Math.round(data.cpu);
+                document.getElementById('cpu-text').textContent = cpuLoad + "%";
+                document.getElementById('cpu-bar').style.width = cpuLoad + "%";
+
+                // Update CPU Chart
+                // ApexCharts needs array of {x, y} or just y for category
+                // We keep last 10 points
+                // Actually easier to just appendData if using realtime logic, 
+                // but providing full array keeps it synced cleaner for simple polling
+                // Here we just update series with a simple push logic could be complex without state.
+                // Simplified: Just push new point and let chart handle window with 'range: 10' in xaxis
+                cpuChart.appendData([{
+                    data: [cpuLoad]
+                }]);
+
+
+                // Update Memory
+                const usedMemGB = parseFloat((data.mem.used / 1073741824).toFixed(2));
+                const freeMemGB = parseFloat((data.mem.free / 1073741824).toFixed(2));
+                const totalMemGB = parseFloat((data.mem.total / 1073741824).toFixed(2));
+                const usedPercent = Math.round((data.mem.used / data.mem.total) * 100);
+
+                document.getElementById('mem-text').textContent = usedPercent + "%";
+                document.getElementById('mem-bar').style.width = usedPercent + "%";
+
+                memChart.updateSeries([usedMemGB, freeMemGB]);
+
+                // Hack to update Total label in donut
+                memChart.updateOptions({
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                labels: {
+                                    total: {
+                                        formatter: () => totalMemGB + " GB"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+
+            } catch (e) {
+                console.error("Stats fetch error:", e);
+                document.getElementById('server-status').textContent = "OFFLINE";
+                document.getElementById('server-status').classList.replace('text-white', 'text-red-500');
+            }
+        }
+
+        // Init
+        fetchStats();
+        setInterval(fetchStats, 2000); // Poll every 2 seconds
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const body = document.body;
+            if (menu.classList.contains('opacity-0')) {
+                menu.classList.remove('opacity-0', 'pointer-events-none');
+                body.classList.add('overflow-hidden');
+            } else {
+                menu.classList.add('opacity-0', 'pointer-events-none');
+                body.classList.remove('overflow-hidden');
+            }
+        }
+
+    </script>
+</body>
+
+</html>

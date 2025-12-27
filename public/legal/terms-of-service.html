@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Terms of Service - YeMo API</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['Ubuntu Mono', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: { 850: '#1f2937', 900: '#111827', 950: '#0b0f19' },
+                        primary: { 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5' }
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #e2e8f0;
+            background-image: radial-gradient(#1f2937 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .neo-panel {
+            background-color: #111827;
+            border: 2px solid #374151;
+            box-shadow: 6px 6px 0px 0px #1f2937;
+        }
+
+        .neo-btn {
+            background-color: #4f46e5;
+            color: white;
+            border: 2px solid #818cf8;
+            box-shadow: 4px 4px 0px 0px #000;
+            transition: all 0.1s;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .neo-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #000;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Ubuntu Mono', monospace;
+            letter-spacing: -0.02em;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111827;
+            border-left: 1px solid #374151;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border: 2px solid #111827;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+    </style>
+</head>
+
+<body class="font-sans min-h-screen py-12 px-4">
+    <div class="max-w-4xl mx-auto">
+        <div class="neo-panel p-8 md:p-12 mb-8">
+            <h1 class="text-4xl md:text-5xl font-black mb-8 text-primary-400 border-b-4 border-gray-700 pb-4">TERMS OF
+                SERVICE</h1>
+            <p
+                class="text-sm font-bold text-gray-500 mb-8 uppercase tracking-widest bg-gray-900 inline-block px-2 py-1 border border-gray-700">
+                Last updated: <span id="date"></span></p>
+
+            <div class="space-y-8 text-gray-300">
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>1. Acceptance of Terms</h2>
+                    <p class="leading-relaxed">
+                        By accessing and using YeMo API ("the Service"), you accept and agree to be bound by the terms
+                        and provision of this agreement. If you do not agree to abide by the above, please do not use
+                        this service.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>2. Description of Service</h2>
+                    <p class="leading-relaxed">
+                        YeMo API is a RESTful API service that provides various endpoints for developers to integrate
+                        into their applications. The Service is provided "as is" without warranties of any kind, either
+                        express or implied.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>3. Use License</h2>
+                    <p class="leading-relaxed mb-3">
+                        This project is licensed under the GNU General Public License v3.0 (GPL-3.0). You are free to:
+                    </p>
+                    <ul class="list-disc pl-6 space-y-2 text-gray-400 marker:text-primary-500">
+                        <li>Use the API for commercial and non-commercial purposes</li>
+                        <li>Modify and distribute the code in accordance with GPL-3.0</li>
+                        <li>Share your modifications under the same license</li>
+                    </ul>
+                    <p class="leading-relaxed mt-3">
+                        <a href="https://www.gnu.org/licenses/gpl-3.0.html"
+                            class="text-primary-400 hover:text-white underline font-bold" target="_blank">View Full
+                            License</a>
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>4. Acceptable Use</h2>
+                    <p class="leading-relaxed mb-3">
+                        You agree not to use the Service to:
+                    </p>
+                    <ul class="list-disc pl-6 space-y-2 text-gray-400 marker:text-primary-500">
+                        <li>Violate any applicable laws or regulations</li>
+                        <li>Infringe upon the rights of others</li>
+                        <li>Transmit any harmful, offensive, or illegal content</li>
+                        <li>Attempt to gain unauthorized access to the Service</li>
+                        <li>Overload or disrupt the Service's infrastructure</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>5. Rate Limiting</h2>
+                    <p class="leading-relaxed">
+                        The Service implements rate limiting to ensure fair usage and maintain service quality.
+                        Excessive requests may result in temporary or permanent restrictions.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>6. Disclaimer of Warranties</h2>
+                    <p class="leading-relaxed uppercase font-bold text-gray-400">
+                        The Service is provided "as is" and "as available" without warranties of any kind, either
+                        express or implied.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold mb-3 text-white uppercase"><span
+                            class="text-primary-500 mr-2">#</span>7. Termination</h2>
+                    <p class="leading-relaxed">
+                        We may terminate or suspend your access to the Service immediately, without prior notice or
+                        liability, for any reason whatsoever.
+                    </p>
+                </section>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <a href="/docs" class="neo-btn py-3 px-6">← RETURN TO DOCS</a>
+        </div>
+    </div>
+    <script>
+        document.getElementById('date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        let lastStartTime = null;
+        setInterval(() => {
+            fetch('/__health').then(r => r.json()).then(d => {
+                if (!lastStartTime) lastStartTime = d.startTime;
+                else if (lastStartTime !== d.startTime) location.reload();
+            }).catch(() => { });
+        }, 2000);
+    </script>
+</body>
+
+</html>

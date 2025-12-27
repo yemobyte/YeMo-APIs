@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>YeMo-APIs Documentation</title>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['Ubuntu Mono', 'monospace'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            gray: {
+              850: '#1f2937',
+              900: '#111827',
+              950: '#0b0f19',
+            },
+            primary: {
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+            }
+          },
+          boxShadow: {
+            'neo': '4px 4px 0px 0px rgba(99, 102, 241, 0.4)',
+            'neo-hover': '2px 2px 0px 0px rgba(99, 102, 241, 1)',
+            'neo-red': '4px 4px 0px 0px rgba(239, 68, 68, 0.4)',
+            'neo-green': '4px 4px 0px 0px rgba(34, 197, 94, 0.4)',
+          }
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      background-color: #050505;
+      color: #e2e8f0;
+      background-image: radial-gradient(#1f2937 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #050505;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #4f46e5;
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6366f1;
+    }
+
+    html,
+    body {
+      overflow-x: hidden;
+      width: 100%;
+      scroll-behavior: smooth;
+    }
+
+    .neo-panel {
+      background-color: #111827;
+      border: 2px solid #374151;
+      box-shadow: 6px 6px 0px 0px #1f2937;
+      transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .neo-panel:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 8px 8px 0px 0px #6366f1;
+      border-color: #6366f1;
+    }
+
+    .neo-btn {
+      background-color: #4f46e5;
+      color: white;
+      border: 2px solid #818cf8;
+      box-shadow: 4px 4px 0px 0px #000;
+      transition: all 0.1s;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: auto;
+    }
+
+    .neo-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px 0px #000;
+    }
+
+    .neo-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .neo-input {
+      background-color: #0b0f19;
+      border: 2px solid #374151;
+      color: white;
+      transition: all 0.2s;
+    }
+
+    .neo-input:focus {
+      border-color: #6366f1;
+      box-shadow: 4px 4px 0px 0px #6366f1;
+      outline: none;
+    }
+
+    .gradient-text {
+      color: #818cf8;
+      text-shadow: 2px 2px 0px #4f46e5;
+    }
+
+    .method-badge {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.5rem;
+      font-weight: 700;
+      border: 2px solid;
+      box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    .method-get {
+      background-color: #059669;
+      border-color: #34d399;
+      color: white;
+    }
+
+    .method-post {
+      background-color: #2563eb;
+      border-color: #60a5fa;
+      color: white;
+    }
+
+    .method-put {
+      background-color: #d97706;
+      border-color: #fbbf24;
+      color: white;
+    }
+
+    .method-delete {
+      background-color: #dc2626;
+      border-color: #f87171;
+      color: white;
+    }
+  </style>
+</head>
+
+<body class="font-mono min-h-screen">
+  <!-- Navbar -->
+  <nav class="w-full sticky top-0 z-[100] bg-[#050505] border-b-4 border-[#1f2937] shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+      <a href="/" class="flex items-center gap-3 group">
+        <div
+          class="w-10 h-10 bg-primary-600 flex items-center justify-center border-2 border-white shadow-[3px_3px_0px_0px_white] transition-transform group-hover:-translate-y-1 group-hover:-translate-x-1 group-hover:shadow-[5px_5px_0px_0px_white]">
+          <span class="font-sans font-black text-white text-xl uppercase tracking-tighter italic">Y</span>
+        </div>
+        <span class="font-sans font-black text-2xl tracking-tighter text-white uppercase italic">YeMo <span
+            class="text-primary-400">API's</span></span>
+      </a>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex gap-4 items-center">
+        <a href="/" class="neo-btn px-4 py-2 text-xs">
+          <i class="fas fa-home"></i> Home
+        </a>
+        <a href="/stats" class="neo-btn px-4 py-2 text-xs">
+          <i class="fas fa-chart-line"></i> Stats
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button
+        class="md:hidden neo-panel p-2 text-white bg-primary-600 border-white shadow-[2px_2px_0px_0px_white] active:shadow-none active:translate-x-[2px] active:translate-y-[2px]"
+        onclick="toggleMobileMenu()">
+        <i class="fas fa-bars text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+      class="fixed inset-0 bg-black/98 z-[110] opacity-0 pointer-events-none transition-all duration-300 md:hidden flex flex-col items-center justify-center gap-12 backdrop-blur-2xl">
+      <button
+        class="absolute top-8 right-8 neo-panel p-3 text-white bg-red-600 border-white shadow-[4px_4px_0px_0px_white]"
+        onclick="toggleMobileMenu()">
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+      <div class="flex flex-col items-center gap-10">
+        <a href="/"
+          class="text-5xl font-black text-white hover:text-primary-400 transition-all tracking-tighter uppercase italic"
+          onclick="toggleMobileMenu()">Home</a>
+        <a href="/stats"
+          class="text-5xl font-black text-white hover:text-primary-400 transition-all tracking-tighter uppercase italic"
+          onclick="toggleMobileMenu()">Stats</a>
+      </div>
+    </div>
+  </nav>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>AOS.init({ duration: 600, once: true });</script>
+  <main class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 overflow-hidden">
+    <div class="text-left mb-12" data-aos="fade-up">
+      <h1 class="text-5xl font-black gradient-text mb-4 tracking-tight">
+        <span id="title">YeMo API's</span>
+      </h1>
+      <p class="text-gray-400 text-lg mb-6 border-l-4 border-primary-500 pl-4">
+        <span id="description">Loading...</span>
+      </p>
+
+      <div class="flex flex-wrap gap-4 mb-8">
+        <a href="https://whatsapp.com/channel/0029Vb7MpjO9RZAXcgJe0n0W"
+          class="neo-btn flex-1 sm:flex-none px-4 py-3 text-sm no-underline inline-block">
+          <i class="fab fa-whatsapp mr-2"></i> Join Channel
+        </a>
+        <a href="https://github.com/yemobyte/YeMo-APIs"
+          class="neo-btn flex-1 sm:flex-none px-4 py-3 text-sm no-underline inline-block bg-gray-800 border-gray-600">
+          <i class="fab fa-github mr-2"></i> Source Code
+        </a>
+      </div>
+
+      <div class="mb-8 neo-panel overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+        <div class="bg-gray-800 p-4 border-b-2 border-gray-700 flex justify-between items-center">
+          <h2 class="font-bold text-white flex items-center gap-2 text-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-megaphone text-yellow-400" aria-hidden="true">
+              <path d="m3 11 18-5v12L3 14v-3z" />
+              <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
+            </svg>
+            Announcement
+          </h2>
+        </div>
+        <div class="p-4 space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar" id="infoList"></div>
+      </div>
+
+      <div class="mb-4 bg-[#111827] border-2 border-[#374151] p-4 shadow-[4px_4px_0px_0px_#1f2937]">
+        <label class="block text-sm font-bold text-primary-400 mb-2 uppercase tracking-wide">Base URL</label>
+        <select id="hostSelect" class="w-full px-4 py-3 neo-input text-sm cursor-pointer">
+          <option id="valueURL" value="" selected>Loading...</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="neo-panel p-6 mb-8" data-aos="fade-up" data-aos-delay="200">
+      <div class="flex justify-between items-center gap-2">
+        <div class="flex-1 text-center border-r-2 border-[#374151]">
+          <div class="text-2xl sm:text-3xl font-black text-primary-400" id="totalEndpoints">0</div>
+          <div class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-widest font-bold mt-1">Endpoints</div>
+        </div>
+        <div class="flex-1 text-center">
+          <div class="text-2xl sm:text-3xl font-black text-primary-400" id="totalCategories">0</div>
+          <div class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-widest font-bold mt-1">Categories</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative mb-8 group">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+        <span class="material-icons text-primary-500">search</span>
+      </div>
+      <input type="text" id="searchInput" placeholder="SEARCH ENDPOINTS..."
+        class="w-full pl-12 pr-4 py-4 text-base neo-input placeholder-gray-600 font-bold">
+    </div>
+
+    <div id="content" class="space-y-8">
+      <div id="noResults" class="text-center py-20 hidden">
+        <div class="inline-block p-6 border-2 border-dashed border-gray-700 rounded-lg">
+          <h3 class="text-xl text-gray-400 font-bold mb-2">NO DATA FOUND</h3>
+          <p class="text-sm text-gray-600">Try searching for something else.</p>
+        </div>
+      </div>
+      <div id="apiList" class="space-y-8"></div>
+    </div>
+
+    <div class="mt-20 py-8 border-t-2 border-[#374151] text-center">
+      <p class="text-gray-500 text-sm font-bold mb-4">
+        &copy; <span id="year"></span> YeMo API's. NO COPYRIGHT INTENDED.
+      </p>
+      <div class="space-x-6">
+        <a href="/legal/privacy-policy.html"
+          class="text-gray-400 hover:text-primary-400 font-bold uppercase text-xs transition-colors">Privacy</a>
+        <span class="text-gray-700">|</span>
+        <a href="/legal/terms-of-service.html"
+          class="text-gray-400 hover:text-primary-400 font-bold uppercase text-xs transition-colors">Terms</a>
+      </div>
+    </div>
+  </main>
+
+  <button onclick="openFeedback()"
+    class="fixed bottom-6 right-6 neo-btn p-3 px-5 z-40 rounded-none flex items-center gap-2 shadow-[4px_4px_0px_0px_#000] hover:transform hover:-translate-y-1 transition-all"
+    aria-label="Send Feedback">
+    <i class="fas fa-comment-alt"></i>
+    <span>FEEDBACK</span>
+  </button>
+
+  <script>
+    async function loadApiData() {
+      try {
+        const res = await fetch("/openapi.json");
+        const apiData = await res.json();
+
+        const categories = {};
+        apiData.endpoints.forEach(endpoint => {
+          if (!categories[endpoint.category]) {
+            categories[endpoint.category] = [];
+          }
+          categories[endpoint.category].push(endpoint);
+        });
+
+        const option = document.getElementById('valueURL');
+        option.value = apiData.baseURL;
+        option.textContent = `${apiData.baseURL} - PRODUCTION`;
+
+        document.getElementById('title').textContent = "YeMo API's";
+        document.getElementById('description').textContent = apiData.description;
+        document.getElementById("year").textContent = new Date().getFullYear();
+        document.getElementById('totalEndpoints').textContent = apiData.endpoints.length;
+        document.getElementById('totalCategories').textContent = Object.keys(categories).length;
+
+        const apiList = document.getElementById('apiList');
+        let categoryIndex = 0;
+
+        for (const [categoryName, endpoints] of Object.entries(categories)) {
+          const categoryGroup = document.createElement('div');
+          categoryGroup.className = 'category-group';
+          categoryGroup.setAttribute('data-category', categoryName);
+
+          const categoryHeader = `
+              <div class="neo-panel overflow-hidden">
+                <button onclick="toggleCategory(${categoryIndex})" class="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-[#1f2937] transition-colors border-b-0 border-[#374151]">
+                  <div class="flex items-center gap-4">
+                      <div class="bg-primary-600 text-white p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                        <span class="material-icons text-xl block">folder_open</span>
+                      </div>
+                      <div>
+                        <h2 class="font-black text-xl text-gray-100 uppercase tracking-wide">${categoryName}</h2>
+                        <span class="text-xs font-bold text-primary-400 bg-[#0b0f19] px-2 py-0.5 border border-[#374151] inline-block mt-1">${endpoints.length} Routes</span>
+                      </div>
+                  </div>
+                  <span class="material-icons text-primary-500 transform transition-transform duration-200" id="category-icon-${categoryIndex}">expand_more</span>
+                </button>
+                <div id="category-${categoryIndex}" class="hidden border-t-2 border-[#374151] bg-[#0b0f19] p-6">
+                  <div class="grid grid-cols-1 gap-6">
+            `;
+
+          let categoryContent = '';
+          let endpointIndex = 0;
+
+          endpoints.forEach(endpoint => {
+            const methodBadges = endpoint.methods.map(method => {
+              let colorClass = 'method-get';
+              if (method === 'POST') colorClass = 'method-post';
+              else if (method === 'PUT') colorClass = 'method-put';
+              else if (method === 'DELETE') colorClass = 'method-delete';
+
+              return `<span class="method-badge ${colorClass}">${method}</span>`;
+            }).join(' ');
+
+            categoryContent += `
+                <div class="border-2 border-[#374151] bg-[#111827] p-5 hover:border-primary-500 transition-colors api-item group" 
+                     data-method="${endpoint.methods[0]}" 
+                     data-path="${endpoint.route}" 
+                     data-alias="${endpoint.name}" 
+                     data-category="${endpoint.category}">
+                  
+                  <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                    <div class="flex-1">
+                        <div class="flex items-center flex-wrap gap-3 mb-2">
+                           ${methodBadges}
+                           <h3 class="font-mono font-bold text-sm text-gray-200 break-all bg-[#0b0f19] px-2 py-1 border border-[#374151]">${endpoint.route}</h3>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-gray-700 pl-3">${endpoint.description}</p>
+                    </div>
+                    <button onclick="toggleEndpoint(${categoryIndex}, ${endpointIndex})" 
+                            class="neo-btn px-3 py-1 text-xs self-start shrink-0 flex items-center gap-1">
+                      <span>TEST</span>
+                      <span class="material-icons text-sm" id="endpoint-icon-${categoryIndex}-${endpointIndex}">expand_more</span>
+                    </button>
+                  </div>
+    
+                  <div id="endpoint-${categoryIndex}-${endpointIndex}" class="hidden mt-6 pt-6 border-t-2 border-dashed border-[#374151]">
+                    <div class="mb-4 flex items-center gap-2">
+                        <span class="material-icons text-green-500 text-sm">terminal</span>
+                        <span class="text-green-500 font-bold text-xs tracking-wider">REQUEST CONSOLE</span>
+                    </div>
+                    
+                    <form id="form-${categoryIndex}-${endpointIndex}" 
+                          onsubmit="executeRequest(event, ${categoryIndex}, ${endpointIndex}, '${endpoint.methods[0]}', '${endpoint.route}', 'application/json')">
+                      <div class="grid grid-cols-1 gap-4 mb-6">
+              `;
+
+            const params = Object.entries(endpoint.paramsSchema);
+
+            if (params.length > 0) {
+              params.forEach(([paramName, paramSchema]) => {
+                const requiredStar = paramSchema.required ? '<span class="text-red-500 ml-1">*</span>' : '';
+                if (paramSchema.type === "file") {
+                  categoryContent += `
+                        <div class="space-y-1">
+                          <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide">
+                            ${paramName} ${requiredStar}
+                          </label>
+                          <input type="file" name="${paramName}" 
+                                class="w-full text-xs text-gray-300 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-xs file:font-semibold file:bg-primary-600 file:text-white hover:file:bg-primary-500 cursor-pointer border-2 border-[#374151] bg-[#0b0f19] p-1"
+                                ${paramSchema.required ? 'required' : ''}>
+                        </div>
+                      `;
+                } else {
+                  categoryContent += `
+                        <div class="space-y-1">
+                          <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide">
+                            ${paramName} ${requiredStar}
+                          </label>
+                          <div class="relative">
+                            <input type="text" name="${paramName}" 
+                                class="w-full px-4 py-2 neo-input text-sm font-mono placeholder-gray-700" 
+                                placeholder="Value for ${paramName}..." ${paramSchema.required ? 'required' : ''}>
+                             <div class="absolute right-2 top-2 text-[10px] text-gray-600 font-bold bg-[#111827] px-1 border border-[#374151]">
+                                ${paramSchema.type}${paramSchema.minLength ? `:${paramSchema.minLength}` : ''}
+                             </div>
+                          </div>
+                        </div>
+                      `;
+                }
+              });
+            } else {
+              categoryContent += `
+                   <div class="text-xs text-gray-500 font-mono border border-dashed border-gray-700 p-2 text-center">
+                     NO PARAMETERS REQUIRED
+                   </div>
+                 `;
+            }
+
+            categoryContent += `
+                      </div>
+                      <div class="flex gap-4">
+                        <button type="submit" class="neo-btn flex-1 py-3 text-sm flex items-center justify-center gap-2">
+                          <span class="material-icons text-sm">play_arrow</span>
+                          EXECUTE
+                        </button>
+                        <button type="button" id="clear-${categoryIndex}-${endpointIndex}" onclick="clearResponse(${categoryIndex}, ${endpointIndex})" 
+                                class="hidden neo-btn bg-gray-800 border-gray-600 flex-1 py-3 text-sm flex items-center justify-center gap-2">
+                          <span class="material-icons text-gray-400 text-sm">clear</span>
+                          CLEAR
+                        </button>
+                      </div>
+                    </form>
+    
+                    <div id="response-${categoryIndex}-${endpointIndex}" class="hidden mt-6">
+                      <div class="mb-2 flex items-center justify-between">
+                         <div class="flex items-center gap-2">
+                            <span class="material-icons text-yellow-500 text-sm">data_object</span>
+                            <span class="text-yellow-500 font-bold text-xs tracking-wider">RESPONSE OUTPUT</span>
+                         </div>
+                      </div>
+                      <div class="bg-[#050505] border-2 border-[#374151] p-4 font-mono text-xs overflow-x-auto shadow-inner">
+                        <div class="max-h-96 overflow-y-auto" id="response-content-${categoryIndex}-${endpointIndex}"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+
+            endpointIndex++;
+          });
+
+          const categoryFooter = `
+                  </div>
+                </div>
+              </div>
+            `;
+
+          categoryGroup.innerHTML = categoryHeader + categoryContent + categoryFooter;
+          apiList.appendChild(categoryGroup);
+          categoryIndex++;
+        }
+
+      } catch (err) {
+        console.error("Failed to load API data:", err);
+        document.getElementById('apiList').innerHTML = `<div class="neo-panel p-8 text-center text-red-500 font-bold">FAILED TO LOAD API DATA</div>`;
+      }
+    }
+
+    loadApiData();
+
+    async function loadInformation() {
+      try {
+        const res = await fetch('/announcement.json');
+        const data = await res.json();
+        const infoList = document.getElementById('infoList');
+
+        infoList.innerHTML = data.map(info => `
+           <div class="p-4 border-2 border-gray-800 hover:border-gray-600 transition-colors bg-[#050505] opacity-70">
+                <div class="flex justify-between items-start gap-4">
+                    <div class="flex-1">
+                        <p class="font-bold text-gray-200 text-sm mb-1 uppercase tracking-wide">${info.title}</p>
+                        <p class="text-xs text-gray-400 font-mono leading-relaxed">${info.description}</p>
+                    </div>
+                    <div class="flex items-center flex-shrink-0">
+                        <span class="text-[10px] text-gray-500 font-mono bg-gray-900 px-2 py-1 border border-gray-800">${info.date}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    loadInformation();
+
+    function toggleCategory(categoryIndex) {
+      const content = document.getElementById(`category-${categoryIndex}`);
+      const icon = document.getElementById(`category-icon-${categoryIndex}`);
+
+      content.classList.toggle('hidden');
+      if (!content.classList.contains('hidden')) {
+        icon.innerText = 'expand_less';
+      } else {
+        icon.innerText = 'expand_more';
+      }
+    }
+
+    function toggleEndpoint(categoryIndex, endpointIndex) {
+      const content = document.getElementById(`endpoint-${categoryIndex}-${endpointIndex}`);
+      const icon = document.getElementById(`endpoint-icon-${categoryIndex}-${endpointIndex}`);
+
+      content.classList.toggle('hidden');
+      if (!content.classList.contains('hidden')) {
+        icon.innerText = 'expand_less';
+      } else {
+        icon.innerText = 'expand_more';
+      }
+    }
+
+    function clearResponse(categoryIndex, endpointIndex) {
+      const responseElement = document.getElementById(`response-${categoryIndex}-${endpointIndex}`);
+      const responseContent = document.getElementById(`response-content-${categoryIndex}-${endpointIndex}`);
+      const clearButton = document.getElementById(`clear-${categoryIndex}-${endpointIndex}`);
+
+      responseElement.classList.add('hidden');
+      responseContent.innerHTML = '';
+      clearButton.classList.add('hidden');
+    }
+
+    async function executeRequest(event, categoryIndex, endpointIndex, method, path, contentType) {
+      event.preventDefault();
+
+      const form = event.target;
+      const responseElement = document.getElementById(`response-${categoryIndex}-${endpointIndex}`);
+      const responseContent = document.getElementById(`response-content-${categoryIndex}-${endpointIndex}`);
+      const clearButton = document.getElementById(`clear-${categoryIndex}-${endpointIndex}`);
+      const hostSelect = document.getElementById('hostSelect');
+      const selectedHost = hostSelect.value;
+      let fullUrl = selectedHost + path;
+
+      try {
+        let requestConfig = {
+          method: method,
+          headers: {}
+        };
+
+        if (method === 'GET') {
+          const formData = new FormData(form);
+          const params = new URLSearchParams();
+          for (let [key, value] of formData.entries()) {
+            if (value) params.append(key, value);
+          }
+          if (params.toString()) fullUrl += '?' + params.toString();
+        } else {
+          const formData = new FormData(form);
+          let hasFile = false;
+          form.querySelectorAll("input[type=file]").forEach(input => {
+            if (input.files.length > 0) hasFile = true;
+          });
+
+          if (hasFile) {
+            requestConfig.body = formData;
+          } else {
+            const jsonBody = {};
+            for (let [key, value] of formData.entries()) {
+              if (value) jsonBody[key] = value;
+            }
+            if (Object.keys(jsonBody).length > 0) {
+              requestConfig.headers['Content-Type'] = 'application/json';
+              requestConfig.body = JSON.stringify(jsonBody);
+            }
+          }
+        }
+
+        responseContent.innerHTML = '<span class="text-primary-400 animate-pulse">Processing Request...</span>';
+        responseElement.classList.remove('hidden');
+
+        const response = await fetch(fullUrl, requestConfig);
+        const respContentType = response.headers.get("content-type");
+
+        let bodyHtml = "";
+        if (respContentType && respContentType.includes("application/json")) {
+          const responseData = await response.json();
+          bodyHtml = `<pre class="text-green-400 whitespace-pre-wrap">${JSON.stringify(responseData, null, 2)}</pre>`;
+        } else if (respContentType && respContentType.startsWith("image/")) {
+          const blob = await response.blob();
+          const imageUrl = URL.createObjectURL(blob);
+          bodyHtml = `<img src="${imageUrl}" alt="Response" class="max-w-full border-2 border-[#374151]"/>`;
+        } else {
+          const textData = await response.text();
+          bodyHtml = `<pre class="text-gray-300 whitespace-pre-wrap">${textData}</pre>`;
+        }
+
+        const statusColor = response.ok ? 'text-green-500' : 'text-red-500';
+        const headerHtml = `
+            <div class="border-b border-gray-800 pb-2 mb-2 font-mono text-xs text-gray-500">
+              <div class="flex justify-between">
+                 <span>STATUS: <span class="${statusColor} font-bold">${response.status} ${response.statusText}</span></span>
+                 <span>${method}</span>
+              </div>
+              <div class="truncate mt-1 text-gray-600">${fullUrl}</div>
+            </div>`;
+
+        responseContent.innerHTML = headerHtml + bodyHtml;
+
+      } catch (error) {
+        responseContent.innerHTML = `
+             <div class="text-red-500 font-bold border-b border-red-900 pb-2 mb-2">ERROR</div>
+             <div class="text-red-400">${error.message}</div>
+          `;
+        responseElement.classList.remove('hidden');
+      } finally {
+        clearButton.classList.remove('hidden');
+      }
+    }
+
+    let searchInput, apiItems, noResults, apiListContainer;
+
+    function applyFilters() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+      const categoryGroups = document.querySelectorAll('.category-group');
+
+      categoryGroups.forEach(group => {
+        let hasVisibleItems = false;
+        const groupItems = group.querySelectorAll('.api-item');
+
+        groupItems.forEach(item => {
+          const matches = [
+            item.getAttribute('data-path'),
+            item.getAttribute('data-alias'),
+            item.getAttribute('data-method'),
+            item.getAttribute('data-category')
+          ].some(attr => attr && attr.toLowerCase().includes(searchTerm));
+
+          item.style.display = matches ? 'block' : 'none';
+          if (matches) hasVisibleItems = true;
+        });
+
+        if (hasVisibleItems) {
+          group.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          group.classList.add('hidden');
+        }
+      });
+
+      if (visibleCount === 0) {
+        noResults.classList.remove('hidden');
+      } else {
+        noResults.classList.add('hidden');
+      }
+    }
+
+    window.addEventListener('load', () => {
+      searchInput = document.getElementById('searchInput');
+      noResults = document.getElementById('noResults');
+      apiListContainer = document.getElementById('apiList');
+
+      searchInput.addEventListener('input', applyFilters);
+    });
+
+    function openFeedback() {
+      window.open('https://github.com/yemobyte/YeMo-APIs/issues/new', '_blank');
+    }
+
+    // Auto Reload Logic
+    let lastStartTime = null;
+    setInterval(() => {
+      fetch('/v1/status').then(r => r.json()).then(d => {
+        if (!lastStartTime) lastStartTime = d.startTime;
+        else if (lastStartTime !== d.startTime) location.reload();
+      }).catch(() => { });
+    }, 2000);
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      const body = document.body;
+      if (menu.classList.contains('opacity-0')) {
+        menu.classList.remove('opacity-0', 'pointer-events-none');
+        body.classList.add('overflow-hidden');
+      } else {
+        menu.classList.add('opacity-0', 'pointer-events-none');
+        body.classList.remove('overflow-hidden');
+      }
+    }
+  </script>
+</body>
+
+</html>

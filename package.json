@@ -1,0 +1,51 @@
+{
+  "name": "YeMo-APIs",
+  "version": "1.0.0",
+  "description": "A minimalist REST API boilerplate built with Express.js — fast, lightweight, and extensible.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "lint": "eslint .",
+    "test": "jest"
+  },
+  "keywords": [
+    "express",
+    "rest-api",
+    "api",
+    "backend",
+    "boilerplate",
+    "framework",
+    "json",
+    "plugin",
+    "minimalist"
+  ],
+  "author": {
+    "name": "YeMo",
+    "url": "https://github.com/yemobyte"
+  },
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yemobyte/YeMo-APIs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yemobyte/YeMo-APIs/issues"
+  },
+  "homepage": "https://github.com/yemobyte/YeMo-APIs#readme",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "cheerio": "^1.1.2",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.2",
+    "express": "^4.19.2",
+    "multer": "^2.0.2",
+    "systeminformation": "^5.28.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.0"
+  }
+}
