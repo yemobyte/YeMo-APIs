@@ -38,6 +38,8 @@
         "message": "Rate limit exceeded - your IP has been blocked."
     },
     "endpointsStatus": {
-        "/tools/upload": "online"
-    }
+        "/tools/upload": "online",
+        "/downloader/aio": "online"
+    },
+    "attribution": "@YeMo"
 }

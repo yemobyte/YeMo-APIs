@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 /**
  * @license
  * Copyright (C) 2025 YeMo
@@ -10,11 +13,11 @@
  * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -60,7 +63,7 @@ export default function setupResponseFormatter(app) {
      * @type {Function}
      */
     const originalJson = res.json;
-    
+
     /**
      * Override the res.json method to format responses consistently
      * @function res.json
@@ -82,7 +85,7 @@ export default function setupResponseFormatter(app) {
          * @type {number}
          */
         const statusCode = res.statusCode || 200;
-        
+
         /**
          * Base response object with status code and original data
          * @type {Object}
@@ -98,20 +101,30 @@ export default function setupResponseFormatter(app) {
            * @type {string}
            */
           responseData.timestamp = new Date().toISOString();
-          
+
           /**
            * Developer attribution credit
            * @type {string}
            */
-          responseData.attribution = "@YeMo";
+          try {
+            const configPath = path.join(process.cwd(), 'configuration.json');
+            if (fs.existsSync(configPath)) {
+              const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+              responseData.attribution = config.attribution || "@YeMo";
+            } else {
+              responseData.attribution = "@YeMo";
+            }
+          } catch (e) {
+            responseData.attribution = "@YeMo";
+          }
         }
 
         return originalJson.call(this, responseData);
       }
-      
+
       return originalJson.call(this, data);
     };
-    
+
     next();
   });
 }
