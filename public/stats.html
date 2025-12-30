@@ -612,12 +612,6 @@
                 const res = await fetch('/configuration');
                 const config = await res.json();
 
-                if (config.website) {
-                    if (config.website.title) document.title = config.website.title + " - Stats";
-                    if (document.getElementById('nav-title')) document.getElementById('nav-title').textContent = config.website.headerTitle;
-                    if (document.getElementById('nav-subtitle')) document.getElementById('nav-subtitle').textContent = config.website.headerSubtitle;
-                }
-
                 if (config.notifications && config.notifications.enabled) {
                     const modal = document.getElementById('notification-docs');
                     if (modal) {

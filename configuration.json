@@ -31,16 +31,6 @@
             }
         ]
     },
-    "website": {
-        "title": "YeMo-APIs",
-        "headerTitle": "YeMo",
-        "headerSubtitle": "APIs",
-        "heroTitle": "YeMo",
-        "heroSubtitle": "API'S",
-        "heroTagline": "NEXT-GEN ENGINE",
-        "description": "Experience the future of development with YeMo API's. Our high-performance, auto-documented, and secure engine provides the robust foundation your modern applications deserve.",
-        "footerText": "YEMO API'S • BEYOND PERFORMANCE"
-    },
     "rateLimit": {
         "enabled": true,
         "windowMs": 10000,

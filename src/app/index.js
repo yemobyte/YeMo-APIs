@@ -119,9 +119,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
 });
 
-initializationPromise.then(endpoints => {
-  setupRoutes(app, endpoints);
-});
+
 
 function setupRoutes(app, endpoints) {
   app.get('/system-stats', async (req, res) => {
@@ -207,7 +205,7 @@ function setupRoutes(app, endpoints) {
    */
   app.post("/admin/unban", express.json(), rateLimiter.adminUnbanHandler);
 
-  /* Routes moved above setupRoutes */
+
 
 
   /**

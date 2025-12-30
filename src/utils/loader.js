@@ -35,7 +35,7 @@ import { pathToFileURL } from "url";
  * Discovered endpoints are automatically registered with the Express application.
  * 
  * @example
- * // Load endpoints from the api directory
+ *
  * const endpoints = await loadEndpoints(path.join(process.cwd(), "api"), app);
  * console.log(`Loaded ${endpoints.length} endpoints`);
  * 
@@ -48,7 +48,6 @@ import { pathToFileURL } from "url";
  *     └── list.js         // GET /api/products/list
  * 
  * @endpointModuleFormat
- * // Example endpoint file (api/users/get.js)
  * export default {
  *   name: "Get User",
  *   description: "Retrieves user information by ID",
