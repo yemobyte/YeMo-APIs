@@ -1,66 +1,51 @@
----
-title: YeMo API's Engine
-sdk: docker
-app_port: 3000
----
+# YeMo APIs
 
-# YeMo API's Engine
+High-performance, secure, and developer-friendly API engine designed for scalability and ease of integration.
 
-A high-performance, next-generation REST API engine built for developers. YeMo API's provides a robust, secure, and auto-documented ecosystem for your modern web and mobile applications.
+## Features
 
-## Key Features
+- **High Performance**: Optimized for low latency and high throughput.
+- **Secure**: Built-in rate limiting, IP whitelisting/blacklisting, and security best practices.
+- **Developer Experience**: Comprehensive documentation and intuitive endpoints.
+- **Real-time Statistics**: Monitor server health, uptime, and resource usage.
+- **Configurable**: Centralized configuration for dynamic updates without downtime.
 
-- Specialized REST Endpoints: Carefully crafted routes for various development needs.
-- Interactive Documentation: Built-in testing console with real-time request and response handling.
-- Advanced Security: Integrated protection systems and rate limiting for high-traffic scenarios.
-- System Performance: Ultra-low latency core with comprehensive system monitoring.
-- Neo-Brutalist Interface: A unique, high-contrast, and responsive design for an optimized developer experience.
+## Installation
 
-## Quick Start
-
-### Prerequisites
-- Node.js (Latest LTS recommended)
-- NPM or Yarn
-
-### Installation
-
-1. Clone the repository
+1. Clone the repository:
+   ```bash
    git clone https://github.com/yemobyte/YeMo-APIs.git
+   ```
 
-2. Navigate to project directory
-   cd YeMo-APIs
-
-3. Install dependencies
+2. Install dependencies:
+   ```bash
    npm install
+   ```
 
-4. Configure Environment
-   Create a .env file based on the provided environment variables.
+3. Start the server:
+   ```bash
+   npm run dev
+   ```
 
-5. Start the engine
-   npm start
+## Configuration
+
+The application is configured via `configuration.json` in the root directory. You can manage:
+
+- **Notifications**: Control system-wide alerts.
+- **Announcements**: Manage updates and news.
+- **Feedback**: Toggle feedback mechanisms.
 
 ## API Documentation
 
-Once the server is running, access the interactive documentation at:
-http://localhost:3000/docs
+Access the full documentation at `/docs` (e.g., `http://localhost:3000/docs`).
 
-## Development
+## Tech Stack
 
-To run the project in development mode with auto-reload:
-npm run dev
-
-## Monitoring
-
-Access real-time system stats and API performance monitoring at:
-http://localhost:3000/stats
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Styling**: Tailwind CSS
+- **Utilities**: Systeminformation, AOS
 
 ## License
 
-Copyright (C) 2025 YeMo
-Distributed under the terms of the GNU General Public License v3.0.
-Full details can be found in the LICENSE file.
-
-## Authors
-
-YeMo Development Team
-GitHub: yemobyte
+This project is licensed under the MIT License.

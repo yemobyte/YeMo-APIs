@@ -195,12 +195,10 @@ function setupRoutes(app, endpoints) {
    * @header {string} X-Admin-Key - Admin key for authentication
    * @returns {Object} JSON response indicating success or failure
    * @example
-   * // Request body
    * {
    *   "ip": "1.2.3.4"
    * }
    * 
-   * // Response
    * {
    *   "success": true,
    *   "message": "IP 1.2.3.4 unbanned."
