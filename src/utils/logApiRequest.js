@@ -59,7 +59,7 @@ import logger from "./logger.js";
     * until when the response is sent to the client.
  */
 const logApiRequest = async (req, res, next) => {
-  if (req.path === '/__health' || req.path === '/status' || req.path === '/configuration') return next();
+  if (req.path === '/__health' || req.path === '/status' || req.path === '/configuration' || req.path === '/system-stats') return next();
 
   /**
    * Timestamp when the request was received (milliseconds since epoch)
