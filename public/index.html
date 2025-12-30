@@ -1,1018 +1,572 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="scroll-smooth">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YeMo-APIs Documentation</title>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YeMo-APIs | Developer Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        mono: ['Ubuntu Mono', 'monospace'],
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
-                        gray: {
-                            850: '#1f2937',
-                            900: '#111827',
-                            950: '#0b0f19',
-                        },
-                        primary: {
-                            400: '#818cf8',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                        }
+                        border: '#18181b',
+                        background: '#ffffff',
+                        surface: '#f4f4f5',
+                        primary: '#3b82f6',
+                        accent: '#8b5cf6',
                     },
                     boxShadow: {
-                        'neo': '4px 4px 0px 0px rgba(99, 102, 241, 0.4)',
-                        'neo-hover': '2px 2px 0px 0px rgba(99, 102, 241, 1)',
-                        'neo-red': '4px 4px 0px 0px rgba(239, 68, 68, 0.4)',
-                        'neo-green': '4px 4px 0px 0px rgba(34, 197, 94, 0.4)',
+                        'brutal': '4px 4px 0 0 #18181b',
+                        'brutal-sm': '2px 2px 0 0 #18181b',
                     }
-                },
-            },
-        };
+                }
+            }
+        }
     </script>
     <style>
-        body {
-            background-color: #050505;
-            color: #e2e8f0;
-            background-image: radial-gradient(#1f2937 1px, transparent 1px);
-            background-size: 24px 24px;
-        }
-
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #050505;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #4f46e5;
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #6366f1;
-        }
-
-        html,
-        body {
-            overflow-x: hidden;
-            width: 100%;
-            scroll-behavior: smooth;
-        }
-
-        .neo-panel {
-            background-color: #111827;
-            border: 2px solid #374151;
-            box-shadow: 6px 6px 0px 0px #1f2937;
-            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .neo-panel:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 8px 8px 0px 0px #6366f1;
-            border-color: #6366f1;
-        }
-
-        .neo-btn {
-            background-color: #4f46e5;
-            color: white;
-            border: 2px solid #818cf8;
-            box-shadow: 4px 4px 0px 0px #000;
-            transition: all 0.1s;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            width: auto;
-        }
-
-        .neo-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px 0px #000;
-        }
-
-        .neo-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .neo-input {
-            background-color: #0b0f19;
-            border: 2px solid #374151;
-            color: white;
-            transition: all 0.2s;
-        }
-
-        .neo-input:focus {
-            border-color: #6366f1;
-            box-shadow: 4px 4px 0px 0px #6366f1;
-            outline: none;
-        }
-
-        .gradient-text {
-            color: #818cf8;
-            text-shadow: 2px 2px 0px #4f46e5;
+        .card-hover:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 0 #18181b;
         }
 
         .method-badge {
-            font-size: 0.7rem;
-            padding: 0.25rem 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
             font-weight: 700;
-            border: 2px solid;
-            box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.5);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border: 1px solid #18181b;
+            border-radius: 4px;
         }
 
-        .status-badge {
-            font-size: 0.6rem;
-            padding: 0.15rem 0.4rem;
-            font-weight: 700;
-            border: 2px solid;
-            box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        .method-GET {
+            background-color: #dbeafe;
+            color: #1e40af;
         }
 
-        .status-online {
-            background-color: #059669;
-            border-color: #34d399;
-            color: white;
+        .method-POST {
+            background-color: #dcfce7;
+            color: #166534;
         }
 
-        .status-offline {
-            background-color: #dc2626;
-            border-color: #f87171;
-            color: white;
+        .method-PUT {
+            background-color: #fef9c3;
+            color: #854d0e;
         }
 
-        .method-get {
-            background-color: #059669;
-            border-color: #34d399;
-            color: white;
+        .method-DELETE {
+            background-color: #fee2e2;
+            color: #991b1b;
         }
 
-        .method-post {
-            background-color: #2563eb;
-            border-color: #60a5fa;
-            color: white;
+        ::-webkit-scrollbar {
+            width: 8px;
         }
 
-        .method-put {
-            background-color: #d97706;
-            border-color: #fbbf24;
-            color: white;
+        ::-webkit-scrollbar-track {
+            background: #f4f4f5;
         }
 
-        .method-delete {
-            background-color: #dc2626;
-            border-color: #f87171;
-            color: white;
+        ::-webkit-scrollbar-thumb {
+            background: #d4d4d8;
+            border-radius: 4px;
         }
 
-        #notification-docs {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100vh;
-            height: 100dvh;
-            z-index: 99999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-
-        #notification-docs .backdrop {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            will-change: backdrop-filter;
-            -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
-        }
-
-        #notification-docs .modal-content {
-            position: relative;
-            background: #6366f1;
-            border: clamp(4px, 1.5vw, 8px) solid black;
-            padding: clamp(1.5rem, 5vw, 3rem);
-            max-width: 40rem;
-            width: 100%;
-            box-shadow: clamp(8px, 2vw, 20px) clamp(8px, 2vw, 20px) 0px 0px #111827;
-            transform: rotate(1deg);
-            will-change: transform, opacity;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            animation: zoomInDocs 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-            margin: auto;
-        }
-
-        @keyframes zoomInDocs {
-            from {
-                transform: scale(0.9) rotate(5deg) translateZ(0);
-                opacity: 0;
-            }
-
-            to {
-                transform: scale(1) rotate(1deg) translateZ(0);
-                opacity: 1;
-            }
-        }
-
-        #notification-docs .corner-label {
-            position: absolute;
-            top: -1rem;
-            left: -1rem;
-            background: white;
-            border: 3px solid black;
-            padding: 0.4rem 0.8rem;
-            transform: rotate(-3deg);
-            box-shadow: 4px 4px 0px 0px black;
-            font-weight: 900;
-            color: black;
-            font-size: clamp(0.75rem, 2vw, 1rem);
-            z-index: 10;
-        }
-
-        #mobile-menu {
-            position: fixed;
-            inset: 0;
-            background: rgba(5, 5, 5, 0.98);
-            z-index: 110;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 3rem;
-            transform: translateY(-100%);
-            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-        }
-
-        #mobile-menu.open {
-            transform: translateY(0);
-        }
-
-        #mobile-menu a {
-            font-family: 'Inter', sans-serif;
-            font-weight: 900;
-            font-size: 3rem;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: -0.05em;
-            position: relative;
-            transition: color 0.3s;
-        }
-
-        #mobile-menu a:hover {
-            color: #6366f1;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1aa;
         }
     </style>
-    <script>
-        (function () {
-            const lockedHTML = '<div style="background:#050505;color:white;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;overflow:hidden;position:fixed;top:0;left:0;width:100%;z-index:100000;width:100vw;height:100vh;"><div style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0.15;pointer-events:none;background-image:repeating-linear-gradient(45deg, #6366f1, #6366f1 20px, #000 20px, #000 40px);"></div><div style="background:#6366f1;border:8px solid black;padding:2.5rem;max-width:40rem;width:90%;box-shadow:20px 20px 0px 0px #000;transform:rotate(-2deg);text-align:center;position:relative;z-index:10;"><h1 style="font-size:clamp(3rem, 10vw, 6rem);font-weight:900;margin-bottom:1.5rem;text-transform:uppercase;color:white;line-height:0.9;font-style:italic;">ACCESS<br>DENIED</h1><div style="background:white;border:4px solid black;padding:1.5rem;margin-bottom:2rem;transform:rotate(1deg);"><p style="color:black;font-weight:900;text-transform:uppercase;font-size:1.25rem;">Developer tools detected. Please close them and refresh to continue browsing.</p></div><div style="display:flex;justify-content:center;gap:1.5rem;"><div style="background:black;color:white;padding:0.75rem 1.5rem;border:4px solid white;font-weight:900;text-transform:uppercase;letter-spacing:1px;">SYSTEM LOCKED</div><button onclick="sessionStorage.removeItem(\'yemo_locked\');window.location.reload();" style="background:white;color:black;padding:0.75rem 1.5rem;border:4px solid black;font-weight:900;text-transform:uppercase;cursor:pointer;">REFRESH</button></div></div></div>';
-            if (sessionStorage.getItem('yemo_locked')) {
-                document.documentElement.innerHTML = lockedHTML;
-                return;
-            }
-            function detectDev() {
-                const start = new Date().getTime();
-                debugger;
-                if (new Date().getTime() - start > 100) {
-                    sessionStorage.setItem('yemo_locked', 'true');
-                    document.body.innerHTML = '';
-                    location.reload();
-                }
-            }
-            setInterval(detectDev, 1000);
-            window.addEventListener('keydown', function (e) {
-                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
-                    sessionStorage.setItem('yemo_locked', 'true');
-                    location.reload();
-                }
-            });
-            document.addEventListener('contextmenu', e => e.preventDefault());
-        })();
-    </script>
 </head>
 
-<body class="font-mono min-h-screen">
-    <div id="notification-docs">
-        <div class="backdrop" onclick="document.getElementById('notification-docs').style.display='none'"></div>
-        <div class="modal-content">
-            <div class="corner-label">NOTICE!</div>
-            <div class="text-center space-y-6">
-                <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none italic">
-                    READY FOR<br><span class="text-black">THE CORE?</span>
-                </h2>
-                <div class="bg-white border-4 border-black p-4 transform -rotate-1 shadow-[4px_4px_0px_0px_black]">
-                    <p class="text-black font-black uppercase text-sm md:text-base leading-tight">
-                        Explore the powerful YeMo API Engine. High performance, secure, and built for developers who
-                        demand the
-                        best.
-                    </p>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-                    <button onclick="document.getElementById('notification-docs').style.display='none'"
-                        class="bg-black text-white py-3 border-4 border-black font-black uppercase tracking-widest hover:bg-white hover:text-black transition-colors shadow-[4px_4px_0px_0px_white] active:translate-x-1 active:translate-y-1 active:shadow-none">OK,
-                        COOL</button>
-                    <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank" rel="noopener"
-                        class="bg-white text-black py-3 border-4 border-black font-black uppercase tracking-widest text-center hover:bg-black hover:text-white transition-colors shadow-[4px_4px_0px_0px_black] active:translate-x-1 active:translate-y-1 active:shadow-none">SOURCE
-                        CODE</a>
-                </div>
-            </div>
-            <button onclick="document.getElementById('notification-docs').style.display='none'"
-                class="absolute top-4 right-4 w-10 h-10 bg-black border-4 border-white text-white font-black hover:scale-110 transition-transform shadow-[2px_2px_0px_0px_black]">X</button>
-        </div>
+<body class="bg-gray-50 text-zinc-900 antialiased min-h-screen flex flex-col">
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-white/95 backdrop-blur-xl z-50 transform translate-x-full transition-transform duration-300 md:hidden flex flex-col items-center justify-center space-y-8">
+        <button onclick="toggleMenu()" class="absolute top-6 right-6 p-2 text-2xl hover:text-primary transition-colors">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <a href="/" onclick="toggleMenu()"
+            class="text-3xl font-black tracking-tight hover:text-primary transition-colors">HOME</a>
+        <a href="/stats" onclick="toggleMenu()"
+            class="text-3xl font-black tracking-tight hover:text-primary transition-colors">STATS</a>
+        <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank"
+            class="text-3xl font-black tracking-tight hover:text-primary transition-colors">GITHUB</a>
     </div>
-    <script>
-        async function initMain() {
-            try {
-                const configRes = await fetch('/configuration');
-                const config = await configRes.json();
 
-                if (config.website) {
-                    document.title = config.website.title || document.title;
-                    if (document.getElementById('nav-title')) document.getElementById('nav-title').textContent = config.website.headerTitle;
-                    if (document.getElementById('nav-subtitle')) document.getElementById('nav-subtitle').textContent = config.website.headerSubtitle;
-                    if (document.getElementById('page-title')) document.getElementById('page-title').textContent = `${config.website.title}`;
-                    if (document.getElementById('footer-text')) document.getElementById('footer-text').textContent = config.website.footerText;
-                }
-
-                if (config.notifications && config.notifications.enabled) {
-                    const modal = document.getElementById('notification-docs');
-                    const title = modal.querySelector('h2');
-                    const message = modal.querySelector('p');
-                    const okBtn = modal.querySelector('button[onclick*="none"]');
-                    const sourceBtn = modal.querySelector('a[href*="github"]');
-
-                    if (title && message && okBtn && sourceBtn) {
-                        title.innerHTML = config.notifications.title.replace('<br>', '<br><span class="text-black">') + '</span>';
-                        message.textContent = config.notifications.message;
-                        okBtn.textContent = config.notifications.buttonText;
-                        sourceBtn.textContent = config.notifications.sourceCodeText;
-                        sourceBtn.href = config.notifications.sourceCodeUrl;
-
-                        setTimeout(() => {
-                            modal.style.display = 'flex';
-                        }, 1500);
-                    }
-                }
-
-                const feedbackBtn = document.getElementById('feedback-btn');
-                if (config.feedbackButton && config.feedbackButton.enabled) {
-                    if (feedbackBtn) feedbackBtn.classList.remove('hidden');
-                }
-
-                const announcementPanel = document.getElementById('announcementPanel');
-                if (announcementPanel && config.announcements && config.announcements.enabled && config.announcements.items) {
-                    const infoList = document.getElementById('infoList');
-                    if (infoList) {
-                        infoList.innerHTML = config.announcements.items.map(info => `
-              <div class="p-4 border-2 border-gray-800 hover:border-gray-600 transition-colors bg-[#050505] opacity-70">
-                  <div class="flex justify-between items-start gap-4">
-                      <div class="flex-1">
-                          <p class="font-bold text-gray-200 text-sm mb-1 uppercase tracking-wide">${info.title}</p>
-                          <p class="text-xs text-gray-400 font-mono leading-relaxed">${info.description}</p>
-                      </div>
-                      <div class="flex items-center flex-shrink-0">
-                          <span class="text-[10px] text-gray-500 font-mono bg-gray-900 px-2 py-1 border border-gray-800">${info.date}</span>
-                      </div>
-                  </div>
-              </div>
-            `).join('');
-                        announcementPanel.classList.remove('hidden');
-                    }
-                }
-
-
-
-                if (config.feedbackButton && config.feedbackButton.url) {
-                    window.feedbackUrl = config.feedbackButton.url;
-                }
-
-                await loadApiData();
-            } catch (e) {
-                console.error("Initialization failed:", e);
-            }
-        }
-        window.addEventListener('DOMContentLoaded', initMain);
-    </script>
-    <!-- Navbar -->
-    <nav
-        class="w-full sticky top-0 z-[100] bg-[#050505] border-b-4 border-[#1f2937] shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
-        <div class="max-w-full mx-auto px-4 md:px-12 py-4 flex justify-between items-center">
-            <a href="/" class="flex items-center gap-3 group">
-                <div
-                    class="w-10 h-10 bg-primary-600 flex items-center justify-center border-2 border-white shadow-[3px_3px_0px_0px_white] transition-transform group-hover:-translate-y-1 group-hover:-translate-x-1 group-hover:shadow-[5px_5px_0px_0px_white]">
-                    <span class="font-sans font-black text-white text-xl uppercase tracking-tighter italic">Y</span>
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-40 w-full bg-white border-b-2 border-border/10 backdrop-blur-md bg-white/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0 flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 bg-zinc-900 text-white flex items-center justify-center rounded-lg font-black text-xl shadow-brutal-sm">
+                        Y</div>
+                    <div>
+                        <h1 class="font-bold text-xl tracking-tight leading-none">YeMo<span
+                                class="text-primary">APIs</span></h1>
+                        <p class="text-[0.65rem] font-mono text-zinc-500 font-bold uppercase tracking-wider">Developer
+                            Hub</p>
+                    </div>
                 </div>
-                <span class="font-sans font-black text-2xl tracking-tighter text-white uppercase italic"><span
-                        id="nav-title">YeMo</span> <span class="text-primary-400" id="nav-subtitle">API's</span></span>
-            </a>
 
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex gap-4 items-center">
-                <a href="/" class="neo-btn px-4 py-2 text-xs">
-                    <i class="fas fa-home"></i> Home
-                </a>
-                <a href="/stats" class="neo-btn px-4 py-2 text-xs">
-                    <i class="fas fa-chart-line"></i> Stats
-                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="/" class="text-sm font-bold hover:text-primary transition-colors">HOME</a>
+                    <a href="/stats" class="text-sm font-bold hover:text-primary transition-colors">STATUS</a>
+                    <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank"
+                        class="flex items-center gap-2 px-4 py-2 bg-zinc-900 text-white text-sm font-bold rounded-lg hover:bg-zinc-800 transition-all shadow-brutal-sm active:translate-y-[2px] active:shadow-none">
+                        <i class="fa-brands fa-github"></i> <span>Star</span>
+                    </a>
+                </div>
+
+                <div class="md:hidden">
+                    <button onclick="toggleMenu()" class="p-2 text-xl text-zinc-900">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
             </div>
-
-            <!-- Mobile Menu Button -->
-            <button
-                class="md:hidden neo-panel w-10 h-10 flex items-center justify-center text-white bg-primary-600 border-white shadow-[2px_2px_0px_0px_white] active:shadow-none active:translate-x-[2px] active:translate-y-[2px]"
-                onclick="toggleMobileMenu()" aria-label="Toggle Menu">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
-        </div>
-
-        <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu" class="md:hidden">
-            <button class="absolute top-8 right-8 text-white text-4xl hover:text-primary-500 transition-colors"
-                onclick="toggleMobileMenu()" aria-label="Close Menu"><i class="fas fa-times"></i></button>
-            <nav class="flex flex-col items-center gap-8">
-                <a href="/" onclick="toggleMobileMenu()">Home</a>
-                <a href="/stats" onclick="toggleMobileMenu()">Stats</a>
-            </nav>
         </div>
     </nav>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>AOS.init({ duration: 600, once: true });</script>
-    <main class="w-full max-w-full mx-auto px-4 md:px-12 lg:px-20 py-12 overflow-hidden">
-        <div class="text-left mb-12" data-aos="fade-up">
-            <h1 class="text-5xl font-black gradient-text mb-4 tracking-tight">
-                <span id="page-title">YeMo API's</span>
+
+    <!-- Hero Section -->
+    <header class="relative overflow-hidden pt-16 pb-12 lg:pt-24 lg:pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
+            <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-8 border border-primary/20">
+                <span class="relative flex h-2 w-2">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                v1.0.0 Stable Release
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-black tracking-tight text-zinc-900 mb-6">
+                Build Faster with <br class="hidden md:block" />
+                <span class="inline-block relative">
+                    <span class="relative z-10 text-white px-4 py-1.5 mx-1"
+                        style="transform: skew(-3deg); display: inline-block;">
+                        <span class="absolute inset-0 bg-primary -z-10 shadow-brutal rounded-lg"></span>
+                        YeMo APIs
+                    </span>
+                </span>
             </h1>
-            <p class="text-gray-400 text-lg mb-6 border-l-4 border-primary-500 pl-4">
-                <span id="description">Loading...</span>
+
+            <p class="mt-6 text-lg md:text-xl text-zinc-600 max-w-2xl mx-auto leading-relaxed">
+                A high-performance, developer-first API collection tailored for modern applications. Free, open-source,
+                and brutually efficient.
             </p>
 
-            <div class="flex flex-wrap gap-4 mb-8">
-                <a href="https://www.whatsapp.com/channel/0029Vb7RdArLikg1BHzpH20A" id="whatsapp-link" target="_blank"
-                    rel="noopener" title="Join our WhatsApp Channel"
-                    class="neo-btn flex-1 sm:flex-none px-4 py-3 text-sm no-underline inline-block">
-                    <i class="fab fa-whatsapp mr-2"></i> Join Channel
+            <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#endpoints"
+                    class="px-8 py-3.5 bg-zinc-900 text-white font-bold rounded-lg shadow-brutal hover:translate-y-[-2px] hover:shadow-[6px_6px_0_0_#18181b] transition-all flex items-center justify-center gap-2">
+                    Start Building <i class="fa-solid fa-arrow-right"></i>
                 </a>
-                <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank" rel="noopener" title="View Source Code"
-                    class="neo-btn flex-1 sm:flex-none px-4 py-3 text-sm no-underline inline-block bg-gray-800 border-gray-600">
-                    <i class="fab fa-github mr-2"></i> Source Code
+                <a href="/stats"
+                    class="px-8 py-3.5 bg-white text-zinc-900 font-bold border-2 border-zinc-200 rounded-lg hover:border-zinc-900 hover:bg-zinc-50 transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-chart-line"></i> System Status
                 </a>
-            </div>
-
-            <div id="announcementPanel" class="mb-8 neo-panel overflow-hidden hidden" data-aos="fade-up"
-                data-aos-delay="100">
-                <div class="bg-gray-800 p-4 border-b-2 border-gray-700 flex justify-between items-center">
-                    <h2 class="font-bold text-white flex items-center gap-2 text-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-megaphone text-yellow-400" aria-hidden="true">
-                            <path d="m3 11 18-5v12L3 14v-3z" />
-                            <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
-                        </svg>
-                        Announcement
-                    </h2>
-                </div>
-                <div class="p-4 space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar" id="infoList"></div>
-            </div>
-
-            <div class="mb-4 bg-[#111827] border-2 border-[#374151] p-4 shadow-[4px_4px_0px_0px_#1f2937]">
-                <label for="hostSelect"
-                    class="block text-sm font-bold text-primary-400 mb-2 uppercase tracking-wide">Base
-                    URL</label>
-                <select id="hostSelect" title="Select API Base URL"
-                    class="w-full px-4 py-3 neo-input text-sm cursor-pointer">
-                    <option id="valueURL" value="" selected>Loading...</option>
-                </select>
             </div>
         </div>
+    </header>
 
-        <div class="neo-panel p-6 mb-8" data-aos="fade-up" data-aos-delay="200">
-            <div class="flex justify-between items-center gap-2">
-                <div class="flex-1 text-center border-r-2 border-[#374151]">
-                    <div class="text-2xl sm:text-3xl font-black text-primary-400" id="totalEndpoints">0</div>
-                    <div class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-widest font-bold mt-1">Endpoints
+    <!-- Main Content -->
+    <main id="endpoints" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+
+        <!-- Search & Metrics -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <!-- Search Box -->
+            <div class="lg:col-span-2 group" data-aos="fade-right">
+                <div class="relative">
+                    <div
+                        class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-400 group-focus-within:text-primary transition-colors">
+                        <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                    </div>
+                    <input type="text" id="searchInput"
+                        class="block w-full pl-12 pr-4 py-4 bg-white border-2 border-zinc-200 rounded-xl text-zinc-900 placeholder-zinc-400 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all font-medium"
+                        placeholder="Search for endpoints (e.g., /downloader)...">
+                    <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
+                        <kbd
+                            class="hidden sm:inline-block px-2 py-1 text-xs font-mono font-bold text-zinc-400 bg-zinc-100 rounded border border-zinc-200">CTRL
+                            K</kbd>
                     </div>
                 </div>
-                <div class="flex-1 text-center">
-                    <div class="text-2xl sm:text-3xl font-black text-primary-400" id="totalCategories">0</div>
-                    <div class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-widest font-bold mt-1">
-                        Categories</div>
+            </div>
+
+            <!-- Total Count Badge -->
+            <div class="bg-zinc-900 text-white rounded-xl p-6 shadow-brutal flex items-center justify-between"
+                data-aos="fade-left">
+                <div>
+                    <p class="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1">Available Endpoints</p>
+                    <p class="text-3xl font-black" id="totalEndpoints">--</p>
+                </div>
+                <div class="h-12 w-12 bg-zinc-800 rounded-lg flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-bolt text-yellow-500"></i>
                 </div>
             </div>
         </div>
 
-        <div class="relative mb-8 group">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <span class="material-icons text-primary-500">search</span>
+        <!-- Endpoints Grid -->
+        <div id="apiList" class="space-y-12"></div>
+
+        <!-- No Results State -->
+        <div id="noResults" class="hidden text-center py-20">
+            <div
+                class="inline-flex items-center justify-center w-20 h-20 bg-zinc-100 rounded-full mb-6 text-3xl text-zinc-400">
+                <i class="fa-solid fa-ghost"></i>
             </div>
-            <input type="text" id="searchInput" placeholder="SEARCH ENDPOINTS..."
-                class="w-full pl-12 pr-4 py-4 text-base neo-input placeholder-gray-600 font-bold">
+            <h3 class="text-xl font-bold text-zinc-900 mb-2">No endpoints found</h3>
+            <p class="text-zinc-500">Try adjusting your search terms</p>
         </div>
 
-        <div id="content" class="space-y-8">
-            <div id="noResults" class="text-center py-20 hidden">
-                <div class="inline-block p-6 border-2 border-dashed border-gray-700 rounded-lg">
-                    <h3 class="text-xl text-gray-400 font-bold mb-2">NO DATA FOUND</h3>
-                    <p class="text-sm text-gray-600">Try searching for something else.</p>
-                </div>
-            </div>
-            <div id="apiList" class="space-y-8"></div>
-        </div>
+    </main>
 
-        <footer
-            class="mt-20 bg-[#050505] border-t-8 border-[#6366f1] p-12 overflow-hidden relative z-10 transition-all">
-            <div class="max-w-full mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
-                <div class="space-y-6">
-                    <div class="text-4xl font-black font-sans italic flex flex-col gap-2">
-                        <span
-                            class="bg-[#6366f1] text-white px-3 w-fit border-2 border-white shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] transform -rotate-1 tracking-tighter">YEMO</span>
-                        <span
-                            class="text-white underline decoration-[#6366f1] decoration-8 underline-offset-4 tracking-tighter uppercase">API'S</span>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-zinc-200 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 bg-zinc-900 rounded flex items-center justify-center text-white font-bold">Y
+                        </div>
+                        <span class="font-bold text-lg">YeMo-APIs</span>
                     </div>
-                    <p class="font-bold text-gray-400 text-sm leading-relaxed">Official documentation for the YeMo API
-                        Engine.
-                        Comprehensive, fast, and secure.</p>
+                    <p class="text-sm text-zinc-500 leading-relaxed">
+                        Open-source API infrastructure designed for speed, reliability, and ease of use.
+                    </p>
                 </div>
                 <div>
-                    <h4 class="font-black font-sans text-xl mb-6 text-[#6366f1] uppercase italic tracking-tighter">
-                        Navigate</h4>
-                    <ul class="space-y-3 font-bold uppercase text-xs tracking-widest text-gray-400">
-                        <li><a href="/" class="hover:text-white transition-colors cursor-pointer">Home</a></li>
-                        <li><a href="/docs"
-                                class="hover:text-white transition-colors cursor-pointer text-white">Documentation</a>
-                        </li>
-                        <li><a href="/stats" class="hover:text-white transition-colors cursor-pointer">Statistics</a>
-                        </li>
-                        <li><a href="https://github.com/yemobyte/YeMo-APIs"
-                                class="hover:text-white transition-colors cursor-pointer">Github</a></li>
+                    <h4 class="font-bold text-zinc-900 mb-4">Platform</h4>
+                    <ul class="space-y-2 text-sm text-zinc-500">
+                        <li><a href="#" class="hover:text-primary transition-colors">Documentation</a></li>
+                        <li><a href="/stats" class="hover:text-primary transition-colors">System Status</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Changelog</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-black font-sans text-xl mb-6 text-[#6366f1] uppercase italic tracking-tighter">
-                        Community</h4>
-                    <div class="flex gap-4 flex-wrap">
-                        <a href="https://github.com/yemobyte" target="_blank" rel="noopener" title="Follow us on GitHub"
-                            class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#6366f1] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
-                            <i class="fab fa-github text-white"></i>
-                        </a>
-                        <a href="#" id="footer-whatsapp-link" target="_blank" rel="noopener"
-                            title="Join our WhatsApp Channel"
-                            class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#25D366] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
-                            <i class="fab fa-whatsapp text-white"></i>
-                        </a>
-                        <a href="mailto:yemobyte@gmail.com" title="Email us"
-                            class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#EA4335] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
-                            <i class="fas fa-envelope text-white"></i>
-                        </a>
-                    </div>
+                    <h4 class="font-bold text-zinc-900 mb-4">Community</h4>
+                    <ul class="space-y-2 text-sm text-zinc-500">
+                        <li><a href="https://github.com/yemobyte/YeMo-APIs"
+                                class="hover:text-primary transition-colors">GitHub</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Discord</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Twitter</a></li>
+                    </ul>
                 </div>
-                <div id="footer-feedback"
-                    class="bg-[#111827] p-6 border-4 border-[#6366f1] shadow-[10px_10px_0px_0px_rgba(99,102,241,0.2)]">
-                    <h4 class="font-black font-sans text-lg mb-4 text-white uppercase italic tracking-tighter">Feedback
-                    </h4>
-                    <p class="text-[10px] text-gray-500 font-bold mb-4 uppercase tracking-widest">Help us improve the
-                        engine</p>
-                    <button onclick="openFeedback()"
-                        class="w-full bg-[#6366f1] text-white p-3 border-2 border-white font-black font-sans tracking-tighter uppercase hover:bg-[#4f46e5] transition-all active:scale-95 shadow-[4px_4px_0px_0px_white]">Open
-                        Issue</button>
+                <div>
+                    <h4 class="font-bold text-zinc-900 mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm text-zinc-500">
+                        <li><a href="#" class="hover:text-primary transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Terms of Service</a></li>
+                    </ul>
                 </div>
             </div>
             <div
-                class="max-w-full mx-auto mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">
-                <div>© <span id="year-footer"></span> <span id="footer-text">YEMO API'S • BEYOND DOCUMENTATION</span>
-                </div>
-                <div class="flex gap-8">
-                    <a href="/legal/privacy" class="hover:text-white transition-colors">Privacy</a>
-                    <a href="/legal/terms" class="hover:text-white transition-colors">Terms</a>
+                class="border-t border-zinc-100 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-zinc-400 font-medium">© <span id="year"></span> YeMo-APIs. All rights reserved.
+                </p>
+                <div class="flex items-center gap-4">
+                    <span class="flex h-2 w-2 relative">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <span class="text-xs font-bold text-zinc-500 uppercase tracking-wide">All Systems Operational</span>
                 </div>
             </div>
-            <script>document.getElementById("year-footer").textContent = new Date().getFullYear();</script>
-        </footer>
-    </main>
+        </div>
+    </footer>
 
-    <button onclick="openFeedback()" id="feedback-btn"
-        class="fixed bottom-6 right-6 neo-btn p-3 px-5 z-40 rounded-none flex items-center gap-2 shadow-[4px_4px_0px_0px_#000] hover:transform hover:-translate-y-1 transition-all hidden"
-        aria-label="Send Feedback">
-        <i class="fas fa-comment-alt"></i>
-        <span>FEEDBACK</span>
-    </button>
-
-    <script>
-        async function loadApiData() {
-            try {
-                const res = await fetch("/openapi.json");
-                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-                const apiData = await res.json();
-
-                if (!apiData || !apiData.endpoints) throw new Error("Invalid API data format");
-
-                const categories = {};
-                apiData.endpoints.forEach(endpoint => {
-                    if (!categories[endpoint.category]) {
-                        categories[endpoint.category] = [];
-                    }
-                    categories[endpoint.category].push(endpoint);
-                });
-
-                const option = document.getElementById('valueURL');
-                option.value = apiData.baseURL;
-                option.textContent = `${apiData.baseURL} - PRODUCTION`;
-
-                const titleEl = document.getElementById('page-title');
-                const descEl = document.getElementById('description');
-                const totalEndpointsEl = document.getElementById('totalEndpoints');
-                const totalCategoriesEl = document.getElementById('totalCategories');
-
-                if (titleEl) titleEl.textContent = "YeMo API's";
-                if (descEl) descEl.textContent = apiData.description;
-                if (totalEndpointsEl) totalEndpointsEl.textContent = apiData.endpoints.length;
-                if (totalCategoriesEl) totalCategoriesEl.textContent = Object.keys(categories).length;
-
-                const apiList = document.getElementById('apiList');
-                let categoryIndex = 0;
-
-                for (const [categoryName, endpoints] of Object.entries(categories)) {
-                    const categoryGroup = document.createElement('div');
-                    categoryGroup.className = 'category-group';
-                    categoryGroup.setAttribute('data-category', categoryName);
-
-                    const categoryHeader = `
-              <div class="neo-panel overflow-hidden">
-                <button onclick="toggleCategory(${categoryIndex})" class="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-[#1f2937] transition-colors border-b-0 border-[#374151]">
-                  <div class="flex items-center gap-4">
-                      <div class="bg-primary-600 text-white p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                        <span class="material-icons text-xl block">folder_open</span>
-                      </div>
-                      <div>
-                        <h2 class="font-black text-xl text-gray-100 uppercase tracking-wide">${categoryName}</h2>
-                        <span class="text-xs font-bold text-primary-400 bg-[#0b0f19] px-2 py-0.5 border border-[#374151] inline-block mt-1">${endpoints.length} Routes</span>
-                      </div>
-                  </div>
-                  <span class="material-icons text-primary-500 transform transition-transform duration-200" id="category-icon-${categoryIndex}">expand_more</span>
+    <!-- Endpoint Try Modal -->
+    <div id="try-modal"
+        class="fixed inset-0 z-50 hidden bg-zinc-900/50 backdrop-blur-sm items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform transition-all scale-100 opacity-100"
+            data-aos="zoom-in">
+            <div class="flex items-center justify-between p-6 border-b border-zinc-100">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <span id="modal-method"
+                            class="text-xs font-bold px-2 py-1 rounded bg-zinc-100 text-zinc-700 font-mono">GET</span>
+                        <h3 id="modal-title" class="text-lg font-bold text-zinc-900">Endpoint Name</h3>
+                    </div>
+                </div>
+                <button onclick="closeModal()"
+                    class="text-zinc-400 hover:text-zinc-900 transition-colors bg-zinc-50 hover:bg-zinc-100 p-2 rounded-lg">
+                    <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
-                <div id="category-${categoryIndex}" class="hidden border-t-2 border-[#374151] bg-[#0b0f19] p-6">
-                  <div class="grid grid-cols-1 gap-6">
-            `;
+            </div>
 
-                    let categoryContent = '';
-                    let endpointIndex = 0;
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <p id="modal-desc" class="text-zinc-600 mb-6 text-sm"></p>
 
-                    endpoints.forEach(endpoint => {
-                        const methodBadges = endpoint.methods.map(method => {
-                            let colorClass = 'method-get';
-                            if (method === 'POST') colorClass = 'method-post';
-                            else if (method === 'PUT') colorClass = 'method-put';
-                            else if (method === 'DELETE') colorClass = 'method-delete';
+                <form id="try-form" class="space-y-5">
+                    <div id="modal-params" class="space-y-4"></div>
 
-                            return `<span class="method-badge ${colorClass}">${method}</span>`;
-                        }).join(' ');
-
-                        categoryContent += `
-                <div class="border-2 border-[#374151] bg-[#111827] p-5 hover:border-primary-500 transition-colors api-item group ${endpoint.status === 'offline' ? 'opacity-75 grayscale-[0.5]' : ''}" 
-                     data-method="${endpoint.methods[0]}" 
-                     data-path="${endpoint.route}" 
-                     data-alias="${endpoint.name}" 
-                     data-category="${endpoint.category}">
-                  
-                  <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
-                    <div class="flex-1">
-                        <div class="flex items-center flex-wrap gap-3 mb-2">
-                           ${methodBadges}
-                           <h3 class="font-mono font-bold text-sm text-gray-200 break-all bg-[#0b0f19] px-2 py-1 border border-[#374151]">${endpoint.route}</h3>
-                           <span class="status-badge ${endpoint.status === 'online' ? 'status-online' : 'status-offline'}">${endpoint.status}</span>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-gray-700 pl-3">${endpoint.description}</p>
-                    </div>
-                    <button onclick="${endpoint.status === 'online' ? `toggleEndpoint(${categoryIndex}, ${endpointIndex})` : ''}" 
-                            class="neo-btn px-3 py-1 text-xs self-start shrink-0 flex items-center gap-1 ${endpoint.status === 'offline' ? 'cursor-not-allowed opacity-50 bg-gray-700 border-gray-600' : ''}"
-                            ${endpoint.status === 'offline' ? 'disabled' : ''}>
-                      <span>${endpoint.status === 'online' ? 'TEST' : 'OFFLINE'}</span>
-                      <span class="material-icons text-sm" id="endpoint-icon-${categoryIndex}-${endpointIndex}">expand_more</span>
-                    </button>
-                  </div>
-    
-                  <div id="endpoint-${categoryIndex}-${endpointIndex}" class="hidden mt-6 pt-6 border-t-2 border-dashed border-[#374151]">
-                    <div class="mb-4 flex items-center gap-2">
-                        <span class="material-icons text-green-500 text-sm">terminal</span>
-                        <span class="text-green-500 font-bold text-xs tracking-wider">REQUEST CONSOLE</span>
-                    </div>
-                    
-                    <form id="form-${categoryIndex}-${endpointIndex}" 
-                          onsubmit="executeRequest(event, ${categoryIndex}, ${endpointIndex}, '${endpoint.methods[0]}', '${endpoint.route}', 'application/json')">
-                      <div class="grid grid-cols-1 gap-4 mb-6">
-              `;
-
-                        const params = Object.entries(endpoint.paramsSchema);
-
-                        if (params.length > 0) {
-                            params.forEach(([paramName, paramSchema]) => {
-                                const requiredStar = paramSchema.required ? '<span class="text-red-500 ml-1">*</span>' : '';
-                                if (paramSchema.type === "file") {
-                                    categoryContent += `
-                        <div class="space-y-1">
-                          <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide">
-                            ${paramName} ${requiredStar}
-                          </label>
-                          <input type="file" name="${paramName}" 
-                                class="w-full text-xs text-gray-300 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-xs file:font-semibold file:bg-primary-600 file:text-white hover:file:bg-primary-500 cursor-pointer border-2 border-[#374151] bg-[#0b0f19] p-1"
-                                ${paramSchema.required ? 'required' : ''}>
-                        </div>
-                      `;
-                                } else {
-                                    categoryContent += `
-                        <div class="space-y-1">
-                          <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide">
-                            ${paramName} ${requiredStar}
-                          </label>
-                          <div class="relative">
-                            <input type="text" name="${paramName}" 
-                                class="w-full px-4 py-2 neo-input text-sm font-mono placeholder-gray-700" 
-                                placeholder="Value for ${paramName}..." ${paramSchema.required ? 'required' : ''}>
-                             <div class="absolute right-2 top-2 text-[10px] text-gray-600 font-bold bg-[#111827] px-1 border border-[#374151]">
-                                ${paramSchema.type}${paramSchema.minLength ? `:${paramSchema.minLength}` : ''}
-                             </div>
-                          </div>
-                        </div>
-                      `;
-                                }
-                            });
-                        } else {
-                            categoryContent += `
-                   <div class="text-xs text-gray-500 font-mono border border-dashed border-gray-700 p-2 text-center">
-                     NO PARAMETERS REQUIRED
-                   </div>
-                 `;
-                        }
-
-                        categoryContent += `
-                      </div>
-                      <div class="flex gap-4">
-                        <button type="submit" class="neo-btn flex-1 py-3 text-sm flex items-center justify-center gap-2">
-                          <span class="material-icons text-sm">play_arrow</span>
-                          EXECUTE
+                    <div class="pt-4">
+                        <button type="submit"
+                            class="w-full py-3 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/30 hover:bg-blue-600 hover:shadow-primary/40 active:translate-y-[1px] transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-play text-xs"></i> Execute Request
                         </button>
-                        <button type="button" id="clear-${categoryIndex}-${endpointIndex}" onclick="clearResponse(${categoryIndex}, ${endpointIndex})" 
-                                class="hidden neo-btn bg-gray-800 border-gray-600 flex-1 py-3 text-sm flex items-center justify-center gap-2">
-                          <span class="material-icons text-gray-400 text-sm">clear</span>
-                          CLEAR
-                        </button>
-                      </div>
-                    </form>
-    
-                    <div id="response-${categoryIndex}-${endpointIndex}" class="hidden mt-6">
-                      <div class="mb-2 flex items-center justify-between">
-                         <div class="flex items-center gap-2">
-                            <span class="material-icons text-yellow-500 text-sm">data_object</span>
-                            <span class="text-yellow-500 font-bold text-xs tracking-wider">RESPONSE OUTPUT</span>
-                         </div>
-                      </div>
-                      <div class="bg-[#050505] border-2 border-[#374151] p-4 font-mono text-xs overflow-x-auto shadow-inner">
-                        <div class="max-h-96 overflow-y-auto" id="response-content-${categoryIndex}-${endpointIndex}"></div>
-                      </div>
                     </div>
-                  </div>
+                </form>
+
+                <div id="modal-response" class="hidden mt-8">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Response Body</h4>
+                        <span
+                            class="text-xs font-mono text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100">200
+                            OK</span>
+                    </div>
+                    <div class="relative group">
+                        <pre
+                            class="bg-zinc-900 text-zinc-100 p-4 rounded-xl text-xs font-mono overflow-x-auto border border-zinc-800 custom-scrollbar"><code id="response-code"></code></pre>
+                        <button onclick="copyResponse()"
+                            class="absolute top-3 right-3 p-2 bg-zinc-800 text-zinc-400 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:text-white hover:bg-zinc-700">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
                 </div>
-              `;
+            </div>
+        </div>
+    </div>
 
-                        endpointIndex++;
-                    });
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, duration: 800 });
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-                    const categoryFooter = `
-                  </div>
-                </div>
-              </div>
-            `;
+        /* State Manager */
+        let endpointsData = [];
 
-                    categoryGroup.innerHTML = categoryHeader + categoryContent + categoryFooter;
-                    apiList.appendChild(categoryGroup);
-                    categoryIndex++;
-                }
-
-            } catch (err) {
-                console.error("Failed to load API data:", err);
-                document.getElementById('apiList').innerHTML = `<div class="neo-panel p-8 text-center text-red-500 font-bold">FAILED TO LOAD API DATA</div>`;
-            }
-        }
-
-        /** Configuration is handled in initMain */
-
-
-        function toggleCategory(categoryIndex) {
-            const content = document.getElementById(`category-${categoryIndex}`);
-            const icon = document.getElementById(`category-icon-${categoryIndex}`);
-
-            content.classList.toggle('hidden');
-            if (!content.classList.contains('hidden')) {
-                icon.innerText = 'expand_less';
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const isOpen = !menu.classList.contains('translate-x-full');
+            if (isOpen) {
+                menu.classList.add('translate-x-full');
+                document.body.style.overflow = '';
             } else {
-                icon.innerText = 'expand_more';
+                menu.classList.remove('translate-x-full');
+                document.body.style.overflow = 'hidden';
             }
         }
 
-        function toggleEndpoint(categoryIndex, endpointIndex) {
-            const content = document.getElementById(`endpoint-${categoryIndex}-${endpointIndex}`);
-            const icon = document.getElementById(`endpoint-icon-${categoryIndex}-${endpointIndex}`);
-
-            content.classList.toggle('hidden');
-            if (!content.classList.contains('hidden')) {
-                icon.innerText = 'expand_less';
-            } else {
-                icon.innerText = 'expand_more';
-            }
-        }
-
-        function clearResponse(categoryIndex, endpointIndex) {
-            const responseElement = document.getElementById(`response-${categoryIndex}-${endpointIndex}`);
-            const responseContent = document.getElementById(`response-content-${categoryIndex}-${endpointIndex}`);
-            const clearButton = document.getElementById(`clear-${categoryIndex}-${endpointIndex}`);
-
-            responseElement.classList.add('hidden');
-            responseContent.innerHTML = '';
-            clearButton.classList.add('hidden');
-        }
-
-        async function executeRequest(event, categoryIndex, endpointIndex, method, path, contentType) {
-            event.preventDefault();
-
-            const form = event.target;
-            const responseElement = document.getElementById(`response-${categoryIndex}-${endpointIndex}`);
-            const responseContent = document.getElementById(`response-content-${categoryIndex}-${endpointIndex}`);
-            const clearButton = document.getElementById(`clear-${categoryIndex}-${endpointIndex}`);
-            const hostSelect = document.getElementById('hostSelect');
-            const selectedHost = hostSelect.value;
-            let fullUrl = selectedHost + path;
-
+        async function init() {
             try {
-                let requestConfig = {
-                    method: method,
-                    headers: {}
-                };
+                const res = await fetch('/openapi.json');
+                const data = await res.json();
+                endpointsData = data.endpoints || [];
 
-                if (method === 'GET') {
-                    const formData = new FormData(form);
-                    const params = new URLSearchParams();
-                    for (let [key, value] of formData.entries()) {
-                        if (value) params.append(key, value);
-                    }
-                    if (params.toString()) fullUrl += '?' + params.toString();
-                } else {
-                    const formData = new FormData(form);
-                    let hasFile = false;
-                    form.querySelectorAll("input[type=file]").forEach(input => {
-                        if (input.files.length > 0) hasFile = true;
-                    });
-
-                    if (hasFile) {
-                        requestConfig.body = formData;
-                    } else {
-                        const jsonBody = {};
-                        for (let [key, value] of formData.entries()) {
-                            if (value) jsonBody[key] = value;
-                        }
-                        if (Object.keys(jsonBody).length > 0) {
-                            requestConfig.headers['Content-Type'] = 'application/json';
-                            requestConfig.body = JSON.stringify(jsonBody);
-                        }
-                    }
-                }
-
-                responseContent.innerHTML = '<span class="text-primary-400 animate-pulse">Processing Request...</span>';
-                responseElement.classList.remove('hidden');
-
-                const response = await fetch(fullUrl, requestConfig);
-                const respContentType = response.headers.get("content-type");
-
-                let bodyHtml = "";
-                if (respContentType && respContentType.includes("application/json")) {
-                    const responseData = await response.json();
-                    bodyHtml = `<pre class="text-green-400 whitespace-pre-wrap">${JSON.stringify(responseData, null, 2)}</pre>`;
-                } else if (respContentType && respContentType.startsWith("image/")) {
-                    const blob = await response.blob();
-                    const imageUrl = URL.createObjectURL(blob);
-                    bodyHtml = `<img src="${imageUrl}" alt="Response" class="max-w-full border-2 border-[#374151]"/>`;
-                } else {
-                    const textData = await response.text();
-                    bodyHtml = `<pre class="text-gray-300 whitespace-pre-wrap">${textData}</pre>`;
-                }
-
-                const statusColor = response.ok ? 'text-green-500' : 'text-red-500';
-                const headerHtml = `
-            <div class="border-b border-gray-800 pb-2 mb-2 font-mono text-xs text-gray-500">
-              <div class="flex justify-between">
-                 <span>STATUS: <span class="${statusColor} font-bold">${response.status} ${response.statusText}</span></span>
-                 <span>${method}</span>
-              </div>
-              <div class="truncate mt-1 text-gray-600">${fullUrl}</div>
-            </div>`;
-
-                responseContent.innerHTML = headerHtml + bodyHtml;
-
+                document.getElementById('totalEndpoints').textContent = endpointsData.length;
+                renderEndpoints(endpointsData);
             } catch (error) {
-                responseContent.innerHTML = `
-             <div class="text-red-500 font-bold border-b border-red-900 pb-2 mb-2">ERROR</div>
-             <div class="text-red-400">${error.message}</div>
-          `;
-                responseElement.classList.remove('hidden');
-            } finally {
-                clearButton.classList.remove('hidden');
+                console.error('Failed to load API data', error);
             }
         }
 
-        let searchInput, apiItems, noResults, apiListContainer;
+        function renderEndpoints(endpoints) {
+            const list = document.getElementById('apiList');
+            list.innerHTML = '';
 
-        function applyFilters() {
-            const searchTerm = searchInput.value.toLowerCase().trim();
-            let visibleCount = 0;
-            const categoryGroups = document.querySelectorAll('.category-group');
-
-            categoryGroups.forEach(group => {
-                let hasVisibleItems = false;
-                const groupItems = group.querySelectorAll('.api-item');
-
-                groupItems.forEach(item => {
-                    const matches = [
-                        item.getAttribute('data-path'),
-                        item.getAttribute('data-alias'),
-                        item.getAttribute('data-method'),
-                        item.getAttribute('data-category')
-                    ].some(attr => attr && attr.toLowerCase().includes(searchTerm));
-
-                    item.style.display = matches ? 'block' : 'none';
-                    if (matches) hasVisibleItems = true;
-                });
-
-                if (hasVisibleItems) {
-                    group.classList.remove('hidden');
-                    visibleCount++;
-                } else {
-                    group.classList.add('hidden');
-                }
+            const categories = {};
+            endpoints.forEach(ep => {
+                const cat = ep.category || 'General';
+                if (!categories[cat]) categories[cat] = [];
+                categories[cat].push(ep);
             });
 
-            if (visibleCount === 0) {
-                noResults.classList.remove('hidden');
+            if (Object.keys(categories).length === 0) {
+                document.getElementById('noResults').classList.remove('hidden');
+                return;
             } else {
-                noResults.classList.add('hidden');
+                document.getElementById('noResults').classList.add('hidden');
+            }
+
+            for (const [category, items] of Object.entries(categories)) {
+                const section = document.createElement('div');
+                section.className = 'bg-white rounded-2xl border border-zinc-200 p-6 md:p-8';
+                section.setAttribute('data-aos', 'fade-up');
+
+                let cardsHtml = items.map((ep, idx) => {
+                    const methodClass = `method-${ep.methods[0]}`;
+                    const statusDot = ep.status === 'online' ? 'bg-green-500' : 'bg-red-500';
+
+                    return `
+                    <div class="group relative bg-white border border-zinc-200 rounded-xl p-5 hover:border-zinc-900 transition-all card-hover cursor-pointer" onclick="openTryModal('${category}', ${idx})">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="method-badge ${methodClass}">${ep.methods[0]}</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="h-2 w-2 rounded-full ${statusDot}"></span>
+                                <span class="text-[0.65rem] font-bold text-zinc-400 uppercase tracking-wide">${ep.status}</span>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-zinc-900 mb-1 group-hover:text-primary transition-colors">${ep.name}</h3>
+                        <div class="flex items-center gap-2 mb-3">
+                            <code class="text-xs bg-zinc-100 text-zinc-600 px-1.5 py-0.5 rounded font-mono">${ep.route}</code>
+                        </div>
+                        <p class="text-sm text-zinc-500 line-clamp-2">${ep.description}</p>
+                    </div>
+                    `;
+                }).join('');
+
+                section.innerHTML = `
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="h-10 w-1 bg-gradient-to-b from-primary to-accent rounded-full"></div>
+                        <h2 class="text-2xl font-bold text-zinc-900 tracking-tight">${category}</h2>
+                        <span class="px-2 py-1 bg-zinc-100 text-zinc-600 text-xs font-bold rounded-full">${items.length}</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${cardsHtml}
+                    </div>
+                `;
+                list.appendChild(section);
             }
         }
 
-        window.addEventListener('load', () => {
-            searchInput = document.getElementById('searchInput');
-            noResults = document.getElementById('noResults');
-            apiListContainer = document.getElementById('apiList');
-
-            searchInput.addEventListener('input', applyFilters);
+        /* Search Functionality */
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = endpointsData.filter(ep =>
+                ep.name.toLowerCase().includes(term) ||
+                ep.route.toLowerCase().includes(term) ||
+                ep.category.toLowerCase().includes(term)
+            );
+            renderEndpoints(filtered);
         });
 
-        function openFeedback() {
-            const url = window.feedbackUrl || 'https://github.com/yemobyte/YeMo-APIs/issues/new';
-            window.open(url, '_blank');
-        }
+        /* Modal Logic */
+        let currentEndpoint = null;
 
+        function openTryModal(cat, idx) {
+            const filtered = endpointsData.filter(ep => ep.category === cat);
+            const ep = filtered[idx];
+            currentEndpoint = ep;
 
-        let lastStartTime = null;
-        setInterval(() => {
-            fetch('/status').then(r => r.json()).then(d => {
-                if (!lastStartTime) lastStartTime = d.startTime;
-                else if (lastStartTime !== d.startTime) location.reload();
-            }).catch(() => { });
-        }, 2000);
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            const body = document.body;
-            menu.classList.toggle('open');
-            if (menu.classList.contains('open')) {
-                body.classList.add('overflow-hidden');
+            document.getElementById('modal-title').textContent = ep.name;
+            document.getElementById('modal-method').textContent = ep.methods[0];
+            document.getElementById('modal-method').className = `text-xs font-bold px-2 py-1 rounded font-mono method-${ep.methods[0]}`;
+            document.getElementById('modal-desc').textContent = ep.description;
+            document.getElementById('modal-response').classList.add('hidden');
+
+            const paramsContainer = document.getElementById('modal-params');
+            paramsContainer.innerHTML = '';
+
+            const schema = ep.paramsSchema || {};
+            const paramKeys = Object.keys(schema);
+
+            if (paramKeys.length === 0) {
+                paramsContainer.innerHTML = `
+                    <div class="text-center py-6 bg-zinc-50 rounded-lg border border-zinc-100 border-dashed">
+                        <p class="text-xs text-zinc-400 font-bold uppercase">No parameters required</p>
+                    </div>
+                `;
             } else {
-                body.classList.remove('overflow-hidden');
+                paramKeys.forEach(key => {
+                    const conf = schema[key];
+                    const div = document.createElement('div');
+                    const requiredStar = conf.required ? '<span class="text-red-500">*</span>' : '';
+
+                    let inputHtml = '';
+                    if (conf.type === 'file') {
+                        inputHtml = `
+                        <input type="file" name="${key}" class="block w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-100 file:text-zinc-700 hover:file:bg-zinc-200 cursor-pointer border border-zinc-200 rounded-lg bg-white" ${conf.required ? 'required' : ''}>
+                        `;
+                    } else {
+                        inputHtml = `
+                        <input type="text" name="${key}" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white transition-all text-sm" placeholder="Enter value..." ${conf.required ? 'required' : ''}>
+                        `;
+                    }
+
+                    div.innerHTML = `
+                        <label class="block text-xs font-bold text-zinc-700 uppercase mb-1.5 ml-1">${key} ${requiredStar}</label>
+                        ${inputHtml}
+                    `;
+                    paramsContainer.appendChild(div);
+                });
             }
+
+            document.getElementById('try-modal').classList.remove('hidden');
+            document.getElementById('try-modal').classList.add('flex');
+            document.body.style.overflow = 'hidden';
         }
+
+        function closeModal() {
+            document.getElementById('try-modal').classList.add('hidden');
+            document.getElementById('try-modal').classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('try-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentEndpoint) return;
+
+            const form = e.target;
+            const formData = new FormData(form);
+            const method = currentEndpoint.methods[0];
+            let url = currentEndpoint.route;
+
+            const btn = form.querySelector('button[type="submit"]');
+            const originalBtnText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
+
+            try {
+                const options = { method };
+
+                if (method === 'GET') {
+                    const params = new URLSearchParams(formData);
+                    if (Array.from(params).length > 0) {
+                        url += '?' + params.toString();
+                    }
+                } else {
+                    const isFileUpload = form.querySelector('input[type="file"]');
+                    if (isFileUpload) {
+                        options.body = formData;
+                    } else {
+                        options.headers = { 'Content-Type': 'application/json' };
+                        options.body = JSON.stringify(Object.fromEntries(formData));
+                    }
+                }
+
+                const res = await fetch(url, options);
+                const data = await res.json();
+
+                const codeBlock = document.getElementById('response-code');
+                codeBlock.textContent = JSON.stringify(data, null, 2);
+                document.getElementById('modal-response').classList.remove('hidden');
+
+            } catch (err) {
+                const codeBlock = document.getElementById('response-code');
+                codeBlock.textContent = JSON.stringify({ error: err.message }, null, 2);
+                document.getElementById('modal-response').classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnText;
+            }
+        });
+
+        /* Shortcuts */
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        init();
     </script>
 </body>
 

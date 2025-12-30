@@ -1,466 +1,248 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="scroll-smooth">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YeMo-APIs | System Status</title>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        mono: ['Ubuntu Mono', 'monospace'],
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
-                        gray: {
-                            850: '#1f2937',
-                            900: '#111827',
-                            950: '#0b0f19',
-                        },
-                        primary: {
-                            400: '#818cf8',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                        }
+                        border: '#18181b',
+                        background: '#ffffff',
+                        surface: '#f4f4f5',
+                        primary: '#3b82f6',
+                        accent: '#8b5cf6',
                     },
                     boxShadow: {
-                        'neo': '5px 5px 0px 0px #1f2937',
-                        'neo-active': '2px 2px 0px 0px #1f2937',
+                        'brutal': '4px 4px 0 0 #18181b',
+                        'brutal-sm': '2px 2px 0 0 #18181b',
                     }
-                },
-            },
-        };
+                }
+            }
+        }
     </script>
     <style>
-        body {
-            background-color: #050505;
-            color: #e2e8f0;
-            background-image: radial-gradient(#1f2937 1px, transparent 1px);
-            background-size: 24px 24px;
-            overflow-x: hidden;
-            width: 100%;
-        }
-
-        .neo-panel {
-            background-color: #111827;
-            border: 2px solid #374151;
-            box-shadow: 6px 6px 0px 0px #1f2937;
-            transition: all 0.2s ease;
-        }
-
-        .neo-panel:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 8px 8px 0px 0px #6366f1;
-            border-color: #6366f1;
-        }
-
-        .neo-btn {
-            background-color: #4f46e5;
-            color: white;
-            border: 2px solid #818cf8;
-            box-shadow: 4px 4px 0px 0px #000;
-            transition: all 0.1s;
-            text-transform: uppercase;
-            font-weight: 800;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .neo-btn:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 6px 6px 0px 0px #000;
-        }
-
-        .neo-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px 0px #000;
-        }
-
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #050505;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #4f46e5;
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #6366f1;
-        }
-
-        /* Custom Chart Tooltip styling */
-        .apexcharts-tooltip {
-            background: #111827 !important;
-            border-color: #374151 !important;
-            color: #fff;
-        }
-
-        .apexcharts-tooltip-title {
-            background: #1f2937 !important;
-            border-bottom: 1px solid #374151 !important;
-        }
-
-        .apexcharts-text {
-            fill: #9ca3af !important;
-            font-family: 'Ubuntu Mono', monospace !important;
-        }
-
-        #notification-docs {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100vh;
-            height: 100dvh;
-            z-index: 99999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-
-        #notification-docs .backdrop {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            will-change: backdrop-filter;
-            -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
-        }
-
-        #notification-docs .modal-content {
-            position: relative;
-            background: #6366f1;
-            border: clamp(4px, 1.5vw, 8px) solid black;
-            padding: clamp(1.5rem, 5vw, 3rem);
-            max-width: 40rem;
-            width: 100%;
-            box-shadow: clamp(8px, 2vw, 20px) clamp(8px, 2vw, 20px) 0px 0px #111827;
-            transform: rotate(1deg);
-            will-change: transform, opacity;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            animation: zoomInDocs 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-            margin: auto;
-        }
-
-        @keyframes zoomInDocs {
-            from {
-                transform: scale(0.9) rotate(5deg) translateZ(0);
-                opacity: 0;
-            }
-
-            to {
-                transform: scale(1) rotate(1deg) translateZ(0);
-                opacity: 1;
-            }
-        }
-
-        #notification-docs .corner-label {
-            position: absolute;
-            top: -1rem;
-            left: -1rem;
+        .neo-card {
             background: white;
-            border: 3px solid black;
-            padding: 0.4rem 0.8rem;
-            transform: rotate(-3deg);
-            box-shadow: 4px 4px 0px 0px black;
-            font-weight: 900;
-            color: black;
-            font-size: clamp(0.75rem, 2vw, 1rem);
-            z-index: 10;
+            border: 1px solid #e4e4e7;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s;
         }
 
-        #mobile-menu {
-            position: fixed;
-            inset: 0;
-            background: rgba(5, 5, 5, 0.98);
-            z-index: 110;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 3rem;
-            transform: translateY(-100%);
-            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+        .neo-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1), 0 4px 6px -2px rgba(59, 130, 246, 0.05);
         }
 
-        #mobile-menu.open {
-            transform: translateY(0);
+        .status-dot {
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            display: inline-block;
         }
 
-        #mobile-menu a {
-            font-family: 'Inter', sans-serif;
-            font-weight: 900;
-            font-size: 3rem;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: -0.05em;
-            position: relative;
-            transition: color 0.3s;
+        .status-online {
+            background-color: #22c55e;
+            box-shadow: 0 0 8px #22c55e;
         }
 
-        #mobile-menu a:hover {
-            color: #6366f1;
+        .status-offline {
+            background-color: #ef4444;
         }
     </style>
-    <script>
-        (function () {
-            const lockedHTML = '<div style="background:#050505;color:white;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;overflow:hidden;position:fixed;top:0;left:0;width:100%;z-index:100000;width:100vw;height:100vh;"><div style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0.15;pointer-events:none;background-image:repeating-linear-gradient(45deg, #6366f1, #6366f1 20px, #000 20px, #000 40px);"></div><div style="background:#6366f1;border:8px solid black;padding:2.5rem;max-width:40rem;width:90%;box-shadow:20px 20px 0px 0px #000;transform:rotate(-2deg);text-align:center;position:relative;z-index:10;"><h1 style="font-size:clamp(3rem, 10vw, 6rem);font-weight:900;margin-bottom:1.5rem;text-transform:uppercase;color:white;line-height:0.9;font-style:italic;">ACCESS<br>DENIED</h1><div style="background:white;border:4px solid black;padding:1.5rem;margin-bottom:2rem;transform:rotate(1deg);"><p style="color:black;font-weight:900;text-transform:uppercase;font-size:1.25rem;">Developer tools detected. Please close them and refresh to continue browsing.</p></div><div style="display:flex;justify-content:center;gap:1.5rem;"><div style="background:black;color:white;padding:0.75rem 1.5rem;border:4px solid white;font-weight:900;text-transform:uppercase;letter-spacing:1px;">SYSTEM LOCKED</div><button onclick="sessionStorage.removeItem(\'yemo_locked\');window.location.reload();" style="background:white;color:black;padding:0.75rem 1.5rem;border:4px solid black;font-weight:900;text-transform:uppercase;cursor:pointer;">REFRESH</button></div></div></div>';
-            if (sessionStorage.getItem('yemo_locked')) {
-                document.documentElement.innerHTML = lockedHTML;
-                return;
-            }
-            function detectDev() {
-                const start = new Date().getTime();
-                debugger;
-                if (new Date().getTime() - start > 100) {
-                    sessionStorage.setItem('yemo_locked', 'true');
-                    document.body.innerHTML = '';
-                    location.reload();
-                }
-            }
-            setInterval(detectDev, 1000);
-            window.addEventListener('keydown', function (e) {
-                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
-                    sessionStorage.setItem('yemo_locked', 'true');
-                    location.reload();
-                }
-            });
-            document.addEventListener('contextmenu', e => e.preventDefault());
-        })();
-    </script>
 </head>
 
-<body class="min-h-screen flex flex-col">
-    <div id="notification-docs">
-        <div class="backdrop" onclick="document.getElementById('notification-docs').style.display='none'"></div>
-        <div class="modal-content">
-            <div class="corner-label">NOTICE!</div>
-            <div class="text-center space-y-6">
-                <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none italic">
-                </h2>
-                <div class="bg-white border-4 border-black p-4 transform -rotate-1 shadow-[4px_4px_0px_0px_black]">
-                    <p class="text-black font-black uppercase text-sm md:text-base leading-tight">
-                    </p>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-                    <button onclick="document.getElementById('notification-docs').style.display='none'"
-                        class="bg-black text-white py-3 border-4 border-black font-black uppercase tracking-widest hover:bg-white hover:text-black transition-colors shadow-[4px_4px_0px_0px_white] active:translate-x-1 active:translate-y-1 active:shadow-none"></button>
-                    <a href="" target="_blank" rel="noopener" title="View Source Code"
-                        class="bg-white text-black py-3 border-4 border-black font-black uppercase tracking-widest text-center hover:bg-black hover:text-white transition-colors shadow-[4px_4px_0px_0px_black] active:translate-x-1 active:translate-y-1 active:shadow-none"></a>
-                </div>
-            </div>
-            <button onclick="document.getElementById('notification-docs').style.display='none'"
-                class="absolute top-4 right-4 w-10 h-10 bg-black border-4 border-white text-white font-black hover:scale-110 transition-transform shadow-[2px_2px_0px_0px_black]">X</button>
-        </div>
+<body class="bg-gray-50 text-zinc-900 antialiased min-h-screen flex flex-col">
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-white/95 backdrop-blur-xl z-50 transform translate-x-full transition-transform duration-300 md:hidden flex flex-col items-center justify-center space-y-8">
+        <button onclick="toggleMenu()" class="absolute top-6 right-6 p-2 text-2xl hover:text-primary transition-colors">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <a href="/" onclick="toggleMenu()"
+            class="text-3xl font-black tracking-tight hover:text-primary transition-colors">HOME</a>
+        <a href="/stats" onclick="toggleMenu()"
+            class="text-3xl font-black tracking-tight hover:text-primary transition-colors">STATS</a>
     </div>
 
-    <!-- Navbar -->
-    <nav
-        class="w-full sticky top-0 z-[100] bg-[#050505] border-b-4 border-[#1f2937] shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
-        <div class="max-w-full mx-auto px-4 md:px-12 py-4 flex justify-between items-center">
-            <a href="/" class="flex items-center gap-3 group">
-                <div
-                    class="w-10 h-10 bg-primary-600 flex items-center justify-center border-2 border-white shadow-[3px_3px_0px_0px_white] transition-transform group-hover:-translate-y-1 group-hover:-translate-x-1 group-hover:shadow-[5px_5px_0px_0px_white]">
-                    <span class="font-sans font-black text-white text-xl uppercase tracking-tighter italic">Y</span>
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-40 w-full bg-white border-b-2 border-border/10 backdrop-blur-md bg-white/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="flex-shrink-0 flex items-center gap-3 group cursor-pointer">
+                    <div
+                        class="w-10 h-10 bg-zinc-900 group-hover:bg-primary transition-colors text-white flex items-center justify-center rounded-lg font-black text-xl shadow-brutal-sm">
+                        Y</div>
+                    <div>
+                        <h1 class="font-bold text-xl tracking-tight leading-none">YeMo<span
+                                class="text-primary">STATS</span></h1>
+                        <p class="text-[0.65rem] font-mono text-zinc-500 font-bold uppercase tracking-wider">System
+                            Monitor</p>
+                    </div>
+                </a>
+
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="/" class="text-sm font-bold hover:text-primary transition-colors">HOME</a>
+                    <a href="/stats" class="text-sm font-bold text-primary">STATUS</a>
                 </div>
-                <span class="font-sans font-black text-2xl tracking-tighter text-white uppercase italic"><span
-                        id="nav-title">YeMo</span> <span class="text-primary-400" id="nav-subtitle">API's</span></span>
-            </a>
 
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex gap-4 items-center">
-                <a href="/" class="neo-btn px-4 py-2 text-xs">
-                    <i class="fas fa-home"></i> Home
-                </a>
-                <a href="/docs" class="neo-btn px-4 py-2 text-xs">
-                    <i class="fas fa-book"></i> Docs
-                </a>
+                <div class="md:hidden">
+                    <button onclick="toggleMenu()" class="p-2 text-xl text-zinc-900">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
             </div>
-
-            <!-- Mobile Menu Button -->
-            <button
-                class="md:hidden neo-panel w-10 h-10 flex items-center justify-center text-white bg-primary-600 border-white shadow-[2px_2px_0px_0px_white] active:shadow-none active:translate-x-[2px] active:translate-y-[2px]"
-                onclick="toggleMobileMenu()" aria-label="Toggle Menu">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
-        </div>
-
-        <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu" class="md:hidden">
-            <button class="absolute top-8 right-8 text-white text-4xl hover:text-primary-500 transition-colors"
-                onclick="toggleMobileMenu()" aria-label="Close Menu"><i class="fas fa-times"></i></button>
-            <nav class="flex flex-col items-center gap-8">
-                <a href="/" onclick="toggleMobileMenu()">Home</a>
-                <a href="/docs" onclick="toggleMobileMenu()">Docs</a>
-            </nav>
         </div>
     </nav>
 
-    <main class="flex-grow max-w-full mx-auto w-full p-6 md:px-12 lg:px-20 space-y-8">
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full space-y-8">
 
-        <!-- Header Info -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="neo-panel p-6 flex flex-col justify-between h-full bg-[#111827]">
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-gray-400 font-mono text-sm uppercase">Server Status</h3>
-                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+        <header class="mb-10" data-aos="fade-down">
+            <h2 class="text-3xl font-black text-zinc-900 tracking-tight mb-2">System Overview</h2>
+            <div class="flex items-center gap-3">
+                <span id="global-status-indicator" class="status-dot status-online"></span>
+                <span id="global-status-text" class="text-sm font-bold text-zinc-500 uppercase tracking-wide">All
+                    Systems Operational</span>
+            </div>
+        </header>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-aos="fade-up">
+            <div class="neo-card p-6 border-l-4 border-l-primary">
+                <div class="flex justify-between items-start mb-4 opacity-60">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500">Uptime</h3>
+                    <i class="fa-solid fa-clock text-primary"></i>
                 </div>
-                <div class="text-2xl font-black text-white tracking-tight" id="server-status">ONLINE</div>
-                <div class="text-xs text-gray-500 font-mono mt-1" id="server-uptime">Up: Calculating...</div>
+                <div id="uptime-text" class="text-2xl font-black font-mono tracking-tight text-zinc-900">--:--:--</div>
+                <p class="text-xs text-zinc-500 mt-2 font-medium">Since last restart</p>
             </div>
 
-            <div class="neo-panel p-6 flex flex-col justify-between h-full">
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-gray-400 font-mono text-sm uppercase">OS Platform</h3>
-                    <i class="fab fa-linux text-gray-500"></i>
+            <div class="neo-card p-6 border-l-4 border-l-accent">
+                <div class="flex justify-between items-start mb-4 opacity-60">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500">Platform</h3>
+                    <i class="fa-brands fa-linux text-accent"></i>
                 </div>
-                <div class="text-xl font-bold text-white tracking-tight truncate" id="os-platform">Loading...</div>
-                <div class="text-xs text-gray-500 font-mono mt-1" id="os-distro">...</div>
+                <div id="platform-text" class="text-2xl font-black tracking-tight text-zinc-900 truncate">Detecting...
+                </div>
+                <div id="distro-text" class="text-xs text-zinc-500 mt-2 font-bold uppercase">--</div>
             </div>
 
-            <div class="neo-panel p-6 flex flex-col justify-between h-full">
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-gray-400 font-mono text-sm uppercase">CPU Load</h3>
-                    <i class="fas fa-microchip text-gray-500"></i>
+            <div class="neo-card p-6 border-l-4 border-l-yellow-500">
+                <div class="flex justify-between items-start mb-4 opacity-60">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500">CPU Load</h3>
+                    <i class="fa-solid fa-microchip text-yellow-500"></i>
                 </div>
-                <div class="text-3xl font-black text-primary-400" id="cpu-text">0%</div>
-                <div class="w-full bg-gray-800 h-1 mt-2 rounded-full overflow-hidden">
-                    <div id="cpu-bar" class="h-full bg-primary-500 transition-all duration-500 w-0"></div>
+                <div class="flex items-end gap-2">
+                    <div id="cpu-text" class="text-4xl font-black tracking-tighter text-zinc-900">0%</div>
+                </div>
+                <div class="w-full bg-zinc-100 rounded-full h-1.5 mt-4 overflow-hidden">
+                    <div id="cpu-bar" class="bg-yellow-500 h-1.5 rounded-full transition-all duration-500 w-0"></div>
                 </div>
             </div>
 
-            <div class="neo-panel p-6 flex flex-col justify-between h-full">
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-gray-400 font-mono text-sm uppercase">Memory Usage</h3>
-                    <i class="fas fa-memory text-gray-500"></i>
+            <div class="neo-card p-6 border-l-4 border-l-green-500">
+                <div class="flex justify-between items-start mb-4 opacity-60">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500">Memory</h3>
+                    <i class="fa-solid fa-memory text-green-500"></i>
                 </div>
-                <div class="text-3xl font-black text-purple-400" id="mem-text">0%</div>
-                <div class="w-full bg-gray-800 h-1 mt-2 rounded-full overflow-hidden">
-                    <div id="mem-bar" class="h-full bg-purple-500 transition-all duration-500 w-0"></div>
+                <div class="flex items-end gap-2">
+                    <div id="mem-text" class="text-4xl font-black tracking-tighter text-zinc-900">0%</div>
+                </div>
+                <div class="w-full bg-zinc-100 rounded-full h-1.5 mt-4 overflow-hidden">
+                    <div id="mem-bar" class="bg-green-500 h-1.5 rounded-full transition-all duration-500 w-0"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Charts Area -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- CPU History Chart -->
-            <div class="neo-panel p-6 min-h-[400px]">
-                <h3 class="text-white font-bold mb-6 flex items-center gap-2">
-                    <i class="fas fa-chart-line text-primary-400"></i> CPU History (Realtime)
-                </h3>
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" data-aos="fade-up" data-aos-delay="100">
+            <div class="neo-card p-6 bg-white">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="font-bold text-lg text-zinc-900">CPU Usage History</h3>
+                        <p class="text-xs text-zinc-500">Real-time load average over last 60s</p>
+                    </div>
+                    <span class="p-2 bg-yellow-50 text-yellow-600 rounded-lg"><i
+                            class="fa-solid fa-wave-square"></i></span>
+                </div>
                 <div id="cpuChart" class="w-full h-[300px]"></div>
             </div>
 
-            <!-- Memory Composition Chart -->
-            <div class="neo-panel p-6 min-h-[400px]">
-                <h3 class="text-white font-bold mb-6 flex items-center gap-2">
-                    <i class="fas fa-chart-pie text-purple-400"></i> Memory Distribution
-                </h3>
+            <div class="neo-card p-6 bg-white">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="font-bold text-lg text-zinc-900">Memory Distribution</h3>
+                        <p class="text-xs text-zinc-500">Physical RAM allocation</p>
+                    </div>
+                    <span class="p-2 bg-green-50 text-green-600 rounded-lg"><i class="fa-solid fa-chart-pie"></i></span>
+                </div>
                 <div id="memChart" class="w-full h-[300px] flex items-center justify-center"></div>
+            </div>
+        </div>
+
+        <!-- System Details Table -->
+        <div class="neo-card overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+            <div class="bg-zinc-50 border-b border-zinc-200 p-4 px-6 flex justify-between items-center">
+                <h3 class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Environment Specifications</h3>
+                <span
+                    class="text-xs bg-white border border-zinc-200 px-2 py-1 rounded font-mono font-bold text-zinc-500">NODE
+                    v20.x</span>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-zinc-100">
+                    <div>
+                        <p class="text-xs text-zinc-400 font-bold uppercase mb-1">Architecture</p>
+                        <p id="spec-arch" class="font-mono font-bold text-zinc-700">x64</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-zinc-400 font-bold uppercase mb-1">Cores</p>
+                        <p id="spec-cores" class="font-mono font-bold text-zinc-700">--</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-zinc-400 font-bold uppercase mb-1">Total RAM</p>
+                        <p id="spec-ram" class="font-mono font-bold text-zinc-700">-- GB</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-zinc-400 font-bold uppercase mb-1">Hostname</p>
+                        <p id="spec-host" class="font-mono font-bold text-zinc-700 truncate px-2">--</p>
+                    </div>
+                </div>
             </div>
         </div>
 
     </main>
 
-    <footer class="mt-20 bg-[#050505] border-t-8 border-[#6366f1] p-12 overflow-hidden relative z-10 transition-all">
-        <div class="max-w-full mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10 px-4 md:px-12 lg:px-20">
-            <div class="space-y-6">
-                <div class="text-4xl font-black font-sans italic flex flex-col gap-2">
-                    <span
-                        class="bg-[#6366f1] text-white px-3 w-fit border-2 border-white shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] transform -rotate-1 tracking-tighter">YEMO</span>
-                    <span
-                        class="text-white underline decoration-[#6366f1] decoration-8 underline-offset-4 tracking-tighter uppercase font-black italic">API'S</span>
-                </div>
-                <p class="font-bold text-gray-400 text-sm leading-relaxed text-left">Real-time system health and
-                    performance analytics for the YeMo API Engine.</p>
-            </div>
-            <div>
-                <h4 class="font-black font-sans text-xl mb-6 text-[#6366f1] uppercase italic tracking-tighter">Navigate
-                </h4>
-                <ul class="space-y-3 font-bold uppercase text-xs tracking-widest text-gray-400">
-                    <li><a href="/" class="hover:text-white transition-colors cursor-pointer">Home</a></li>
-                    <li><a href="/docs" class="hover:text-white transition-colors cursor-pointer">Documentation</a></li>
-                    <li><a href="/stats"
-                            class="hover:text-white transition-colors cursor-pointer text-white">Statistics</a></li>
-                    <li><a href="https://github.com/yemobyte/YeMo-APIs"
-                            class="hover:text-white transition-colors cursor-pointer">Github</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-black font-sans text-xl mb-6 text-[#6366f1] uppercase italic tracking-tighter">Social
-                </h4>
-                <div class="flex gap-4 flex-wrap">
-                    <a href="https://github.com/yemobyte" target="_blank" rel="noopener" title="Follow us on GitHub"
-                        class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#6366f1] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
-                        <i class="fab fa-github text-white"></i>
-                    </a>
-                    <a href="#" target="_blank" rel="noopener" title="Join our WhatsApp Channel"
-                        class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#25D366] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
-                        <i class="fab fa-whatsapp text-white"></i>
-                    </a>
-                    <a href="mailto:yemobyte@gmail.com" title="Email us"
-                        class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#EA4335] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
-                        <i class="fas fa-envelope text-white"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#111827] p-6 border-4 border-[#6366f1] shadow-[10px_10px_0px_0px_rgba(99,102,241,0.2)]">
-                <h4 class="font-black font-sans text-lg mb-4 text-white uppercase italic tracking-tighter">Engine Status
-                </h4>
-                <div class="flex items-center gap-3">
-                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></div>
-                    <span class="text-xs font-black text-white uppercase tracking-[0.2em]">Operational</span>
-                </div>
-                <p class="text-[10px] text-gray-500 font-bold mt-4 uppercase tracking-widest leading-relaxed"
-                    id="engine-details">
-                    Uptime: 99.98% / Nodes: 4
-                </p>
-            </div>
-        </div>
-        <div
-            class="max-w-full mx-auto mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] px-4 md:px-12 lg:px-20">
-            <div>© <span id="year-stats"></span> YEMO API'S • BEYOND STATISTICS</div>
-            <div class="flex gap-8">
-                <a href="/legal/privacy" class="hover:text-white transition-colors">Privacy</a>
-                <a href="/legal/terms" class="hover:text-white transition-colors">Terms</a>
-            </div>
-        </div>
-        <script>document.getElementById("year-stats").textContent = new Date().getFullYear();</script>
-    </footer>
-
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>AOS.init({ duration: 600, once: true });</script>
-
     <script>
-        function formatBytes(bytes, decimals = 2) {
-            if (!+bytes) return '0 Bytes';
-            const k = 1024;
-            const dm = decimals < 0 ? 0 : decimals;
-            const sizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+        AOS.init({ once: true, duration: 800 });
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const isOpen = !menu.classList.contains('translate-x-full');
+            if (isOpen) {
+                menu.classList.add('translate-x-full');
+            } else {
+                menu.classList.remove('translate-x-full');
+            }
         }
 
         function formatUptime(seconds) {
@@ -470,40 +252,26 @@
             return `${h}h ${m}m ${s}s`;
         }
 
+        /* Chart Config */
+        const fontFamily = 'Plus Jakarta Sans, sans-serif';
+
         const cpuOptions = {
-            series: [{ name: 'CPU Load', data: [] }],
+            series: [{ name: 'Load', data: [] }],
             chart: {
                 type: 'area',
                 height: 300,
+                fontFamily: fontFamily,
                 animations: { enabled: true, easing: 'linear', dynamicAnimation: { speed: 1000 } },
                 toolbar: { show: false },
-                background: 'transparent',
-                fontFamily: 'Ubuntu Mono, monospace'
+                zoom: { enabled: false }
             },
-            colors: ['#6366f1'],
+            colors: ['#eab308'],
             stroke: { curve: 'smooth', width: 2 },
-            fill: {
-                type: 'gradient',
-                gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.1, stops: [0, 100] }
-            },
+            fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.05, stops: [0, 90, 100] } },
             dataLabels: { enabled: false },
-            grid: {
-                borderColor: '#374151',
-                strokeDashArray: 4,
-            },
-            xaxis: {
-                range: 10,
-                labels: { show: false },
-                axisBorder: { show: false },
-                axisTicks: { show: false }
-            },
-            yaxis: {
-                max: 100,
-                min: 0,
-                tickAmount: 5,
-                labels: { style: { colors: '#9ca3af' } }
-            },
-            theme: { mode: 'dark' }
+            grid: { borderColor: '#f4f4f5', strokeDashArray: 4 },
+            xaxis: { labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false } },
+            yaxis: { max: 100, min: 0, tickAmount: 4 },
         };
         const cpuChart = new ApexCharts(document.querySelector("#cpuChart"), cpuOptions);
         cpuChart.render();
@@ -511,190 +279,74 @@
         const memOptions = {
             series: [0, 0],
             labels: ['Used', 'Free'],
-            chart: {
-                type: 'donut',
-                height: 300,
-                background: 'transparent',
-                fontFamily: 'Ubuntu Mono, monospace'
-            },
-            colors: ['#a855f7', '#1f2937'],
-            stroke: { show: true, colors: ['#000'], width: 2 },
+            chart: { type: 'donut', height: 300, fontFamily: fontFamily },
+            colors: ['#22c55e', '#f4f4f5'],
+            stroke: { show: false },
             plotOptions: {
-                pie: {
-                    donut: {
-                        size: '75%',
-                        labels: {
-                            show: true,
-                            name: { color: '#9ca3af' },
-                            value: { color: '#fff', fontSize: '24px', fontWeight: 'bold' },
-                            total: {
-                                show: true,
-                                label: 'Total',
-                                color: '#9ca3af',
-                                formatter: function (w) {
-                                    return w.globals.seriesTotals.reduce((a, b) => a + b, 0).toFixed(1) + " GB";
-                                }
-                            }
-                        }
-                    }
-                }
+                pie: { donut: { size: '75%', labels: { show: true, total: { show: true, label: 'TOTAL RAM', fontWeight: 800, color: '#9ca3af' } } } }
             },
             dataLabels: { enabled: false },
-            legend: { position: 'bottom', labels: { colors: '#9ca3af' } },
-            tooltip: {
-                enabled: true,
-                y: {
-                    formatter: function (val) {
-                        return val + " GB"
-                    }
-                }
-            }
+            legend: { position: 'bottom', markers: { radius: 12 } },
+            tooltip: { enabled: true }
         };
         const memChart = new ApexCharts(document.querySelector("#memChart"), memOptions);
         memChart.render();
 
+        /* Realtime Updates */
         async function fetchStats() {
             try {
                 const res = await fetch('/status');
+                if (!res.ok) throw new Error('Network error');
                 const data = await res.json();
 
-                document.getElementById('server-uptime').textContent = "Up: " + formatUptime(data.uptime);
+                // Status Header
+                document.getElementById('global-status-indicator').classList.remove('status-offline');
+                document.getElementById('global-status-indicator').classList.add('status-online');
+                document.getElementById('global-status-text').textContent = 'All Systems Operational';
+
+                // Basic Metrics
+                document.getElementById('uptime-text').textContent = formatUptime(data.uptime);
 
                 if (data.os) {
-                    document.getElementById('os-platform').textContent = data.os.platform.toUpperCase();
-                    document.getElementById('os-distro').textContent = `${data.os.distro} ${data.os.release}`;
+                    document.getElementById('platform-text').textContent = data.os.platform.toUpperCase();
+                    document.getElementById('distro-text').textContent = `${data.os.distro} ${data.os.release}`;
+                    document.getElementById('spec-arch').textContent = data.os.arch;
+                    document.getElementById('spec-host').textContent = data.os.hostname;
                 }
 
-                const cpuLoad = Math.round(data.cpu);
-                document.getElementById('cpu-text').textContent = cpuLoad + "%";
-                document.getElementById('cpu-bar').style.width = cpuLoad + "%";
+                // CPU
+                const cpu = Math.round(data.cpu);
+                document.getElementById('cpu-text').textContent = cpu + "%";
+                document.getElementById('cpu-bar').style.width = cpu + "%";
+                cpuChart.appendData([{ data: [cpu] }]);
 
-                cpuChart.appendData([{
-                    data: [cpuLoad]
-                }]);
+                // Memory
+                const totalGB = (data.mem.total / 1073741824).toFixed(1);
+                const usedGB = (data.mem.used / 1073741824).toFixed(1);
+                const freeGB = (data.mem.free / 1073741824).toFixed(1);
+                const usedPct = Math.round((data.mem.used / data.mem.total) * 100);
 
+                document.getElementById('mem-text').textContent = usedPct + "%";
+                document.getElementById('mem-bar').style.width = usedPct + "%";
+                document.getElementById('spec-ram').textContent = totalGB + ' GB';
 
-                const usedMemGB = parseFloat((data.mem.used / 1073741824).toFixed(2));
-                const freeMemGB = parseFloat((data.mem.free / 1073741824).toFixed(2));
-                const totalMemGB = parseFloat((data.mem.total / 1073741824).toFixed(2));
-                const usedPercent = Math.round((data.mem.used / data.mem.total) * 100);
-
-                document.getElementById('mem-text').textContent = usedPercent + "%";
-                document.getElementById('mem-bar').style.width = usedPercent + "%";
-
-                memChart.updateSeries([usedMemGB, freeMemGB]);
-
+                memChart.updateSeries([parseFloat(usedGB), parseFloat(freeGB)]);
                 memChart.updateOptions({
-                    plotOptions: {
-                        pie: {
-                            donut: {
-                                labels: {
-                                    total: {
-                                        formatter: () => totalMemGB + " GB"
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    plotOptions: { pie: { donut: { labels: { total: { formatter: () => totalGB + " GB" } } } } }
                 });
 
-                const detailsEl = document.getElementById('engine-details');
-                if (detailsEl) {
-                    detailsEl.textContent = `Uptime: 99.98% / Nodes: 4`;
-                }
-            } catch (e) {
-                console.error("Stats fetch error:", e);
-                document.getElementById('server-status').textContent = "OFFLINE";
-                document.getElementById('server-status').classList.replace('text-white', 'text-red-500');
+            } catch (error) {
+                console.error(error);
+                document.getElementById('global-status-indicator').classList.remove('status-online');
+                document.getElementById('global-status-indicator').classList.add('status-offline');
+                document.getElementById('global-status-text').textContent = 'Connection Lost';
             }
         }
 
-        fetchStats();
         setInterval(fetchStats, 2000);
+        fetchStats();
 
-        async function initConfiguration() {
-            try {
-                const res = await fetch('/configuration');
-                const config = await res.json();
-
-                if (config.notifications && config.notifications.enabled) {
-                    const modal = document.getElementById('notification-docs');
-                    if (modal) {
-                        const title = modal.querySelector('h2');
-                        const message = modal.querySelector('p');
-                        const okBtn = modal.querySelector('button[onclick*="none"]');
-                        const sourceBtn = modal.querySelector('a[href*="github"]');
-
-                        if (title) title.innerHTML = config.notifications.title.replace('<br>', '<br><span class="text-black">') + '</span>';
-                        if (message) message.textContent = config.notifications.message;
-                        if (okBtn) okBtn.textContent = config.notifications.buttonText;
-                        if (sourceBtn) {
-                            sourceBtn.textContent = config.notifications.sourceCodeText;
-                            sourceBtn.href = config.notifications.sourceCodeUrl;
-                        }
-
-                        setTimeout(() => {
-                            modal.style.display = 'flex';
-                        }, 1500);
-                    }
-                }
-            } catch (e) {
-                console.error("Config load failed:", e);
-            }
-        }
-        document.addEventListener('DOMContentLoaded', initConfiguration);
-
-
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            const body = document.body;
-            menu.classList.toggle('open');
-            if (menu.classList.contains('open')) {
-                body.classList.add('overflow-hidden');
-            } else {
-                body.classList.remove('overflow-hidden');
-            }
-        }
-
-        function openFeedback() {
-            window.open('https://github.com/yemobyte/YeMo-APIs/issues/new', '_blank');
-        }
-
-        async function initConfiguration() {
-            try {
-                const res = await fetch('/v1/configuration');
-                const config = await res.json();
-
-                if (config.notifications && config.notifications.enabled) {
-                    const modal = document.getElementById('notification-docs');
-                    const title = modal.querySelector('h2');
-                    const message = modal.querySelector('p');
-                    const okBtn = modal.querySelector('button[onclick*="none"]');
-                    const sourceBtn = modal.querySelector('a[href*="github"]');
-
-                    title.innerHTML = config.notifications.title.replace('<br>', '<br><span class="text-black">') + '</span>';
-                    message.textContent = config.notifications.message;
-                    okBtn.textContent = config.notifications.buttonText;
-                    sourceBtn.textContent = config.notifications.sourceCodeText;
-                    sourceBtn.href = config.notifications.sourceCodeUrl;
-
-                    setTimeout(() => {
-                        modal.style.display = 'flex';
-                    }, 1500);
-                }
-
-                if (config.features && config.features.feedbackButton === false) {
-                    const feedbackBtn = document.getElementById('feedback-btn');
-                    if (feedbackBtn) feedbackBtn.style.display = 'none';
-                }
-            } catch (e) {
-                console.error("Config failed:", e);
-            }
-        }
-        window.addEventListener('DOMContentLoaded', initConfiguration);
     </script>
-
-
 </body>
 
 </html>
