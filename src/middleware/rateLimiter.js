@@ -32,23 +32,9 @@ import path from "path";
  * @constant {string}
  */
 const DATA_DIR = path.join(process.cwd(), "data");
-
-/**
- * Directory path for log files
- * @constant {string}
- */
 const LOG_DIR = path.join(process.cwd(), "logs");
-
-/**
- * File path for banned IPs storage
- * @constant {string}
- */
 const BANNED_FILE = path.join(DATA_DIR, "banned-ips.json");
-
-/**
- * File path for request logs
- * @constant {string}
- */
+const WHITELIST_FILE = path.join(DATA_DIR, "whitelist-ips.json");
 const REQUEST_LOG = path.join(LOG_DIR, "request-logs.log");
 
 /**
@@ -69,37 +55,19 @@ const MAX_REQUESTS = 25;
  */
 const CLEANUP_INTERVAL_MS = 60 * 1000;
 
-/**
- * Map storing IP addresses and their request timestamps
- * @type {Map<string, number[]>}
- */
 const ipTimestamps = new Map();
-
-/**
- * Object storing banned IP information loaded from file
- * @type {Object}
- * @property {string} bannedAt - ISO timestamp when IP was banned
- * @property {string} reason - Reason for banning
- * @property {string} by - Entity that performed the ban
- */
 let banned = {};
+let whitelist = {};
 
-/**
- * Ensures required directories and files exist
- * @function ensureFiles
- */
 function ensureFiles() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
   if (!fs.existsSync(LOG_DIR)) fs.mkdirSync(LOG_DIR);
   if (!fs.existsSync(BANNED_FILE)) fs.writeFileSync(BANNED_FILE, JSON.stringify({}, null, 2));
+  if (!fs.existsSync(WHITELIST_FILE)) fs.writeFileSync(WHITELIST_FILE, JSON.stringify({}, null, 2));
   if (!fs.existsSync(REQUEST_LOG)) fs.writeFileSync(REQUEST_LOG, "");
 }
 ensureFiles();
 
-/**
- * Loads banned IP list from disk storage
- * @function loadBanned
- */
 function loadBanned() {
   try {
     const raw = fs.readFileSync(BANNED_FILE, "utf8");
@@ -110,6 +78,43 @@ function loadBanned() {
   }
 }
 loadBanned();
+
+function loadWhitelist() {
+  try {
+    const raw = fs.readFileSync(WHITELIST_FILE, "utf8");
+    whitelist = raw ? JSON.parse(raw) : {};
+    if (!whitelist["157.230.33.80"]) {
+      whitelist["157.230.33.80"] = { addedAt: new Date().toISOString(), reason: "Owner/Admin" };
+      saveWhitelist();
+    }
+  } catch (err) {
+    console.error("Failed to load whitelist file:", err);
+    whitelist = {};
+  }
+}
+
+function saveWhitelist() {
+  try {
+    fs.writeFileSync(WHITELIST_FILE, JSON.stringify(whitelist, null, 2));
+  } catch (err) {
+    console.error("Failed to save whitelist file:", err);
+  }
+}
+loadWhitelist();
+
+fs.watch(WHITELIST_FILE, (eventType) => {
+  if (eventType === 'change') {
+    console.log('Whitelist file changed, reloading...');
+    loadWhitelist();
+  }
+});
+
+fs.watch(BANNED_FILE, (eventType) => {
+  if (eventType === 'change') {
+    console.log('Banned IPs file changed, reloading...');
+    loadBanned();
+  }
+});
 
 /**
  * Saves banned IP list to disk storage
@@ -200,6 +205,10 @@ function rateLimiterMiddleware(options = {}) {
   return (req, res, next) => {
     const ip = req.ip || req.headers["x-forwarded-for"] || req.connection.remoteAddress || "unknown";
 
+    if (whitelist[ip]) {
+      return next();
+    }
+
     if (banned[ip]) {
       const info = banned[ip];
       res.status(403).json({
@@ -226,7 +235,7 @@ function rateLimiterMiddleware(options = {}) {
       banIp(ip, `exceeded_${maxReq}_per_${windowMs}ms`);
       res.status(429).json({
         success: false,
-        error: `Rate limit exceeded - your IP has been blocked. Max ${maxReq} requests per ${windowMs/1000}s.`,
+        error: `Rate limit exceeded - your IP has been blocked. Max ${maxReq} requests per ${windowMs / 1000}s.`,
         note: "Contact the owner to request unblocking.",
       });
       return;
@@ -296,31 +305,31 @@ export default {
    * @member {Function}
    */
   middleware: rateLimiterMiddleware(),
-  
+
   /**
    * Admin handler for unbanning IP addresses
    * @member {Function}
    */
   adminUnbanHandler,
-  
+
   /**
    * Function to get banned IP list
    * @member {Function}
    */
   getBannedList,
-  
+
   /**
    * Function to get rate limiter statistics
    * @member {Function}
    */
   getStats,
-  
+
   /**
    * Function to ban an IP programmatically
    * @member {Function}
    */
   banIp,
-  
+
   /**
    * Function to unban an IP programmatically
    * @member {Function}

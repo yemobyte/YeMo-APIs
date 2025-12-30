@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>YeMo-APIs Documentation</title>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -166,13 +166,219 @@
       border-color: #f87171;
       color: white;
     }
+
+    #notification-docs {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    #notification-docs .backdrop {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      will-change: backdrop-filter;
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+
+    #notification-docs .modal-content {
+      position: relative;
+      background: #6366f1;
+      border: clamp(4px, 1.5vw, 8px) solid black;
+      padding: clamp(1.5rem, 5vw, 3rem);
+      max-width: 40rem;
+      width: 100%;
+      box-shadow: clamp(8px, 2vw, 20px) clamp(8px, 2vw, 20px) 0px 0px #111827;
+      transform: rotate(1deg);
+      will-change: transform, opacity;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      animation: zoomInDocs 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      margin: auto;
+    }
+
+    @keyframes zoomInDocs {
+      from {
+        transform: scale(0.9) rotate(5deg) translateZ(0);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1) rotate(1deg) translateZ(0);
+        opacity: 1;
+      }
+    }
+
+    #notification-docs .corner-label {
+      position: absolute;
+      top: -1rem;
+      left: -1rem;
+      background: white;
+      border: 3px solid black;
+      padding: 0.4rem 0.8rem;
+      transform: rotate(-3deg);
+      box-shadow: 4px 4px 0px 0px black;
+      font-weight: 900;
+      color: black;
+      font-size: clamp(0.75rem, 2vw, 1rem);
+      z-index: 10;
+    }
+
+    #mobile-menu {
+      position: fixed;
+      inset: 0;
+      background: #6366f1;
+      z-index: 110;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      border-left: 8px solid black;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    #mobile-menu.open {
+      transform: translateX(0);
+    }
   </style>
+  <script>
+    (function () {
+      const lockedHTML = '<div style="background:#050505;color:white;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;overflow:hidden;position:fixed;top:0;left:0;width:100%;z-index:100000;width:100vw;height:100vh;"><div style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0.15;pointer-events:none;background-image:repeating-linear-gradient(45deg, #6366f1, #6366f1 20px, #000 20px, #000 40px);"></div><div style="background:#6366f1;border:8px solid black;padding:2.5rem;max-width:40rem;width:90%;box-shadow:20px 20px 0px 0px #000;transform:rotate(-2deg);text-align:center;position:relative;z-index:10;"><h1 style="font-size:clamp(3rem, 10vw, 6rem);font-weight:900;margin-bottom:1.5rem;text-transform:uppercase;color:white;line-height:0.9;font-style:italic;">ACCESS<br>DENIED</h1><div style="background:white;border:4px solid black;padding:1.5rem;margin-bottom:2rem;transform:rotate(1deg);"><p style="color:black;font-weight:900;text-transform:uppercase;font-size:1.25rem;">Developer tools detected. Please close them and refresh to continue browsing.</p></div><div style="display:flex;justify-content:center;gap:1.5rem;"><div style="background:black;color:white;padding:0.75rem 1.5rem;border:4px solid white;font-weight:900;text-transform:uppercase;letter-spacing:1px;">SYSTEM LOCKED</div><button onclick="sessionStorage.removeItem(\'yemo_locked\');window.location.reload();" style="background:white;color:black;padding:0.75rem 1.5rem;border:4px solid black;font-weight:900;text-transform:uppercase;cursor:pointer;">REFRESH</button></div></div></div>';
+      if (sessionStorage.getItem('yemo_locked')) {
+        document.documentElement.innerHTML = lockedHTML;
+        return;
+      }
+      function detectDev() {
+        const start = new Date().getTime();
+        debugger;
+        if (new Date().getTime() - start > 100) {
+          sessionStorage.setItem('yemo_locked', 'true');
+          document.body.innerHTML = '';
+          location.reload();
+        }
+      }
+      setInterval(detectDev, 1000);
+      window.addEventListener('keydown', function (e) {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
+          sessionStorage.setItem('yemo_locked', 'true');
+          location.reload();
+        }
+      });
+      document.addEventListener('contextmenu', e => e.preventDefault());
+    })();
+  </script>
 </head>
 
 <body class="font-mono min-h-screen">
+  <div id="notification-docs">
+    <div class="backdrop" onclick="document.getElementById('notification-docs').style.display='none'"></div>
+    <div class="modal-content">
+      <div class="corner-label">NOTICE!</div>
+      <div class="text-center space-y-6">
+        <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none italic">
+          READY FOR<br><span class="text-black">THE CORE?</span>
+        </h2>
+        <div class="bg-white border-4 border-black p-4 transform -rotate-1 shadow-[4px_4px_0px_0px_black]">
+          <p class="text-black font-black uppercase text-sm md:text-base leading-tight">
+            Explore the powerful YeMo API Engine. High performance, secure, and built for developers who demand the
+            best.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+          <button onclick="document.getElementById('notification-docs').style.display='none'"
+            class="bg-black text-white py-3 border-4 border-black font-black uppercase tracking-widest hover:bg-white hover:text-black transition-colors shadow-[4px_4px_0px_0px_white] active:translate-x-1 active:translate-y-1 active:shadow-none">OK,
+            COOL</button>
+          <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank" rel="noopener"
+            class="bg-white text-black py-3 border-4 border-black font-black uppercase tracking-widest text-center hover:bg-black hover:text-white transition-colors shadow-[4px_4px_0px_0px_black] active:translate-x-1 active:translate-y-1 active:shadow-none">SOURCE
+            CODE</a>
+        </div>
+      </div>
+      <button onclick="document.getElementById('notification-docs').style.display='none'"
+        class="absolute top-4 right-4 w-10 h-10 bg-black border-4 border-white text-white font-black hover:scale-110 transition-transform shadow-[2px_2px_0px_0px_black]">X</button>
+    </div>
+  </div>
+  <script>
+    async function initMain() {
+      try {
+        const configRes = await fetch('/v1/configuration');
+        const config = await configRes.json();
+
+        if (config.notifications && config.notifications.enabled) {
+          const modal = document.getElementById('notification-docs');
+          const title = modal.querySelector('h2');
+          const message = modal.querySelector('p');
+          const okBtn = modal.querySelector('button[onclick*="none"]');
+          const sourceBtn = modal.querySelector('a[href*="github"]');
+
+          if (title && message && okBtn && sourceBtn) {
+            title.innerHTML = config.notifications.title.replace('<br>', '<br><span class="text-black">') + '</span>';
+            message.textContent = config.notifications.message;
+            okBtn.textContent = config.notifications.buttonText;
+            sourceBtn.textContent = config.notifications.sourceCodeText;
+            sourceBtn.href = config.notifications.sourceCodeUrl;
+
+            setTimeout(() => {
+              modal.style.display = 'flex';
+            }, 1500);
+          }
+        }
+
+        const feedbackBtn = document.getElementById('feedback-btn');
+        if (config.feedbackButton && config.feedbackButton.enabled) {
+          if (feedbackBtn) feedbackBtn.classList.remove('hidden');
+        }
+
+        const announcementPanel = document.getElementById('announcementPanel');
+        if (announcementPanel && config.announcements && config.announcements.enabled && config.announcements.items) {
+          const infoList = document.getElementById('infoList');
+          if (infoList) {
+            infoList.innerHTML = config.announcements.items.map(info => `
+              <div class="p-4 border-2 border-gray-800 hover:border-gray-600 transition-colors bg-[#050505] opacity-70">
+                  <div class="flex justify-between items-start gap-4">
+                      <div class="flex-1">
+                          <p class="font-bold text-gray-200 text-sm mb-1 uppercase tracking-wide">${info.title}</p>
+                          <p class="text-xs text-gray-400 font-mono leading-relaxed">${info.description}</p>
+                      </div>
+                      <div class="flex items-center flex-shrink-0">
+                          <span class="text-[10px] text-gray-500 font-mono bg-gray-900 px-2 py-1 border border-gray-800">${info.date}</span>
+                      </div>
+                  </div>
+              </div>
+            `).join('');
+            announcementPanel.classList.remove('hidden');
+          }
+        }
+
+
+
+        if (config.feedbackButton && config.feedbackButton.url) {
+          window.feedbackUrl = config.feedbackButton.url;
+        }
+
+        await loadApiData();
+      } catch (e) {
+        console.error("Initialization failed:", e);
+      }
+    }
+    window.addEventListener('DOMContentLoaded', initMain);
+  </script>
   <!-- Navbar -->
   <nav class="w-full sticky top-0 z-[100] bg-[#050505] border-b-4 border-[#1f2937] shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+    <div class="max-w-full mx-auto px-4 md:px-12 py-4 flex justify-between items-center">
       <a href="/" class="flex items-center gap-3 group">
         <div
           class="w-10 h-10 bg-primary-600 flex items-center justify-center border-2 border-white shadow-[3px_3px_0px_0px_white] transition-transform group-hover:-translate-y-1 group-hover:-translate-x-1 group-hover:shadow-[5px_5px_0px_0px_white]">
@@ -195,32 +401,31 @@
       <!-- Mobile Menu Button -->
       <button
         class="md:hidden neo-panel p-2 text-white bg-primary-600 border-white shadow-[2px_2px_0px_0px_white] active:shadow-none active:translate-x-[2px] active:translate-y-[2px]"
-        onclick="toggleMobileMenu()">
+        onclick="toggleMobileMenu()" aria-label="Toggle Menu">
         <i class="fas fa-bars text-xl"></i>
       </button>
     </div>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu"
-      class="fixed inset-0 bg-black/98 z-[110] opacity-0 pointer-events-none transition-all duration-300 md:hidden flex flex-col items-center justify-center gap-12 backdrop-blur-2xl">
-      <button
-        class="absolute top-8 right-8 neo-panel p-3 text-white bg-red-600 border-white shadow-[4px_4px_0px_0px_white]"
-        onclick="toggleMobileMenu()">
-        <i class="fas fa-times text-2xl"></i>
-      </button>
-      <div class="flex flex-col items-center gap-10">
+    <div id="mobile-menu" class="md:hidden">
+      <button class="absolute top-8 right-8 text-white text-6xl font-black hover:scale-110 transition-transform"
+        onclick="toggleMobileMenu()">&times;</button>
+      <div class="flex flex-col items-center gap-12">
         <a href="/"
-          class="text-5xl font-black text-white hover:text-primary-400 transition-all tracking-tighter uppercase italic"
+          class="text-6xl font-black text-white hover:text-black transition-all tracking-tighter uppercase italic"
           onclick="toggleMobileMenu()">Home</a>
         <a href="/stats"
-          class="text-5xl font-black text-white hover:text-primary-400 transition-all tracking-tighter uppercase italic"
+          class="text-6xl font-black text-white hover:text-black transition-all tracking-tighter uppercase italic"
           onclick="toggleMobileMenu()">Stats</a>
+        <a href="https://github.com/yemobyte/YeMo-APIs"
+          class="text-6xl font-black text-white hover:text-black transition-all tracking-tighter uppercase italic"
+          onclick="toggleMobileMenu()">Github</a>
       </div>
     </div>
   </nav>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>AOS.init({ duration: 600, once: true });</script>
-  <main class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 overflow-hidden">
+  <main class="w-full max-w-full mx-auto px-4 md:px-12 lg:px-20 py-12 overflow-hidden">
     <div class="text-left mb-12" data-aos="fade-up">
       <h1 class="text-5xl font-black gradient-text mb-4 tracking-tight">
         <span id="title">YeMo API's</span>
@@ -230,17 +435,18 @@
       </p>
 
       <div class="flex flex-wrap gap-4 mb-8">
-        <a href="https://whatsapp.com/channel/0029Vb7MpjO9RZAXcgJe0n0W"
+        <a href="https://www.whatsapp.com/channel/0029Vb7RdArLikg1BHzpH20A" id="whatsapp-link" target="_blank"
+          rel="noopener" title="Join our WhatsApp Channel"
           class="neo-btn flex-1 sm:flex-none px-4 py-3 text-sm no-underline inline-block">
           <i class="fab fa-whatsapp mr-2"></i> Join Channel
         </a>
-        <a href="https://github.com/yemobyte/YeMo-APIs"
+        <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank" rel="noopener" title="View Source Code"
           class="neo-btn flex-1 sm:flex-none px-4 py-3 text-sm no-underline inline-block bg-gray-800 border-gray-600">
           <i class="fab fa-github mr-2"></i> Source Code
         </a>
       </div>
 
-      <div class="mb-8 neo-panel overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+      <div id="announcementPanel" class="mb-8 neo-panel overflow-hidden hidden" data-aos="fade-up" data-aos-delay="100">
         <div class="bg-gray-800 p-4 border-b-2 border-gray-700 flex justify-between items-center">
           <h2 class="font-bold text-white flex items-center gap-2 text-lg">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -256,8 +462,9 @@
       </div>
 
       <div class="mb-4 bg-[#111827] border-2 border-[#374151] p-4 shadow-[4px_4px_0px_0px_#1f2937]">
-        <label class="block text-sm font-bold text-primary-400 mb-2 uppercase tracking-wide">Base URL</label>
-        <select id="hostSelect" class="w-full px-4 py-3 neo-input text-sm cursor-pointer">
+        <label for="hostSelect" class="block text-sm font-bold text-primary-400 mb-2 uppercase tracking-wide">Base
+          URL</label>
+        <select id="hostSelect" title="Select API Base URL" class="w-full px-4 py-3 neo-input text-sm cursor-pointer">
           <option id="valueURL" value="" selected>Loading...</option>
         </select>
       </div>
@@ -294,22 +501,69 @@
       <div id="apiList" class="space-y-8"></div>
     </div>
 
-    <div class="mt-20 py-8 border-t-2 border-[#374151] text-center">
-      <p class="text-gray-500 text-sm font-bold mb-4">
-        &copy; <span id="year"></span> YeMo API's. NO COPYRIGHT INTENDED.
-      </p>
-      <div class="space-x-6">
-        <a href="/legal/privacy-policy.html"
-          class="text-gray-400 hover:text-primary-400 font-bold uppercase text-xs transition-colors">Privacy</a>
-        <span class="text-gray-700">|</span>
-        <a href="/legal/terms-of-service.html"
-          class="text-gray-400 hover:text-primary-400 font-bold uppercase text-xs transition-colors">Terms</a>
+    <footer class="mt-20 bg-[#050505] border-t-8 border-[#6366f1] p-12 overflow-hidden relative z-10 transition-all">
+      <div class="max-w-full mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
+        <div class="space-y-6">
+          <div class="text-4xl font-black font-sans italic flex flex-col gap-2">
+            <span
+              class="bg-[#6366f1] text-white px-3 w-fit border-2 border-white shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] transform -rotate-1 tracking-tighter">YEMO</span>
+            <span
+              class="text-white underline decoration-[#6366f1] decoration-8 underline-offset-4 tracking-tighter uppercase">API'S</span>
+          </div>
+          <p class="font-bold text-gray-400 text-sm leading-relaxed">Official documentation for the YeMo API Engine.
+            Comprehensive, fast, and secure.</p>
+        </div>
+        <div>
+          <h4 class="font-black font-sans text-xl mb-6 text-[#6366f1] uppercase italic tracking-tighter">Navigate</h4>
+          <ul class="space-y-3 font-bold uppercase text-xs tracking-widest text-gray-400">
+            <li><a href="/" class="hover:text-white transition-colors cursor-pointer">Home</a></li>
+            <li><a href="/docs" class="hover:text-white transition-colors cursor-pointer text-white">Documentation</a>
+            </li>
+            <li><a href="/stats" class="hover:text-white transition-colors cursor-pointer">Statistics</a></li>
+            <li><a href="https://github.com/yemobyte/YeMo-APIs"
+                class="hover:text-white transition-colors cursor-pointer">Github</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-black font-sans text-xl mb-6 text-[#6366f1] uppercase italic tracking-tighter">Community</h4>
+          <div class="flex gap-4 flex-wrap">
+            <a href="https://github.com/yemobyte" target="_blank" rel="noopener" title="Follow us on GitHub"
+              class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#6366f1] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
+              <i class="fab fa-github text-white"></i>
+            </a>
+            <a href="#" id="footer-whatsapp-link" target="_blank" rel="noopener" title="Join our WhatsApp Channel"
+              class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#25D366] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
+              <i class="fab fa-whatsapp text-white"></i>
+            </a>
+            <a href="mailto:yemobyte@gmail.com" title="Email us"
+              class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#EA4335] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
+              <i class="fas fa-envelope text-white"></i>
+            </a>
+          </div>
+        </div>
+        <div id="footer-feedback"
+          class="bg-[#111827] p-6 border-4 border-[#6366f1] shadow-[10px_10px_0px_0px_rgba(99,102,241,0.2)]">
+          <h4 class="font-black font-sans text-lg mb-4 text-white uppercase italic tracking-tighter">Feedback</h4>
+          <p class="text-[10px] text-gray-500 font-bold mb-4 uppercase tracking-widest">Help us improve the engine</p>
+          <button onclick="openFeedback()"
+            class="w-full bg-[#6366f1] text-white p-3 border-2 border-white font-black font-sans tracking-tighter uppercase hover:bg-[#4f46e5] transition-all active:scale-95 shadow-[4px_4px_0px_0px_white]">Open
+            Issue</button>
+        </div>
       </div>
-    </div>
+      <div
+        class="max-w-full mx-auto mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">
+        <div>© <span id="year-footer"></span> YEMO API'S • BEYOND DOCUMENTATION</div>
+        <div class="flex gap-8">
+          <a href="/legal/privacy-policy.html" class="hover:text-white transition-colors">Privacy</a>
+          <a href="/legal/terms-of-service.html" class="hover:text-white transition-colors">Terms</a>
+        </div>
+      </div>
+      <script>document.getElementById("year-footer").textContent = new Date().getFullYear();</script>
+    </footer>
   </main>
 
-  <button onclick="openFeedback()"
-    class="fixed bottom-6 right-6 neo-btn p-3 px-5 z-40 rounded-none flex items-center gap-2 shadow-[4px_4px_0px_0px_#000] hover:transform hover:-translate-y-1 transition-all"
+  <button onclick="openFeedback()" id="feedback-btn"
+    class="fixed bottom-6 right-6 neo-btn p-3 px-5 z-40 rounded-none flex items-center gap-2 shadow-[4px_4px_0px_0px_#000] hover:transform hover:-translate-y-1 transition-all hidden"
     aria-label="Send Feedback">
     <i class="fas fa-comment-alt"></i>
     <span>FEEDBACK</span>
@@ -319,7 +573,10 @@
     async function loadApiData() {
       try {
         const res = await fetch("/openapi.json");
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const apiData = await res.json();
+
+        if (!apiData || !apiData.endpoints) throw new Error("Invalid API data format");
 
         const categories = {};
         apiData.endpoints.forEach(endpoint => {
@@ -335,7 +592,6 @@
 
         document.getElementById('title').textContent = "YeMo API's";
         document.getElementById('description').textContent = apiData.description;
-        document.getElementById("year").textContent = new Date().getFullYear();
         document.getElementById('totalEndpoints').textContent = apiData.endpoints.length;
         document.getElementById('totalCategories').textContent = Object.keys(categories).length;
 
@@ -503,33 +759,8 @@
       }
     }
 
-    loadApiData();
+    /** Configuration is handled in initMain */
 
-    async function loadInformation() {
-      try {
-        const res = await fetch('/announcement.json');
-        const data = await res.json();
-        const infoList = document.getElementById('infoList');
-
-        infoList.innerHTML = data.map(info => `
-           <div class="p-4 border-2 border-gray-800 hover:border-gray-600 transition-colors bg-[#050505] opacity-70">
-                <div class="flex justify-between items-start gap-4">
-                    <div class="flex-1">
-                        <p class="font-bold text-gray-200 text-sm mb-1 uppercase tracking-wide">${info.title}</p>
-                        <p class="text-xs text-gray-400 font-mono leading-relaxed">${info.description}</p>
-                    </div>
-                    <div class="flex items-center flex-shrink-0">
-                        <span class="text-[10px] text-gray-500 font-mono bg-gray-900 px-2 py-1 border border-gray-800">${info.date}</span>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    loadInformation();
 
     function toggleCategory(categoryIndex) {
       const content = document.getElementById(`category-${categoryIndex}`);
@@ -699,10 +930,11 @@
     });
 
     function openFeedback() {
-      window.open('https://github.com/yemobyte/YeMo-APIs/issues/new', '_blank');
+      const url = window.feedbackUrl || 'https://github.com/yemobyte/YeMo-APIs/issues/new';
+      window.open(url, '_blank');
     }
 
-    // Auto Reload Logic
+
     let lastStartTime = null;
     setInterval(() => {
       fetch('/v1/status').then(r => r.json()).then(d => {
@@ -713,11 +945,10 @@
     function toggleMobileMenu() {
       const menu = document.getElementById('mobile-menu');
       const body = document.body;
-      if (menu.classList.contains('opacity-0')) {
-        menu.classList.remove('opacity-0', 'pointer-events-none');
+      menu.classList.toggle('open');
+      if (menu.classList.contains('open')) {
         body.classList.add('overflow-hidden');
       } else {
-        menu.classList.add('opacity-0', 'pointer-events-none');
         body.classList.remove('overflow-hidden');
       }
     }

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>YeMo-APIs | System Status</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -121,15 +121,151 @@
             fill: #9ca3af !important;
             font-family: 'Ubuntu Mono', monospace !important;
         }
+
+        #notification-docs {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        #notification-docs .backdrop {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            will-change: backdrop-filter;
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+        }
+
+        #notification-docs .modal-content {
+            position: relative;
+            background: #6366f1;
+            border: clamp(4px, 1.5vw, 8px) solid black;
+            padding: clamp(1.5rem, 5vw, 3rem);
+            max-width: 40rem;
+            width: 100%;
+            box-shadow: clamp(8px, 2vw, 20px) clamp(8px, 2vw, 20px) 0px 0px #111827;
+            transform: rotate(1deg);
+            will-change: transform, opacity;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            animation: zoomInDocs 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            margin: auto;
+        }
+
+        @keyframes zoomInDocs {
+            from {
+                transform: scale(0.9) rotate(5deg) translateZ(0);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1) rotate(1deg) translateZ(0);
+                opacity: 1;
+            }
+        }
+
+        #notification-docs .corner-label {
+            position: absolute;
+            top: -1rem;
+            left: -1rem;
+            background: white;
+            border: 3px solid black;
+            padding: 0.4rem 0.8rem;
+            transform: rotate(-3deg);
+            box-shadow: 4px 4px 0px 0px black;
+            font-weight: 900;
+            color: black;
+            font-size: clamp(0.75rem, 2vw, 1rem);
+            z-index: 10;
+        }
+
+        #mobile-menu {
+            position: fixed;
+            inset: 0;
+            background: #6366f1;
+            z-index: 110;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2.5rem;
+            border-left: 8px solid black;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        #mobile-menu.open {
+            transform: translateX(0);
+        }
     </style>
+    <script>
+        (function () {
+            const lockedHTML = '<div style="background:#050505;color:white;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;overflow:hidden;position:fixed;top:0;left:0;width:100%;z-index:100000;width:100vw;height:100vh;"><div style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0.15;pointer-events:none;background-image:repeating-linear-gradient(45deg, #6366f1, #6366f1 20px, #000 20px, #000 40px);"></div><div style="background:#6366f1;border:8px solid black;padding:2.5rem;max-width:40rem;width:90%;box-shadow:20px 20px 0px 0px #000;transform:rotate(-2deg);text-align:center;position:relative;z-index:10;"><h1 style="font-size:clamp(3rem, 10vw, 6rem);font-weight:900;margin-bottom:1.5rem;text-transform:uppercase;color:white;line-height:0.9;font-style:italic;">ACCESS<br>DENIED</h1><div style="background:white;border:4px solid black;padding:1.5rem;margin-bottom:2rem;transform:rotate(1deg);"><p style="color:black;font-weight:900;text-transform:uppercase;font-size:1.25rem;">Developer tools detected. Please close them and refresh to continue browsing.</p></div><div style="display:flex;justify-content:center;gap:1.5rem;"><div style="background:black;color:white;padding:0.75rem 1.5rem;border:4px solid white;font-weight:900;text-transform:uppercase;letter-spacing:1px;">SYSTEM LOCKED</div><button onclick="sessionStorage.removeItem(\'yemo_locked\');window.location.reload();" style="background:white;color:black;padding:0.75rem 1.5rem;border:4px solid black;font-weight:900;text-transform:uppercase;cursor:pointer;">REFRESH</button></div></div></div>';
+            if (sessionStorage.getItem('yemo_locked')) {
+                document.documentElement.innerHTML = lockedHTML;
+                return;
+            }
+            function detectDev() {
+                const start = new Date().getTime();
+                debugger;
+                if (new Date().getTime() - start > 100) {
+                    sessionStorage.setItem('yemo_locked', 'true');
+                    document.body.innerHTML = '';
+                    location.reload();
+                }
+            }
+            setInterval(detectDev, 1000);
+            window.addEventListener('keydown', function (e) {
+                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
+                    sessionStorage.setItem('yemo_locked', 'true');
+                    location.reload();
+                }
+            });
+            document.addEventListener('contextmenu', e => e.preventDefault());
+        })();
+    </script>
 </head>
 
 <body class="min-h-screen flex flex-col">
+    <div id="notification-docs">
+        <div class="backdrop" onclick="document.getElementById('notification-docs').style.display='none'"></div>
+        <div class="modal-content">
+            <div class="corner-label">NOTICE!</div>
+            <div class="text-center space-y-6">
+                <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none italic">
+                </h2>
+                <div class="bg-white border-4 border-black p-4 transform -rotate-1 shadow-[4px_4px_0px_0px_black]">
+                    <p class="text-black font-black uppercase text-sm md:text-base leading-tight">
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+                    <button onclick="document.getElementById('notification-docs').style.display='none'"
+                        class="bg-black text-white py-3 border-4 border-black font-black uppercase tracking-widest hover:bg-white hover:text-black transition-colors shadow-[4px_4px_0px_0px_white] active:translate-x-1 active:translate-y-1 active:shadow-none"></button>
+                    <a href="" target="_blank" rel="noopener" title="View Source Code"
+                        class="bg-white text-black py-3 border-4 border-black font-black uppercase tracking-widest text-center hover:bg-black hover:text-white transition-colors shadow-[4px_4px_0px_0px_black] active:translate-x-1 active:translate-y-1 active:shadow-none"></a>
+                </div>
+            </div>
+            <button onclick="document.getElementById('notification-docs').style.display='none'"
+                class="absolute top-4 right-4 w-10 h-10 bg-black border-4 border-white text-white font-black hover:scale-110 transition-transform shadow-[2px_2px_0px_0px_black]">X</button>
+        </div>
+    </div>
 
     <!-- Navbar -->
     <nav
         class="w-full sticky top-0 z-[100] bg-[#050505] border-b-4 border-[#1f2937] shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+        <div class="max-w-full mx-auto px-4 md:px-12 py-4 flex justify-between items-center">
             <a href="/" class="flex items-center gap-3 group">
                 <div
                     class="w-10 h-10 bg-primary-600 flex items-center justify-center border-2 border-white shadow-[3px_3px_0px_0px_white] transition-transform group-hover:-translate-y-1 group-hover:-translate-x-1 group-hover:shadow-[5px_5px_0px_0px_white]">
@@ -152,31 +288,30 @@
             <!-- Mobile Menu Button -->
             <button
                 class="md:hidden neo-panel p-2 text-white bg-primary-600 border-white shadow-[2px_2px_0px_0px_white] active:shadow-none active:translate-x-[2px] active:translate-y-[2px]"
-                onclick="toggleMobileMenu()">
+                onclick="toggleMobileMenu()" aria-label="Toggle Menu">
                 <i class="fas fa-bars text-xl"></i>
             </button>
         </div>
 
         <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu"
-            class="fixed inset-0 bg-black/98 z-[110] opacity-0 pointer-events-none transition-all duration-300 md:hidden flex flex-col items-center justify-center gap-12 backdrop-blur-2xl">
-            <button
-                class="absolute top-8 right-8 neo-panel p-3 text-white bg-red-600 border-white shadow-[4px_4px_0px_0px_white]"
-                onclick="toggleMobileMenu()">
-                <i class="fas fa-times text-2xl"></i>
-            </button>
-            <div class="flex flex-col items-center gap-10">
+        <div id="mobile-menu" class="md:hidden">
+            <button class="absolute top-8 right-8 text-white text-6xl font-black hover:scale-110 transition-transform"
+                onclick="toggleMobileMenu()">&times;</button>
+            <div class="flex flex-col items-center gap-12">
                 <a href="/"
-                    class="text-5xl font-black text-white hover:text-primary-400 transition-all tracking-tighter uppercase italic"
+                    class="text-6xl font-black text-white hover:text-black transition-all tracking-tighter uppercase italic"
                     onclick="toggleMobileMenu()">Home</a>
                 <a href="/docs"
-                    class="text-5xl font-black text-white hover:text-primary-400 transition-all tracking-tighter uppercase italic"
+                    class="text-6xl font-black text-white hover:text-black transition-all tracking-tighter uppercase italic"
                     onclick="toggleMobileMenu()">Docs</a>
+                <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank" rel="noopener" title="View Source Code"
+                    class="text-6xl font-black text-white hover:text-black transition-all tracking-tighter uppercase italic"
+                    onclick="toggleMobileMenu()">Github</a>
             </div>
         </div>
     </nav>
 
-    <main class="flex-grow max-w-7xl mx-auto w-full p-6 space-y-8">
+    <main class="flex-grow max-w-full mx-auto w-full p-6 md:px-12 lg:px-20 space-y-8">
 
         <!-- Header Info -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -205,7 +340,7 @@
                 </div>
                 <div class="text-3xl font-black text-primary-400" id="cpu-text">0%</div>
                 <div class="w-full bg-gray-800 h-1 mt-2 rounded-full overflow-hidden">
-                    <div id="cpu-bar" class="h-full bg-primary-500 transition-all duration-500" style="width: 0%"></div>
+                    <div id="cpu-bar" class="h-full bg-primary-500 transition-all duration-500 w-0"></div>
                 </div>
             </div>
 
@@ -216,7 +351,7 @@
                 </div>
                 <div class="text-3xl font-black text-purple-400" id="mem-text">0%</div>
                 <div class="w-full bg-gray-800 h-1 mt-2 rounded-full overflow-hidden">
-                    <div id="mem-bar" class="h-full bg-purple-500 transition-all duration-500" style="width: 0%"></div>
+                    <div id="mem-bar" class="h-full bg-purple-500 transition-all duration-500 w-0"></div>
                 </div>
             </div>
         </div>
@@ -242,15 +377,74 @@
 
     </main>
 
-    <footer class="mt-auto border-t border-gray-800 bg-[#050505] py-8 text-center">
-        <p class="text-xs text-gray-500 font-mono">POWERED BY YeMo API's ENGINE</p>
+    <footer class="mt-20 bg-[#050505] border-t-8 border-[#6366f1] p-12 overflow-hidden relative z-10 transition-all">
+        <div class="max-w-full mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10 px-4 md:px-12 lg:px-20">
+            <div class="space-y-6">
+                <div class="text-4xl font-black font-sans italic flex flex-col gap-2">
+                    <span
+                        class="bg-[#6366f1] text-white px-3 w-fit border-2 border-white shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] transform -rotate-1 tracking-tighter">YEMO</span>
+                    <span
+                        class="text-white underline decoration-[#6366f1] decoration-8 underline-offset-4 tracking-tighter uppercase font-black italic">API'S</span>
+                </div>
+                <p class="font-bold text-gray-400 text-sm leading-relaxed text-left">Real-time system health and
+                    performance analytics for the YeMo API Engine.</p>
+            </div>
+            <div>
+                <h4 class="font-black font-sans text-xl mb-6 text-[#6366f1] uppercase italic tracking-tighter">Navigate
+                </h4>
+                <ul class="space-y-3 font-bold uppercase text-xs tracking-widest text-gray-400">
+                    <li><a href="/" class="hover:text-white transition-colors cursor-pointer">Home</a></li>
+                    <li><a href="/docs" class="hover:text-white transition-colors cursor-pointer">Documentation</a></li>
+                    <li><a href="/stats"
+                            class="hover:text-white transition-colors cursor-pointer text-white">Statistics</a></li>
+                    <li><a href="https://github.com/yemobyte/YeMo-APIs"
+                            class="hover:text-white transition-colors cursor-pointer">Github</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-black font-sans text-xl mb-6 text-[#6366f1] uppercase italic tracking-tighter">Social
+                </h4>
+                <div class="flex gap-4 flex-wrap">
+                    <a href="https://github.com/yemobyte" target="_blank" rel="noopener" title="Follow us on GitHub"
+                        class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#6366f1] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
+                        <i class="fab fa-github text-white"></i>
+                    </a>
+                    <a href="#" target="_blank" rel="noopener" title="Join our WhatsApp Channel"
+                        class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#25D366] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
+                        <i class="fab fa-whatsapp text-white"></i>
+                    </a>
+                    <a href="mailto:yemobyte@gmail.com" title="Email us"
+                        class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#EA4335] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
+                        <i class="fas fa-envelope text-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="bg-[#111827] p-6 border-4 border-[#6366f1] shadow-[10px_10px_0px_0px_rgba(99,102,241,0.2)]">
+                <h4 class="font-black font-sans text-lg mb-4 text-white uppercase italic tracking-tighter">Engine Status
+                </h4>
+                <div class="flex items-center gap-3">
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></div>
+                    <span class="text-xs font-black text-white uppercase tracking-[0.2em]">Operational</span>
+                </div>
+                <p class="text-[10px] text-gray-500 font-bold mt-4 uppercase tracking-widest leading-relaxed">Uptime:
+                    99.98% / Nodes: 4</p>
+            </div>
+        </div>
+        <div
+            class="max-w-full mx-auto mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] px-4 md:px-12 lg:px-20">
+            <div>© <span id="year-stats"></span> YEMO API'S • BEYOND STATISTICS</div>
+            <div class="flex gap-8">
+                <a href="/legal/privacy-policy.html" class="hover:text-white transition-colors">Privacy</a>
+                <a href="/legal/terms-of-service.html" class="hover:text-white transition-colors">Terms</a>
+            </div>
+        </div>
+        <script>document.getElementById("year-stats").textContent = new Date().getFullYear();</script>
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>AOS.init({ duration: 600, once: true });</script>
 
     <script>
-        // -- Utility Functions --
         function formatBytes(bytes, decimals = 2) {
             if (!+bytes) return '0 Bytes';
             const k = 1024;
@@ -267,8 +461,6 @@
             return `${h}h ${m}m ${s}s`;
         }
 
-        // -- Chart Setup --
-        // CPU Line Chart
         const cpuOptions = {
             series: [{ name: 'CPU Load', data: [] }],
             chart: {
@@ -307,7 +499,6 @@
         const cpuChart = new ApexCharts(document.querySelector("#cpuChart"), cpuOptions);
         cpuChart.render();
 
-        // Memory Donut Chart
         const memOptions = {
             series: [0, 0], // Used, Free
             labels: ['Used', 'Free'],
@@ -353,13 +544,11 @@
         const memChart = new ApexCharts(document.querySelector("#memChart"), memOptions);
         memChart.render();
 
-        // -- Data Fetching --
         async function fetchStats() {
             try {
                 const res = await fetch('/v1/system-stats');
                 const data = await res.json();
 
-                // Update Text Info
                 document.getElementById('server-uptime').textContent = "Up: " + formatUptime(data.uptime);
 
                 if (data.os) {
@@ -367,24 +556,15 @@
                     document.getElementById('os-distro').textContent = `${data.os.distro} ${data.os.release}`;
                 }
 
-                // Update CPU
                 const cpuLoad = Math.round(data.cpu);
                 document.getElementById('cpu-text').textContent = cpuLoad + "%";
                 document.getElementById('cpu-bar').style.width = cpuLoad + "%";
 
-                // Update CPU Chart
-                // ApexCharts needs array of {x, y} or just y for category
-                // We keep last 10 points
-                // Actually easier to just appendData if using realtime logic, 
-                // but providing full array keeps it synced cleaner for simple polling
-                // Here we just update series with a simple push logic could be complex without state.
-                // Simplified: Just push new point and let chart handle window with 'range: 10' in xaxis
                 cpuChart.appendData([{
                     data: [cpuLoad]
                 }]);
 
 
-                // Update Memory
                 const usedMemGB = parseFloat((data.mem.used / 1073741824).toFixed(2));
                 const freeMemGB = parseFloat((data.mem.free / 1073741824).toFixed(2));
                 const totalMemGB = parseFloat((data.mem.total / 1073741824).toFixed(2));
@@ -395,7 +575,6 @@
 
                 memChart.updateSeries([usedMemGB, freeMemGB]);
 
-                // Hack to update Total label in donut
                 memChart.updateOptions({
                     plotOptions: {
                         pie: {
@@ -418,23 +597,60 @@
             }
         }
 
-        // Init
         fetchStats();
-        setInterval(fetchStats, 2000); // Poll every 2 seconds
+        setInterval(fetchStats, 2000);
+
 
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             const body = document.body;
-            if (menu.classList.contains('opacity-0')) {
-                menu.classList.remove('opacity-0', 'pointer-events-none');
+            menu.classList.toggle('open');
+            if (menu.classList.contains('open')) {
                 body.classList.add('overflow-hidden');
             } else {
-                menu.classList.add('opacity-0', 'pointer-events-none');
                 body.classList.remove('overflow-hidden');
             }
         }
 
+        function openFeedback() {
+            window.open('https://github.com/yemobyte/YeMo-APIs/issues/new', '_blank');
+        }
+
+        async function initConfiguration() {
+            try {
+                const res = await fetch('/v1/configuration');
+                const config = await res.json();
+
+                if (config.notifications && config.notifications.enabled) {
+                    const modal = document.getElementById('notification-docs');
+                    const title = modal.querySelector('h2');
+                    const message = modal.querySelector('p');
+                    const okBtn = modal.querySelector('button[onclick*="none"]');
+                    const sourceBtn = modal.querySelector('a[href*="github"]');
+
+                    title.innerHTML = config.notifications.title.replace('<br>', '<br><span class="text-black">') + '</span>';
+                    message.textContent = config.notifications.message;
+                    okBtn.textContent = config.notifications.buttonText;
+                    sourceBtn.textContent = config.notifications.sourceCodeText;
+                    sourceBtn.href = config.notifications.sourceCodeUrl;
+
+                    setTimeout(() => {
+                        modal.style.display = 'flex';
+                    }, 1500);
+                }
+
+                if (config.features && config.features.feedbackButton === false) {
+                    const feedbackBtn = document.getElementById('feedback-btn');
+                    if (feedbackBtn) feedbackBtn.style.display = 'none';
+                }
+            } catch (e) {
+                console.error("Config failed:", e);
+            }
+        }
+        window.addEventListener('DOMContentLoaded', initConfiguration);
     </script>
+
+
 </body>
 
 </html>

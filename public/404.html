@@ -56,6 +56,32 @@
             box-shadow: 2px 2px 0px 0px #000;
         }
     </style>
+    <script>
+        (function () {
+            const lockedHTML = '<div style="background:#050505;color:white;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;overflow:hidden;position:fixed;top:0;left:0;width:100%;z-index:100000;width:100vw;height:100vh;"><div style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0.15;pointer-events:none;background-image:repeating-linear-gradient(45deg, #6366f1, #6366f1 20px, #000 20px, #000 40px);"></div><div style="background:#6366f1;border:8px solid black;padding:2.5rem;max-width:40rem;width:90%;box-shadow:20px 20px 0px 0px #000;transform:rotate(-2deg);text-align:center;position:relative;z-index:10;"><h1 style="font-size:clamp(3rem, 10vw, 6rem);font-weight:900;margin-bottom:1.5rem;text-transform:uppercase;color:white;line-height:0.9;font-style:italic;">ACCESS<br>DENIED</h1><div style="background:white;border:4px solid black;padding:1.5rem;margin-bottom:2rem;transform:rotate(1deg);"><p style="color:black;font-weight:900;text-transform:uppercase;font-size:1.25rem;">Developer tools detected. Please close them and refresh to continue browsing.</p></div><div style="display:flex;justify-content:center;gap:1.5rem;"><div style="background:black;color:white;padding:0.75rem 1.5rem;border:4px solid white;font-weight:900;text-transform:uppercase;letter-spacing:1px;">SYSTEM LOCKED</div><button onclick="sessionStorage.removeItem(\'yemo_locked\');window.location.reload();" style="background:white;color:black;padding:0.75rem 1.5rem;border:4px solid black;font-weight:900;text-transform:uppercase;cursor:pointer;">REFRESH</button></div></div></div>';
+            if (sessionStorage.getItem('yemo_locked')) {
+                document.documentElement.innerHTML = lockedHTML;
+                return;
+            }
+            function detectDev() {
+                const start = new Date().getTime();
+                debugger;
+                if (new Date().getTime() - start > 100) {
+                    sessionStorage.setItem('yemo_locked', 'true');
+                    document.body.innerHTML = '';
+                    location.reload();
+                }
+            }
+            setInterval(detectDev, 1000);
+            window.addEventListener('keydown', function (e) {
+                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
+                    sessionStorage.setItem('yemo_locked', 'true');
+                    location.reload();
+                }
+            });
+            document.addEventListener('contextmenu', e => e.preventDefault());
+        })();
+    </script>
 </head>
 
 <body class="font-mono min-h-screen flex items-center justify-center p-4">

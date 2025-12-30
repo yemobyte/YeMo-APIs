@@ -54,13 +54,13 @@ const PORT = process.env.PORT || 3000;
  */
 const server = app.listen(PORT, () => {
   console.log("");
-  
+
   /**
    * Log server startup success message
    * @event logger#ready
    */
   logger.ready(`Server started successfully`);
-  
+
   /**
    * Log local access URL
    * @event logger#info
@@ -73,7 +73,7 @@ const server = app.listen(PORT, () => {
      * @type {Object.<string, os.NetworkInterfaceInfo[]>}
      */
     const nets = os.networkInterfaces();
-    
+
     /**
      * Object to store filtered IPv4 network addresses
      * @type {Object.<string, string[]>}
@@ -122,17 +122,25 @@ const server = app.listen(PORT, () => {
    * @event logger#info
    */
   logger.info("Ready for connections");
-  
+
   console.log("");
 });
 
 server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     logger.warn(`Port ${PORT} is already in use. Trying to kill the process...`);
-    exec(`lsof -ti:${PORT} | xargs kill -9`, (error) => {
+    const killCmd = process.platform === 'win32'
+      ? `FOR /F "tokens=5" %P IN ('netstat -aon ^| findstr :${PORT}') DO taskkill /F /PID %P`
+      : `lsof -ti:${PORT} | xargs kill -9`;
+
+    exec(killCmd, (error) => {
       if (error) {
         logger.error(`Failed to kill process on port ${PORT}. Please manually kill it.`);
-        logger.error(`Run: lsof -ti:${PORT} | xargs kill -9`);
+        if (process.platform === 'win32') {
+          logger.error(`Run: netstat -ano | findstr :${PORT} and then taskkill /F /PID <PID>`);
+        } else {
+          logger.error(`Run: lsof -ti:${PORT} | xargs kill -9`);
+        }
         process.exit(1);
       } else {
         logger.info(`Process on port ${PORT} killed. Please restart the server.`);

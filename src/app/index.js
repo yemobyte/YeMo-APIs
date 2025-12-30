@@ -66,39 +66,63 @@ let allEndpoints = [];
  * @function initializeAPI
  * @returns {Promise<void>}
  */
-(async function initializeAPI() {
-  logger.info("Starting server initialization...");
-  logger.info("Loading API endpoints...");
+const initializationPromise = (async function initializeAPI() {
+  try {
+    logger.info("Starting server initialization...");
+    logger.info("Loading API endpoints...");
 
-  allEndpoints = (await loadEndpoints(path.join(process.cwd(), "api"), app)) || [];
+    allEndpoints = (await loadEndpoints(path.join(process.cwd(), "api"), app)) || [];
 
-  logger.ready(`Loaded ${allEndpoints.length} endpoints`);
-
-  setupRoutes(app, allEndpoints);
+    logger.ready(`Loaded ${allEndpoints.length} endpoints`);
+    return allEndpoints;
+  } catch (err) {
+    logger.error(`Initialization failed: ${err.message}`);
+    return [];
+  }
 })();
 
-/**
- * Sets up all routes for the Express application including API documentation and error handling
- * @function setupRoutes
- * @param {express.Application} app - The Express application instance
- * @param {Array<Object>} endpoints - Array of endpoint objects containing route information
- */
-function setupRoutes(app, endpoints) {
-  const SERVER_START_TIME = Date.now();
+const SERVER_START_TIME = Date.now();
 
-  app.get('/v1/status', (req, res) => {
-    const start = process.hrtime();
-    const diff = process.hrtime(start);
-    const latency = (diff[0] * 1e9 + diff[1]) / 1e6;
+app.get('/v1/status', (req, res) => {
+  const start = process.hrtime();
+  const diff = process.hrtime(start);
+  const latency = (diff[0] * 1e9 + diff[1]) / 1e6;
 
-    res.json({
-      status: "online",
-      latency: `${latency.toFixed(2)}ms`,
-      version: "1.0.0",
-      startTime: SERVER_START_TIME
-    });
+  res.json({
+    status: "online",
+    latency: `${latency.toFixed(2)}ms`,
+    version: "1.0.0",
+    startTime: SERVER_START_TIME
   });
+});
 
+app.get('/v1/configuration', (req, res) => {
+  try {
+    const configPath = path.join(process.cwd(), 'configuration.json');
+    const configData = fs.readFileSync(configPath, 'utf8');
+    res.json(JSON.parse(configData));
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to load configuration' });
+  }
+});
+
+app.get('/docs', (req, res) => {
+  res.sendFile(path.join(process.cwd(), 'public', 'docs.html'));
+});
+
+app.get('/stats', (req, res) => {
+  res.sendFile(path.join(process.cwd(), 'public', 'stats.html'));
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
+});
+
+initializationPromise.then(endpoints => {
+  setupRoutes(app, endpoints);
+});
+
+function setupRoutes(app, endpoints) {
   app.get('/v1/system-stats', async (req, res) => {
     try {
       const [cpu, mem, osInfo] = await Promise.all([
@@ -139,14 +163,11 @@ function setupRoutes(app, endpoints) {
    * @returns {string} returns.baseURL - Base URL of the API
    * @returns {Array<Object>} returns.endpoints - Array of endpoint objects with enriched URL information
    */
-  app.get("/openapi.json", (req, res) => {
+  app.get("/openapi.json", async (req, res) => {
+    await initializationPromise;
     const baseURL = `${req.protocol}://${req.get("host")}`;
 
-    /**
-     * Enriches endpoints with full URL information including query parameters
-     * @type {Array<Object>}
-     */
-    const enrichedEndpoints = endpoints.map((ep) => {
+    const enrichedEndpoints = allEndpoints.map((ep) => {
       let url = baseURL + ep.route;
       if (ep.params && ep.params.length > 0) {
         const query = ep.params.map((p) => `${p}=YOUR_${p.toUpperCase()}`).join("&");
@@ -187,35 +208,8 @@ function setupRoutes(app, endpoints) {
    */
   app.post("/admin/unban", express.json(), rateLimiter.adminUnbanHandler);
 
-  /**
-   * GET /
-   * @name GET /
-   * @description Serves the main landing page
-   * @route {GET} /
-   * @param {express.Request} req - Express request object
-   * @param {express.Response} res - Express response object
-   * @returns {file} Sends the index.html file
-   */
-  app.get('/', (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
-  });
+  /* Routes moved above setupRoutes */
 
-  /**
-   * GET /docs
-   * @name GET /docs
-   * @description Serves the API documentation page
-   * @route {GET} /docs
-   * @param {express.Request} req - Express request object
-   * @param {express.Response} res - Express response object
-   * @returns {file} Sends the docs.html file
-   */
-  app.get('/docs', (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'public', 'docs.html'));
-  });
-
-  app.get('/stats', (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'public', 'stats.html'));
-  });
 
   /**
    * POST /files/upload
