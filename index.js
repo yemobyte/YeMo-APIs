@@ -28,7 +28,7 @@ import logger from './src/utils/logger.js';
  * @constant {number}
  * @default 3000
  */
-const PORT = process.env.PORT || 7860;
+const PORT = process.env.PORT || 3000;
 
 /**
  * Starts the Express server and logs startup information including network interfaces

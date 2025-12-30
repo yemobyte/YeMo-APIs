@@ -74,6 +74,7 @@ const initializationPromise = (async function initializeAPI() {
     allEndpoints = (await loadEndpoints(path.join(process.cwd(), "api"), app)) || [];
 
     logger.ready(`Loaded ${allEndpoints.length} endpoints`);
+    setupRoutes(app, allEndpoints);
     return allEndpoints;
   } catch (err) {
     logger.error(`Initialization failed: ${err.message}`);
