@@ -555,7 +555,7 @@
 
         async function fetchStats() {
             try {
-                const res = await fetch('/system-stats');
+                const res = await fetch('/status');
                 const data = await res.json();
 
                 document.getElementById('server-uptime').textContent = "Up: " + formatUptime(data.uptime);

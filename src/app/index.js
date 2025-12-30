@@ -110,17 +110,38 @@ const initializationPromise = (async function initializeAPI() {
 
 const SERVER_START_TIME = Date.now();
 
-app.get('/status', (req, res) => {
-  const start = process.hrtime();
-  const diff = process.hrtime(start);
-  const latency = (diff[0] * 1e9 + diff[1]) / 1e6;
+app.get('/status', async (req, res) => {
+  try {
+    const start = process.hrtime();
+    const [cpu, mem, osInfo] = await Promise.all([
+      si.currentLoad(),
+      si.mem(),
+      si.osInfo()
+    ]);
+    const diff = process.hrtime(start);
+    const latency = (diff[0] * 1e9 + diff[1]) / 1e6;
 
-  res.json({
-    status: "online",
-    latency: `${latency.toFixed(2)}ms`,
-    version: "1.0.0",
-    startTime: SERVER_START_TIME
-  });
+    res.json({
+      status: "online",
+      latency: `${latency.toFixed(2)}ms`,
+      version: "1.0.0",
+      startTime: SERVER_START_TIME,
+      cpu: cpu.currentLoad,
+      mem: {
+        total: mem.total,
+        used: mem.active,
+        free: mem.available
+      },
+      os: {
+        platform: osInfo.platform,
+        distro: osInfo.distro,
+        release: osInfo.release
+      },
+      uptime: process.uptime()
+    });
+  } catch (e) {
+    res.status(500).json({ status: "error", error: e.message });
+  }
 });
 
 app.get('/configuration', (req, res) => {
@@ -150,32 +171,7 @@ app.get('/', (req, res) => {
 });
 
 function setupRoutes(app, endpoints) {
-  app.get('/system-stats', async (req, res) => {
-    try {
-      const [cpu, mem, osInfo] = await Promise.all([
-        si.currentLoad(),
-        si.mem(),
-        si.osInfo()
-      ]);
 
-      res.json({
-        cpu: cpu.currentLoad,
-        mem: {
-          total: mem.total,
-          used: mem.active,
-          free: mem.available
-        },
-        os: {
-          platform: osInfo.platform,
-          distro: osInfo.distro,
-          release: osInfo.release
-        },
-        uptime: process.uptime()
-      });
-    } catch (e) {
-      res.status(500).json({ error: 'Failed to fetch stats' });
-    }
-  });
 
   app.get("/openapi.json", async (req, res) => {
     await initializationPromise;
