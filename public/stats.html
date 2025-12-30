@@ -310,7 +310,7 @@
         <!-- Mobile Menu Overlay -->
         <div id="mobile-menu" class="md:hidden">
             <button class="absolute top-8 right-8 text-white text-4xl hover:text-primary-500 transition-colors"
-                onclick="toggleMobileMenu()"><i class="fas fa-times"></i></button>
+                onclick="toggleMobileMenu()" aria-label="Close Menu"><i class="fas fa-times"></i></button>
             <nav class="flex flex-col items-center gap-8">
                 <a href="/" onclick="toggleMobileMenu()">Home</a>
                 <a href="/docs" onclick="toggleMobileMenu()">Docs</a>
@@ -507,7 +507,7 @@
         cpuChart.render();
 
         const memOptions = {
-            series: [0, 0], // Used, Free
+            series: [0, 0],
             labels: ['Used', 'Free'],
             chart: {
                 type: 'donut',

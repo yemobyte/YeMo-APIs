@@ -4,13 +4,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YeMo-APIs</title>
+    <title>YeMo-APIs Documentation</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link
-        href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <script>
         tailwind.config = {
@@ -28,15 +28,16 @@
                             950: '#0b0f19',
                         },
                         primary: {
-                            400: '#818cf8', /* Indigo-400 */
-                            500: '#6366f1', /* Indigo-500 */
-                            600: '#4f46e5', /* Indigo-600 */
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
                         }
                     },
                     boxShadow: {
                         'neo': '4px 4px 0px 0px rgba(99, 102, 241, 0.4)',
                         'neo-hover': '2px 2px 0px 0px rgba(99, 102, 241, 1)',
-                        'neo-white': '4px 4px 0px 0px #ffffff',
+                        'neo-red': '4px 4px 0px 0px rgba(239, 68, 68, 0.4)',
+                        'neo-green': '4px 4px 0px 0px rgba(34, 197, 94, 0.4)',
                     }
                 },
             },
@@ -46,122 +47,8 @@
         body {
             background-color: #050505;
             color: #e2e8f0;
-            overflow-x: hidden;
             background-image: radial-gradient(#1f2937 1px, transparent 1px);
             background-size: 24px 24px;
-        }
-
-        .neo-panel {
-            background-color: #111827;
-            border: 2px solid #374151;
-            box-shadow: 6px 6px 0px 0px #1f2937;
-            transition: all 0.2s ease;
-        }
-
-        .neo-panel:hover {
-            border-color: #6366f1;
-            box-shadow: 8px 8px 0px 0px #6366f1;
-            transform: translate(-3px, -3px);
-        }
-
-        .neo-btn {
-            background-color: #4f46e5;
-            color: white;
-            border: 2px solid #818cf8;
-            box-shadow: 4px 4px 0px 0px #000;
-            transition: all 0.1s;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            white-space: nowrap;
-        }
-
-        .neo-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px 0px #000;
-        }
-
-        .neo-btn-outline {
-            background-color: transparent;
-            color: #e2e8f0;
-            border: 2px solid #374151;
-            box-shadow: 4px 4px 0px 0px #1f2937;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            transition: all 0.1s;
-        }
-
-        .neo-btn-outline:hover {
-            border-color: #e2e8f0;
-            color: #fff;
-            background-color: #1f2937;
-        }
-
-        .gradient-text {
-            color: #818cf8;
-            text-shadow: 2px 2px 0px #4f46e5;
-        }
-
-        .marquee-container {
-            overflow: hidden;
-            white-space: nowrap;
-            background: #111827;
-            border-top: 2px solid #374151;
-            border-bottom: 2px solid #374151;
-            padding: 1rem 0;
-            font-family: 'Ubuntu Mono', monospace;
-            display: flex;
-            align-items: center;
-            transform: rotate(-1deg) scale(1.1);
-            margin: 4rem -5% 4rem -5%;
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-            width: 110%;
-        }
-
-        .marquee-content {
-            display: inline-block;
-            animation: marquee 30s linear infinite;
-            padding-left: 2rem;
-            color: #818cf8;
-            font-weight: 700;
-            font-size: 1.25rem;
-        }
-
-        @keyframes marquee {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-        .terminal-header {
-            background-color: #1f2937;
-            border-bottom: 2px solid #374151;
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .terminal-dot {
-            width: 0.75rem;
-            height: 0.75rem;
-            border-radius: 50%;
-        }
-
-        html,
-        body {
-            overflow-x: hidden;
-            width: 100%;
-            scroll-behavior: smooth;
         }
 
         ::-webkit-scrollbar {
@@ -182,51 +69,102 @@
             background: #6366f1;
         }
 
-        .spotlight {
-            position: fixed;
-            top: -50vh;
-            left: -50vw;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 1;
-            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
-            will-change: transform;
-            transform: translate3d(0, 0, 0);
+        html,
+        body {
+            overflow-x: hidden;
+            width: 100%;
+            scroll-behavior: smooth;
         }
 
-        #mobile-menu {
-            position: fixed;
-            inset: 0;
-            background: rgba(5, 5, 5, 0.98);
-            z-index: 110;
-            display: flex;
-            flex-direction: column;
+        .neo-panel {
+            background-color: #111827;
+            border: 2px solid #374151;
+            box-shadow: 6px 6px 0px 0px #1f2937;
+            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .neo-panel:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 8px 8px 0px 0px #6366f1;
+            border-color: #6366f1;
+        }
+
+        .neo-btn {
+            background-color: #4f46e5;
+            color: white;
+            border: 2px solid #818cf8;
+            box-shadow: 4px 4px 0px 0px #000;
+            transition: all 0.1s;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 3rem;
-            transform: translateY(-100%);
-            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            gap: 0.5rem;
+            width: auto;
         }
 
-        #mobile-menu.open {
-            transform: translateY(0);
+        .neo-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #000;
         }
 
-        #mobile-menu a {
-            font-family: 'Inter', sans-serif;
-            font-weight: 900;
-            font-size: 3rem;
+        .neo-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .neo-input {
+            background-color: #0b0f19;
+            border: 2px solid #374151;
             color: white;
-            text-transform: uppercase;
-            letter-spacing: -0.05em;
-            position: relative;
-            transition: color 0.3s;
+            transition: all 0.2s;
         }
 
-        #mobile-menu a:hover {
-            color: #6366f1;
-            /* text-shadow: 0 0 20px rgba(99, 102, 241, 0.5); */
+        .neo-input:focus {
+            border-color: #6366f1;
+            box-shadow: 4px 4px 0px 0px #6366f1;
+            outline: none;
+        }
+
+        .gradient-text {
+            color: #818cf8;
+            text-shadow: 2px 2px 0px #4f46e5;
+        }
+
+        .method-badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            font-weight: 700;
+            border: 2px solid;
+            box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.5);
+        }
+
+        .method-get {
+            background-color: #059669;
+            border-color: #34d399;
+            color: white;
+        }
+
+        .method-post {
+            background-color: #2563eb;
+            border-color: #60a5fa;
+            color: white;
+        }
+
+        .method-put {
+            background-color: #d97706;
+            border-color: #fbbf24;
+            color: white;
+        }
+
+        .method-delete {
+            background-color: #dc2626;
+            border-color: #f87171;
+            color: white;
         }
 
         #notification-docs {
@@ -297,6 +235,39 @@
             font-size: clamp(0.75rem, 2vw, 1rem);
             z-index: 10;
         }
+
+        #mobile-menu {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 5, 5, 0.98);
+            z-index: 110;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            transform: translateY(-100%);
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        #mobile-menu.open {
+            transform: translateY(0);
+        }
+
+        #mobile-menu a {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: 3rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        #mobile-menu a:hover {
+            color: #6366f1;
+        }
     </style>
     <script>
         (function () {
@@ -326,32 +297,108 @@
     </script>
 </head>
 
-<body class="font-mono min-h-screen flex flex-col relative" onmousemove="updateSpotlight(event)">
+<body class="font-mono min-h-screen">
     <div id="notification-docs">
         <div class="backdrop" onclick="document.getElementById('notification-docs').style.display='none'"></div>
         <div class="modal-content">
             <div class="corner-label">NOTICE!</div>
             <div class="text-center space-y-6">
                 <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none italic">
+                    READY FOR<br><span class="text-black">THE CORE?</span>
                 </h2>
                 <div class="bg-white border-4 border-black p-4 transform -rotate-1 shadow-[4px_4px_0px_0px_black]">
                     <p class="text-black font-black uppercase text-sm md:text-base leading-tight">
+                        Explore the powerful YeMo API Engine. High performance, secure, and built for developers who
+                        demand the
+                        best.
                     </p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
                     <button onclick="document.getElementById('notification-docs').style.display='none'"
-                        class="bg-black text-white py-3 border-4 border-black font-black uppercase tracking-widest hover:bg-white hover:text-black transition-colors shadow-[4px_4px_0px_0px_white] active:translate-x-1 active:translate-y-1 active:shadow-none"></button>
-                    <a href="" target="_blank" rel="noopener"
-                        class="bg-white text-black py-3 border-4 border-black font-black uppercase tracking-widest text-center hover:bg-black hover:text-white transition-colors shadow-[4px_4px_0px_0px_black] active:translate-x-1 active:translate-y-1 active:shadow-none"></a>
+                        class="bg-black text-white py-3 border-4 border-black font-black uppercase tracking-widest hover:bg-white hover:text-black transition-colors shadow-[4px_4px_0px_0px_white] active:translate-x-1 active:translate-y-1 active:shadow-none">OK,
+                        COOL</button>
+                    <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank" rel="noopener"
+                        class="bg-white text-black py-3 border-4 border-black font-black uppercase tracking-widest text-center hover:bg-black hover:text-white transition-colors shadow-[4px_4px_0px_0px_black] active:translate-x-1 active:translate-y-1 active:shadow-none">SOURCE
+                        CODE</a>
                 </div>
             </div>
             <button onclick="document.getElementById('notification-docs').style.display='none'"
                 class="absolute top-4 right-4 w-10 h-10 bg-black border-4 border-white text-white font-black hover:scale-110 transition-transform shadow-[2px_2px_0px_0px_black]">X</button>
         </div>
     </div>
+    <script>
+        async function initMain() {
+            try {
+                const configRes = await fetch('/configuration');
+                const config = await configRes.json();
 
-    <div class="spotlight"></div>
+                if (config.website) {
+                    document.title = config.website.title || document.title;
+                    if (document.getElementById('nav-title')) document.getElementById('nav-title').textContent = config.website.headerTitle;
+                    if (document.getElementById('nav-subtitle')) document.getElementById('nav-subtitle').textContent = config.website.headerSubtitle;
+                    if (document.getElementById('page-title')) document.getElementById('page-title').textContent = `${config.website.title}`;
+                    if (document.getElementById('footer-text')) document.getElementById('footer-text').textContent = config.website.footerText;
+                }
 
+                if (config.notifications && config.notifications.enabled) {
+                    const modal = document.getElementById('notification-docs');
+                    const title = modal.querySelector('h2');
+                    const message = modal.querySelector('p');
+                    const okBtn = modal.querySelector('button[onclick*="none"]');
+                    const sourceBtn = modal.querySelector('a[href*="github"]');
+
+                    if (title && message && okBtn && sourceBtn) {
+                        title.innerHTML = config.notifications.title.replace('<br>', '<br><span class="text-black">') + '</span>';
+                        message.textContent = config.notifications.message;
+                        okBtn.textContent = config.notifications.buttonText;
+                        sourceBtn.textContent = config.notifications.sourceCodeText;
+                        sourceBtn.href = config.notifications.sourceCodeUrl;
+
+                        setTimeout(() => {
+                            modal.style.display = 'flex';
+                        }, 1500);
+                    }
+                }
+
+                const feedbackBtn = document.getElementById('feedback-btn');
+                if (config.feedbackButton && config.feedbackButton.enabled) {
+                    if (feedbackBtn) feedbackBtn.classList.remove('hidden');
+                }
+
+                const announcementPanel = document.getElementById('announcementPanel');
+                if (announcementPanel && config.announcements && config.announcements.enabled && config.announcements.items) {
+                    const infoList = document.getElementById('infoList');
+                    if (infoList) {
+                        infoList.innerHTML = config.announcements.items.map(info => `
+              <div class="p-4 border-2 border-gray-800 hover:border-gray-600 transition-colors bg-[#050505] opacity-70">
+                  <div class="flex justify-between items-start gap-4">
+                      <div class="flex-1">
+                          <p class="font-bold text-gray-200 text-sm mb-1 uppercase tracking-wide">${info.title}</p>
+                          <p class="text-xs text-gray-400 font-mono leading-relaxed">${info.description}</p>
+                      </div>
+                      <div class="flex items-center flex-shrink-0">
+                          <span class="text-[10px] text-gray-500 font-mono bg-gray-900 px-2 py-1 border border-gray-800">${info.date}</span>
+                      </div>
+                  </div>
+              </div>
+            `).join('');
+                        announcementPanel.classList.remove('hidden');
+                    }
+                }
+
+
+
+                if (config.feedbackButton && config.feedbackButton.url) {
+                    window.feedbackUrl = config.feedbackButton.url;
+                }
+
+                await loadApiData();
+            } catch (e) {
+                console.error("Initialization failed:", e);
+            }
+        }
+        window.addEventListener('DOMContentLoaded', initMain);
+    </script>
     <!-- Navbar -->
     <nav
         class="w-full sticky top-0 z-[100] bg-[#050505] border-b-4 border-[#1f2937] shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
@@ -367,8 +414,8 @@
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex gap-4 items-center">
-                <a href="/docs" class="neo-btn px-4 py-2 text-xs">
-                    <i class="fas fa-book"></i> Docs
+                <a href="/" class="neo-btn px-4 py-2 text-xs">
+                    <i class="fas fa-home"></i> Home
                 </a>
                 <a href="/stats" class="neo-btn px-4 py-2 text-xs">
                     <i class="fas fa-chart-line"></i> Stats
@@ -386,281 +433,547 @@
         <!-- Mobile Menu Overlay -->
         <div id="mobile-menu" class="md:hidden">
             <button class="absolute top-8 right-8 text-white text-4xl hover:text-primary-500 transition-colors"
-                onclick="toggleMobileMenu()"><i class="fas fa-times"></i></button>
+                onclick="toggleMobileMenu()" aria-label="Close Menu"><i class="fas fa-times"></i></button>
             <nav class="flex flex-col items-center gap-8">
-                <a href="/docs" onclick="toggleMobileMenu()">Docs</a>
+                <a href="/" onclick="toggleMobileMenu()">Home</a>
                 <a href="/stats" onclick="toggleMobileMenu()">Stats</a>
             </nav>
         </div>
     </nav>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init({ duration: 600, once: true });</script>
+    <main class="w-full max-w-full mx-auto px-4 md:px-12 lg:px-20 py-12 overflow-hidden">
+        <div class="text-left mb-12" data-aos="fade-up">
+            <h1 class="text-5xl font-black gradient-text mb-4 tracking-tight">
+                <span id="page-title">YeMo API's</span>
+            </h1>
+            <p class="text-gray-400 text-lg mb-6 border-l-4 border-primary-500 pl-4">
+                <span id="description">Loading...</span>
+            </p>
 
-    <!-- Hero Section -->
-    <main
-        class="flex-grow flex flex-col items-center justify-center py-20 px-6 relative max-w-full mx-auto w-full z-10 overflow-hidden lg:px-20 md:px-12">
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center w-full">
-            <div class="space-y-8 text-center lg:text-left" data-aos="fade-right" data-aos-duration="600">
-                <div class="inline-flex items-center gap-2 bg-[#111827] border border-[#374151] px-3 py-1.5 shadow-sm">
-                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                    <span class="text-primary-400 font-bold uppercase tracking-widest text-xs">System Online v1.0</span>
-                </div>
-
-                <h1
-                    class="text-4xl sm:text-6xl md:text-8xl font-sans font-black tracking-tighter leading-none text-white">
-                    <span id="hero-title">YeMo</span> <span class="gradient-text" id="hero-subtitle">API'S</span><br>
-                    <span class="text-2xl sm:text-4xl md:text-5xl opacity-80" id="hero-tagline">NEXT-GEN ENGINE</span>
-                </h1>
-
-                <p id="hero-desc"
-                    class="text-lg text-gray-400 font-medium max-w-xl mx-auto lg:mx-0 leading-relaxed border-l-4 border-gray-800 lg:pl-6 pl-0 border-none lg:border-solid">
-                    Experience the future of development with YeMo API's. Our high-performance, auto-documented, and
-                    secure engine provides the robust foundation your modern applications deserve. Fast, Reliable, and
-                    Always Online.
-                </p>
-
-                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
-                    <a href="/docs" class="neo-btn px-8 py-4 text-base">
-                        <i class="fas fa-book"></i> Read The Docs
-                    </a>
-                    <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank" rel="noopener"
-                        title="View Source Code"
-                        class="neo-btn-outline px-8 py-4 text-base flex items-center justify-center gap-2">
-                        <i class="fab fa-github"></i> Source Code
-                    </a>
-                </div>
-
-                <div
-                    class="grid grid-cols-3 items-center justify-items-center lg:justify-items-start gap-4 pt-8 border-t border-gray-800/50">
-                    <div class="text-center lg:text-left w-full">
-                        <div class="text-xl sm:text-2xl font-black text-white">10ms</div>
-                        <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Lat</div>
-                    </div>
-                    <div class="text-center lg:text-left w-full">
-                        <div class="text-xl sm:text-2xl font-black text-white">99%</div>
-                        <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Up</div>
-                    </div>
-                    <div class="text-center lg:text-left w-full">
-                        <div class="text-xl sm:text-2xl font-black text-white">Open</div>
-                        <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Src</div>
-                    </div>
-                </div>
+            <div class="flex flex-wrap gap-4 mb-8">
+                <a href="https://www.whatsapp.com/channel/0029Vb7RdArLikg1BHzpH20A" id="whatsapp-link" target="_blank"
+                    rel="noopener" title="Join our WhatsApp Channel"
+                    class="neo-btn flex-1 sm:flex-none px-4 py-3 text-sm no-underline inline-block">
+                    <i class="fab fa-whatsapp mr-2"></i> Join Channel
+                </a>
+                <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank" rel="noopener" title="View Source Code"
+                    class="neo-btn flex-1 sm:flex-none px-4 py-3 text-sm no-underline inline-block bg-gray-800 border-gray-600">
+                    <i class="fab fa-github mr-2"></i> Source Code
+                </a>
             </div>
 
-            <div class="relative w-full" data-aos="fade-left" data-aos-duration="600" data-aos-delay="100">
-                <div class="neo-panel w-full">
-                    <div class="terminal-header">
-                        <div class="terminal-dot bg-red-500"></div>
-                        <div class="terminal-dot bg-yellow-500"></div>
-                        <div class="terminal-dot bg-green-500"></div>
-                        <div class="flex-1 text-center text-xs text-gray-400 font-bold tracking-widest">
-                            root@yemo-server:~</div>
-                    </div>
-                    <div
-                        class="p-6 font-mono text-sm space-y-3 bg-[#0b0f19] text-gray-300 min-h-[250px] overflow-x-auto">
-                        <div class="flex gap-3 whitespace-nowrap">
-                            <span class="text-green-400 font-bold">➜</span>
-                            <span class="text-blue-400 font-bold">~</span>
-                            <span>curl -X GET <span id="curl-url">https://api.yemo.dev/status</span></span>
-                        </div>
-                        <div class="pl-4 border-l-2 border-gray-800 my-2">
-                            <span class="text-yellow-500">{</span><br>
-                            &nbsp;&nbsp;<span class="text-primary-400">"status"</span>: <span class="text-green-400"
-                                id="status-val">"online"</span>,<br>
-                            &nbsp;&nbsp;<span class="text-primary-400">"latency"</span>: <span class="text-yellow-400"
-                                id="latency-val">"12ms"</span>,<br>
-                            &nbsp;&nbsp;<span class="text-primary-400">"version"</span>: <span class="text-blue-400"
-                                id="version-val">"1.0.0"</span><br>
-                            <span class="text-yellow-500">}</span>
-                        </div>
-                        <div class="flex gap-3">
-                            <span class="text-green-400 font-bold">➜</span>
-                            <span class="text-blue-400 font-bold">~</span>
-                            <span class="animate-pulse bg-gray-600 w-2 h-5 inline-block align-middle"></span>
-                        </div>
-                    </div>
+            <div id="announcementPanel" class="mb-8 neo-panel overflow-hidden hidden" data-aos="fade-up"
+                data-aos-delay="100">
+                <div class="bg-gray-800 p-4 border-b-2 border-gray-700 flex justify-between items-center">
+                    <h2 class="font-bold text-white flex items-center gap-2 text-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-megaphone text-yellow-400" aria-hidden="true">
+                            <path d="m3 11 18-5v12L3 14v-3z" />
+                            <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
+                        </svg>
+                        Announcement
+                    </h2>
                 </div>
-                <div class="absolute -z-10 top-4 left-4 w-full h-full border-2 border-gray-800 rounded-lg"></div>
+                <div class="p-4 space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar" id="infoList"></div>
+            </div>
+
+            <div class="mb-4 bg-[#111827] border-2 border-[#374151] p-4 shadow-[4px_4px_0px_0px_#1f2937]">
+                <label for="hostSelect"
+                    class="block text-sm font-bold text-primary-400 mb-2 uppercase tracking-wide">Base
+                    URL</label>
+                <select id="hostSelect" title="Select API Base URL"
+                    class="w-full px-4 py-3 neo-input text-sm cursor-pointer">
+                    <option id="valueURL" value="" selected>Loading...</option>
+                </select>
             </div>
         </div>
 
+        <div class="neo-panel p-6 mb-8" data-aos="fade-up" data-aos-delay="200">
+            <div class="flex justify-between items-center gap-2">
+                <div class="flex-1 text-center border-r-2 border-[#374151]">
+                    <div class="text-2xl sm:text-3xl font-black text-primary-400" id="totalEndpoints">0</div>
+                    <div class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-widest font-bold mt-1">Endpoints
+                    </div>
+                </div>
+                <div class="flex-1 text-center">
+                    <div class="text-2xl sm:text-3xl font-black text-primary-400" id="totalCategories">0</div>
+                    <div class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-widest font-bold mt-1">
+                        Categories</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative mb-8 group">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <span class="material-icons text-primary-500">search</span>
+            </div>
+            <input type="text" id="searchInput" placeholder="SEARCH ENDPOINTS..."
+                class="w-full pl-12 pr-4 py-4 text-base neo-input placeholder-gray-600 font-bold">
+        </div>
+
+        <div id="content" class="space-y-8">
+            <div id="noResults" class="text-center py-20 hidden">
+                <div class="inline-block p-6 border-2 border-dashed border-gray-700 rounded-lg">
+                    <h3 class="text-xl text-gray-400 font-bold mb-2">NO DATA FOUND</h3>
+                    <p class="text-sm text-gray-600">Try searching for something else.</p>
+                </div>
+            </div>
+            <div id="apiList" class="space-y-8"></div>
+        </div>
+
+        <footer
+            class="mt-20 bg-[#050505] border-t-8 border-[#6366f1] p-12 overflow-hidden relative z-10 transition-all">
+            <div class="max-w-full mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
+                <div class="space-y-6">
+                    <div class="text-4xl font-black font-sans italic flex flex-col gap-2">
+                        <span
+                            class="bg-[#6366f1] text-white px-3 w-fit border-2 border-white shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] transform -rotate-1 tracking-tighter">YEMO</span>
+                        <span
+                            class="text-white underline decoration-[#6366f1] decoration-8 underline-offset-4 tracking-tighter uppercase">API'S</span>
+                    </div>
+                    <p class="font-bold text-gray-400 text-sm leading-relaxed">Official documentation for the YeMo API
+                        Engine.
+                        Comprehensive, fast, and secure.</p>
+                </div>
+                <div>
+                    <h4 class="font-black font-sans text-xl mb-6 text-[#6366f1] uppercase italic tracking-tighter">
+                        Navigate</h4>
+                    <ul class="space-y-3 font-bold uppercase text-xs tracking-widest text-gray-400">
+                        <li><a href="/" class="hover:text-white transition-colors cursor-pointer">Home</a></li>
+                        <li><a href="/docs"
+                                class="hover:text-white transition-colors cursor-pointer text-white">Documentation</a>
+                        </li>
+                        <li><a href="/stats" class="hover:text-white transition-colors cursor-pointer">Statistics</a>
+                        </li>
+                        <li><a href="https://github.com/yemobyte/YeMo-APIs"
+                                class="hover:text-white transition-colors cursor-pointer">Github</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-black font-sans text-xl mb-6 text-[#6366f1] uppercase italic tracking-tighter">
+                        Community</h4>
+                    <div class="flex gap-4 flex-wrap">
+                        <a href="https://github.com/yemobyte" target="_blank" rel="noopener" title="Follow us on GitHub"
+                            class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#6366f1] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
+                            <i class="fab fa-github text-white"></i>
+                        </a>
+                        <a href="#" id="footer-whatsapp-link" target="_blank" rel="noopener"
+                            title="Join our WhatsApp Channel"
+                            class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#25D366] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
+                            <i class="fab fa-whatsapp text-white"></i>
+                        </a>
+                        <a href="mailto:yemobyte@gmail.com" title="Email us"
+                            class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#EA4335] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
+                            <i class="fas fa-envelope text-white"></i>
+                        </a>
+                    </div>
+                </div>
+                <div id="footer-feedback"
+                    class="bg-[#111827] p-6 border-4 border-[#6366f1] shadow-[10px_10px_0px_0px_rgba(99,102,241,0.2)]">
+                    <h4 class="font-black font-sans text-lg mb-4 text-white uppercase italic tracking-tighter">Feedback
+                    </h4>
+                    <p class="text-[10px] text-gray-500 font-bold mb-4 uppercase tracking-widest">Help us improve the
+                        engine</p>
+                    <button onclick="openFeedback()"
+                        class="w-full bg-[#6366f1] text-white p-3 border-2 border-white font-black font-sans tracking-tighter uppercase hover:bg-[#4f46e5] transition-all active:scale-95 shadow-[4px_4px_0px_0px_white]">Open
+                        Issue</button>
+                </div>
+            </div>
+            <div
+                class="max-w-full mx-auto mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">
+                <div>© <span id="year-footer"></span> <span id="footer-text">YEMO API'S • BEYOND DOCUMENTATION</span>
+                </div>
+                <div class="flex gap-8">
+                    <a href="/legal/privacy-policy.html" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="/legal/terms-of-service.html" class="hover:text-white transition-colors">Terms</a>
+                </div>
+            </div>
+            <script>document.getElementById("year-footer").textContent = new Date().getFullYear();</script>
+        </footer>
     </main>
 
-    <!-- Marquee -->
-    <div class="marquee-container">
-        <div class="marquee-content">
-            AUTO-GENERATED DOCS • HIGH PERFORMANCE • SECURE ENDPOINTS • OPEN SOURCE • TYPESCRIPT SUPPORT • RATE
-            LIMITING • FILE UPLOAD •
-            AUTO-GENERATED DOCS • HIGH PERFORMANCE • SECURE ENDPOINTS • OPEN SOURCE • TYPESCRIPT SUPPORT • RATE
-            LIMITING • FILE UPLOAD •
-        </div>
-    </div>
+    <button onclick="openFeedback()" id="feedback-btn"
+        class="fixed bottom-6 right-6 neo-btn p-3 px-5 z-40 rounded-none flex items-center gap-2 shadow-[4px_4px_0px_0px_#000] hover:transform hover:-translate-y-1 transition-all hidden"
+        aria-label="Send Feedback">
+        <i class="fas fa-comment-alt"></i>
+        <span>FEEDBACK</span>
+    </button>
 
-    <!-- Features Section -->
-    <section class="max-w-full mx-auto px-6 md:px-12 lg:px-20 py-20 w-full z-10" data-aos="fade-up"
-        data-aos-duration="600">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="neo-panel p-8 group hover:bg-[#1f2937] transition-colors" data-aos="fade-up" data-aos-delay="0">
-                <div
-                    class="w-12 h-12 bg-primary-900/50 border border-primary-500/30 flex items-center justify-center mb-6 text-primary-400">
-                    <i class="fas fa-bolt text-xl"></i>
-                </div>
-                <h3 class="text-xl font-sans font-black text-white mb-3">Lightning Fast</h3>
-                <p class="text-gray-400 text-sm leading-relaxed">
-                    Optimized for speed. Our infrastructure ensures your requests are processed in milliseconds.
-                </p>
-            </div>
-
-            <div class="neo-panel p-8 group hover:bg-[#1f2937] transition-colors" data-aos="fade-up"
-                data-aos-delay="100">
-                <div
-                    class="w-12 h-12 bg-primary-900/50 border border-primary-500/30 flex items-center justify-center mb-6 text-primary-400">
-                    <i class="fas fa-shield-alt text-xl"></i>
-                </div>
-                <h3 class="text-xl font-sans font-black text-white mb-3">Secure by Design</h3>
-                <p class="text-gray-400 text-sm leading-relaxed">
-                    Built with security first. Rate limiting, input validation, and secure headers come standard.
-                </p>
-            </div>
-
-            <div class="neo-panel p-8 group hover:bg-[#1f2937] transition-colors" data-aos="fade-up"
-                data-aos-delay="200">
-                <div
-                    class="w-12 h-12 bg-primary-900/50 border border-primary-500/30 flex items-center justify-center mb-6 text-primary-400">
-                    <i class="fas fa-code text-xl"></i>
-                </div>
-                <h3 class="text-xl font-sans font-black text-white mb-3">Developer Friendly</h3>
-                <p class="text-gray-400 text-sm leading-relaxed">
-                    Comprehensive documentation and easy-to-use endpoints make integration a breeze.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="mt-20 bg-[#050505] border-t-8 border-[#6366f1] p-12 overflow-hidden relative z-10">
-
-        <div class="max-w-full mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10 px-4 md:px-12 lg:px-20">
-            <div class="space-y-6">
-                <div class="text-4xl font-black font-sans italic flex flex-col gap-2">
-                    <span
-                        class="bg-[#6366f1] text-white px-3 w-fit border-2 border-white shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] transform -rotate-1 tracking-tighter">YEMO</span>
-                    <span
-                        class="text-white underline decoration-[#6366f1] decoration-8 underline-offset-4 tracking-tighter">API'S</span>
-                </div>
-                <p class="font-bold text-gray-400 text-sm leading-relaxed">The next-generation API engine. Built for
-                    speed, security, and the ultimate developer experience.</p>
-            </div>
-            <div>
-                <h4 class="font-black font-sans text-xl mb-6 text-[#6366f1] uppercase italic tracking-tighter">Navigate
-                </h4>
-                <ul class="space-y-3 font-bold uppercase text-xs tracking-widest text-gray-400">
-                    <li><a href="/" class="hover:text-white transition-colors cursor-pointer">Home</a></li>
-                    <li><a href="/docs" class="hover:text-white transition-colors cursor-pointer">Documentation</a></li>
-                    <li><a href="/stats" class="hover:text-white transition-colors cursor-pointer">Statistics</a></li>
-                    <li><a href="https://github.com/yemobyte/YeMo-APIs"
-                            class="hover:text-white transition-colors cursor-pointer">Github</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-black font-sans text-xl mb-6 text-[#6366f1] uppercase italic tracking-tighter">Connect
-                </h4>
-                <div class="flex gap-4 flex-wrap">
-                    <a href="https://github.com/yemobyte" target="_blank" rel="noopener" title="Follow us on GitHub"
-                        class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#6366f1] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
-                        <i class="fab fa-github text-white"></i>
-                    </a>
-                    <a href="#" target="_blank" rel="noopener" title="Join our WhatsApp Channel"
-                        class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#25D366] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
-                        <i class="fab fa-whatsapp text-white"></i>
-                    </a>
-                    <a href="mailto:yemobyte@gmail.com" title="Email us"
-                        class="w-10 h-10 bg-gray-800 border-2 border-white flex items-center justify-center hover:bg-[#EA4335] hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[4px_4px_0px_0px_white] transition-all">
-                        <i class="fas fa-envelope text-white"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-[#111827] p-6 border-4 border-[#6366f1] shadow-[10px_10px_0px_0px_rgba(99,102,241,0.2)]">
-                <h4 class="font-black font-sans text-lg mb-4 text-white uppercase italic tracking-tighter">Developer
-                    Intel</h4>
-                <div class="flex flex-col gap-3">
-                    <input type="text"
-                        class="bg-[#050505] border-2 border-gray-700 p-3 w-full outline-none font-bold text-xs text-white focus:border-[#6366f1] transition-colors"
-                        placeholder="YOUR@EMAIL.COM" />
-                    <button
-                        class="bg-[#6366f1] text-white p-3 border-2 border-white font-black font-sans tracking-tighter uppercase hover:bg-[#4f46e5] transition-all active:scale-95">Join
-                        The Core</button>
-                </div>
-            </div>
-        </div>
-        <div
-            class="max-w-full mx-auto mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] px-4 md:px-12 lg:px-20">
-            <div>© <span id="year"></span> <span id="footer-text">YEMO API'S • BEYOND PERFORMANCE</span></div>
-            <div class="flex gap-8">
-                <a href="/legal/privacy-policy.html" class="hover:text-white transition-colors">Privacy</a>
-                <a href="/legal/terms-of-service.html" class="hover:text-white transition-colors">Terms</a>
-            </div>
-        </div>
-        <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
-    </footer>
-
-
-
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({
-            once: true,
-            mirror: false,
-            duration: 600,
-            offset: 50,
+        async function loadApiData() {
+            try {
+                const res = await fetch("/openapi.json");
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                const apiData = await res.json();
+
+                if (!apiData || !apiData.endpoints) throw new Error("Invalid API data format");
+
+                const categories = {};
+                apiData.endpoints.forEach(endpoint => {
+                    if (!categories[endpoint.category]) {
+                        categories[endpoint.category] = [];
+                    }
+                    categories[endpoint.category].push(endpoint);
+                });
+
+                const option = document.getElementById('valueURL');
+                option.value = apiData.baseURL;
+                option.textContent = `${apiData.baseURL} - PRODUCTION`;
+
+                document.getElementById('title').textContent = "YeMo API's";
+                document.getElementById('description').textContent = apiData.description;
+                document.getElementById('totalEndpoints').textContent = apiData.endpoints.length;
+                document.getElementById('totalCategories').textContent = Object.keys(categories).length;
+
+                const apiList = document.getElementById('apiList');
+                let categoryIndex = 0;
+
+                for (const [categoryName, endpoints] of Object.entries(categories)) {
+                    const categoryGroup = document.createElement('div');
+                    categoryGroup.className = 'category-group';
+                    categoryGroup.setAttribute('data-category', categoryName);
+
+                    const categoryHeader = `
+              <div class="neo-panel overflow-hidden">
+                <button onclick="toggleCategory(${categoryIndex})" class="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-[#1f2937] transition-colors border-b-0 border-[#374151]">
+                  <div class="flex items-center gap-4">
+                      <div class="bg-primary-600 text-white p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                        <span class="material-icons text-xl block">folder_open</span>
+                      </div>
+                      <div>
+                        <h2 class="font-black text-xl text-gray-100 uppercase tracking-wide">${categoryName}</h2>
+                        <span class="text-xs font-bold text-primary-400 bg-[#0b0f19] px-2 py-0.5 border border-[#374151] inline-block mt-1">${endpoints.length} Routes</span>
+                      </div>
+                  </div>
+                  <span class="material-icons text-primary-500 transform transition-transform duration-200" id="category-icon-${categoryIndex}">expand_more</span>
+                </button>
+                <div id="category-${categoryIndex}" class="hidden border-t-2 border-[#374151] bg-[#0b0f19] p-6">
+                  <div class="grid grid-cols-1 gap-6">
+            `;
+
+                    let categoryContent = '';
+                    let endpointIndex = 0;
+
+                    endpoints.forEach(endpoint => {
+                        const methodBadges = endpoint.methods.map(method => {
+                            let colorClass = 'method-get';
+                            if (method === 'POST') colorClass = 'method-post';
+                            else if (method === 'PUT') colorClass = 'method-put';
+                            else if (method === 'DELETE') colorClass = 'method-delete';
+
+                            return `<span class="method-badge ${colorClass}">${method}</span>`;
+                        }).join(' ');
+
+                        categoryContent += `
+                <div class="border-2 border-[#374151] bg-[#111827] p-5 hover:border-primary-500 transition-colors api-item group" 
+                     data-method="${endpoint.methods[0]}" 
+                     data-path="${endpoint.route}" 
+                     data-alias="${endpoint.name}" 
+                     data-category="${endpoint.category}">
+                  
+                  <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                    <div class="flex-1">
+                        <div class="flex items-center flex-wrap gap-3 mb-2">
+                           ${methodBadges}
+                           <h3 class="font-mono font-bold text-sm text-gray-200 break-all bg-[#0b0f19] px-2 py-1 border border-[#374151]">${endpoint.route}</h3>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-gray-700 pl-3">${endpoint.description}</p>
+                    </div>
+                    <button onclick="toggleEndpoint(${categoryIndex}, ${endpointIndex})" 
+                            class="neo-btn px-3 py-1 text-xs self-start shrink-0 flex items-center gap-1">
+                      <span>TEST</span>
+                      <span class="material-icons text-sm" id="endpoint-icon-${categoryIndex}-${endpointIndex}">expand_more</span>
+                    </button>
+                  </div>
+    
+                  <div id="endpoint-${categoryIndex}-${endpointIndex}" class="hidden mt-6 pt-6 border-t-2 border-dashed border-[#374151]">
+                    <div class="mb-4 flex items-center gap-2">
+                        <span class="material-icons text-green-500 text-sm">terminal</span>
+                        <span class="text-green-500 font-bold text-xs tracking-wider">REQUEST CONSOLE</span>
+                    </div>
+                    
+                    <form id="form-${categoryIndex}-${endpointIndex}" 
+                          onsubmit="executeRequest(event, ${categoryIndex}, ${endpointIndex}, '${endpoint.methods[0]}', '${endpoint.route}', 'application/json')">
+                      <div class="grid grid-cols-1 gap-4 mb-6">
+              `;
+
+                        const params = Object.entries(endpoint.paramsSchema);
+
+                        if (params.length > 0) {
+                            params.forEach(([paramName, paramSchema]) => {
+                                const requiredStar = paramSchema.required ? '<span class="text-red-500 ml-1">*</span>' : '';
+                                if (paramSchema.type === "file") {
+                                    categoryContent += `
+                        <div class="space-y-1">
+                          <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide">
+                            ${paramName} ${requiredStar}
+                          </label>
+                          <input type="file" name="${paramName}" 
+                                class="w-full text-xs text-gray-300 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-xs file:font-semibold file:bg-primary-600 file:text-white hover:file:bg-primary-500 cursor-pointer border-2 border-[#374151] bg-[#0b0f19] p-1"
+                                ${paramSchema.required ? 'required' : ''}>
+                        </div>
+                      `;
+                                } else {
+                                    categoryContent += `
+                        <div class="space-y-1">
+                          <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide">
+                            ${paramName} ${requiredStar}
+                          </label>
+                          <div class="relative">
+                            <input type="text" name="${paramName}" 
+                                class="w-full px-4 py-2 neo-input text-sm font-mono placeholder-gray-700" 
+                                placeholder="Value for ${paramName}..." ${paramSchema.required ? 'required' : ''}>
+                             <div class="absolute right-2 top-2 text-[10px] text-gray-600 font-bold bg-[#111827] px-1 border border-[#374151]">
+                                ${paramSchema.type}${paramSchema.minLength ? `:${paramSchema.minLength}` : ''}
+                             </div>
+                          </div>
+                        </div>
+                      `;
+                                }
+                            });
+                        } else {
+                            categoryContent += `
+                   <div class="text-xs text-gray-500 font-mono border border-dashed border-gray-700 p-2 text-center">
+                     NO PARAMETERS REQUIRED
+                   </div>
+                 `;
+                        }
+
+                        categoryContent += `
+                      </div>
+                      <div class="flex gap-4">
+                        <button type="submit" class="neo-btn flex-1 py-3 text-sm flex items-center justify-center gap-2">
+                          <span class="material-icons text-sm">play_arrow</span>
+                          EXECUTE
+                        </button>
+                        <button type="button" id="clear-${categoryIndex}-${endpointIndex}" onclick="clearResponse(${categoryIndex}, ${endpointIndex})" 
+                                class="hidden neo-btn bg-gray-800 border-gray-600 flex-1 py-3 text-sm flex items-center justify-center gap-2">
+                          <span class="material-icons text-gray-400 text-sm">clear</span>
+                          CLEAR
+                        </button>
+                      </div>
+                    </form>
+    
+                    <div id="response-${categoryIndex}-${endpointIndex}" class="hidden mt-6">
+                      <div class="mb-2 flex items-center justify-between">
+                         <div class="flex items-center gap-2">
+                            <span class="material-icons text-yellow-500 text-sm">data_object</span>
+                            <span class="text-yellow-500 font-bold text-xs tracking-wider">RESPONSE OUTPUT</span>
+                         </div>
+                      </div>
+                      <div class="bg-[#050505] border-2 border-[#374151] p-4 font-mono text-xs overflow-x-auto shadow-inner">
+                        <div class="max-h-96 overflow-y-auto" id="response-content-${categoryIndex}-${endpointIndex}"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+
+                        endpointIndex++;
+                    });
+
+                    const categoryFooter = `
+                  </div>
+                </div>
+              </div>
+            `;
+
+                    categoryGroup.innerHTML = categoryHeader + categoryContent + categoryFooter;
+                    apiList.appendChild(categoryGroup);
+                    categoryIndex++;
+                }
+
+            } catch (err) {
+                console.error("Failed to load API data:", err);
+                document.getElementById('apiList').innerHTML = `<div class="neo-panel p-8 text-center text-red-500 font-bold">FAILED TO LOAD API DATA</div>`;
+            }
+        }
+
+        /** Configuration is handled in initMain */
+
+
+        function toggleCategory(categoryIndex) {
+            const content = document.getElementById(`category-${categoryIndex}`);
+            const icon = document.getElementById(`category-icon-${categoryIndex}`);
+
+            content.classList.toggle('hidden');
+            if (!content.classList.contains('hidden')) {
+                icon.innerText = 'expand_less';
+            } else {
+                icon.innerText = 'expand_more';
+            }
+        }
+
+        function toggleEndpoint(categoryIndex, endpointIndex) {
+            const content = document.getElementById(`endpoint-${categoryIndex}-${endpointIndex}`);
+            const icon = document.getElementById(`endpoint-icon-${categoryIndex}-${endpointIndex}`);
+
+            content.classList.toggle('hidden');
+            if (!content.classList.contains('hidden')) {
+                icon.innerText = 'expand_less';
+            } else {
+                icon.innerText = 'expand_more';
+            }
+        }
+
+        function clearResponse(categoryIndex, endpointIndex) {
+            const responseElement = document.getElementById(`response-${categoryIndex}-${endpointIndex}`);
+            const responseContent = document.getElementById(`response-content-${categoryIndex}-${endpointIndex}`);
+            const clearButton = document.getElementById(`clear-${categoryIndex}-${endpointIndex}`);
+
+            responseElement.classList.add('hidden');
+            responseContent.innerHTML = '';
+            clearButton.classList.add('hidden');
+        }
+
+        async function executeRequest(event, categoryIndex, endpointIndex, method, path, contentType) {
+            event.preventDefault();
+
+            const form = event.target;
+            const responseElement = document.getElementById(`response-${categoryIndex}-${endpointIndex}`);
+            const responseContent = document.getElementById(`response-content-${categoryIndex}-${endpointIndex}`);
+            const clearButton = document.getElementById(`clear-${categoryIndex}-${endpointIndex}`);
+            const hostSelect = document.getElementById('hostSelect');
+            const selectedHost = hostSelect.value;
+            let fullUrl = selectedHost + path;
+
+            try {
+                let requestConfig = {
+                    method: method,
+                    headers: {}
+                };
+
+                if (method === 'GET') {
+                    const formData = new FormData(form);
+                    const params = new URLSearchParams();
+                    for (let [key, value] of formData.entries()) {
+                        if (value) params.append(key, value);
+                    }
+                    if (params.toString()) fullUrl += '?' + params.toString();
+                } else {
+                    const formData = new FormData(form);
+                    let hasFile = false;
+                    form.querySelectorAll("input[type=file]").forEach(input => {
+                        if (input.files.length > 0) hasFile = true;
+                    });
+
+                    if (hasFile) {
+                        requestConfig.body = formData;
+                    } else {
+                        const jsonBody = {};
+                        for (let [key, value] of formData.entries()) {
+                            if (value) jsonBody[key] = value;
+                        }
+                        if (Object.keys(jsonBody).length > 0) {
+                            requestConfig.headers['Content-Type'] = 'application/json';
+                            requestConfig.body = JSON.stringify(jsonBody);
+                        }
+                    }
+                }
+
+                responseContent.innerHTML = '<span class="text-primary-400 animate-pulse">Processing Request...</span>';
+                responseElement.classList.remove('hidden');
+
+                const response = await fetch(fullUrl, requestConfig);
+                const respContentType = response.headers.get("content-type");
+
+                let bodyHtml = "";
+                if (respContentType && respContentType.includes("application/json")) {
+                    const responseData = await response.json();
+                    bodyHtml = `<pre class="text-green-400 whitespace-pre-wrap">${JSON.stringify(responseData, null, 2)}</pre>`;
+                } else if (respContentType && respContentType.startsWith("image/")) {
+                    const blob = await response.blob();
+                    const imageUrl = URL.createObjectURL(blob);
+                    bodyHtml = `<img src="${imageUrl}" alt="Response" class="max-w-full border-2 border-[#374151]"/>`;
+                } else {
+                    const textData = await response.text();
+                    bodyHtml = `<pre class="text-gray-300 whitespace-pre-wrap">${textData}</pre>`;
+                }
+
+                const statusColor = response.ok ? 'text-green-500' : 'text-red-500';
+                const headerHtml = `
+            <div class="border-b border-gray-800 pb-2 mb-2 font-mono text-xs text-gray-500">
+              <div class="flex justify-between">
+                 <span>STATUS: <span class="${statusColor} font-bold">${response.status} ${response.statusText}</span></span>
+                 <span>${method}</span>
+              </div>
+              <div class="truncate mt-1 text-gray-600">${fullUrl}</div>
+            </div>`;
+
+                responseContent.innerHTML = headerHtml + bodyHtml;
+
+            } catch (error) {
+                responseContent.innerHTML = `
+             <div class="text-red-500 font-bold border-b border-red-900 pb-2 mb-2">ERROR</div>
+             <div class="text-red-400">${error.message}</div>
+          `;
+                responseElement.classList.remove('hidden');
+            } finally {
+                clearButton.classList.remove('hidden');
+            }
+        }
+
+        let searchInput, apiItems, noResults, apiListContainer;
+
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let visibleCount = 0;
+            const categoryGroups = document.querySelectorAll('.category-group');
+
+            categoryGroups.forEach(group => {
+                let hasVisibleItems = false;
+                const groupItems = group.querySelectorAll('.api-item');
+
+                groupItems.forEach(item => {
+                    const matches = [
+                        item.getAttribute('data-path'),
+                        item.getAttribute('data-alias'),
+                        item.getAttribute('data-method'),
+                        item.getAttribute('data-category')
+                    ].some(attr => attr && attr.toLowerCase().includes(searchTerm));
+
+                    item.style.display = matches ? 'block' : 'none';
+                    if (matches) hasVisibleItems = true;
+                });
+
+                if (hasVisibleItems) {
+                    group.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    group.classList.add('hidden');
+                }
+            });
+
+            if (visibleCount === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        }
+
+        window.addEventListener('load', () => {
+            searchInput = document.getElementById('searchInput');
+            noResults = document.getElementById('noResults');
+            apiListContainer = document.getElementById('apiList');
+
+            searchInput.addEventListener('input', applyFilters);
         });
 
-        const spotlightEl = document.querySelector('.spotlight');
-        let ticking = false;
-        function updateSpotlight(e) {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    if (spotlightEl) {
-                        spotlightEl.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-                    }
-                    ticking = false;
-                });
-                ticking = true;
-            }
+        function openFeedback() {
+            const url = window.feedbackUrl || 'https://github.com/yemobyte/YeMo-APIs/issues/new';
+            window.open(url, '_blank');
         }
 
-        document.getElementById("year").textContent = new Date().getFullYear();
-
-        const baseUrl = window.location.origin;
-        document.getElementById('curl-url').textContent = `${baseUrl}/status`;
-
-        async function fetchStatus() {
-            try {
-                const res = await fetch('/status');
-                const data = await res.json();
-
-                document.getElementById('status-val').textContent = `"${data.status}"`;
-                document.getElementById('latency-val').textContent = `"${data.latency}"`;
-                document.getElementById('version-val').textContent = `"${data.version}"`;
-
-                const statusColor = data.status === 'online' ? 'text-green-400' : 'text-red-500';
-                document.getElementById('status-val').className = statusColor;
-            } catch (e) {
-                document.getElementById('status-val').textContent = '"offline"';
-                document.getElementById('status-val').className = 'text-red-500';
-            }
-        }
-
-        fetchStatus();
-        setInterval(fetchStatus, 5000);
 
         let lastStartTime = null;
         setInterval(() => {
-            fetch('/status').then(r => r.json()).then(d => {
+            fetch('/v1/status').then(r => r.json()).then(d => {
                 if (!lastStartTime) lastStartTime = d.startTime;
                 else if (lastStartTime !== d.startTime) location.reload();
             }).catch(() => { });
         }, 2000);
-
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             const body = document.body;
@@ -671,50 +984,6 @@
                 body.classList.remove('overflow-hidden');
             }
         }
-
-        function openFeedback() {
-            window.open('https://github.com/yemobyte/YeMo-APIs/issues/new', '_blank');
-        }
-
-        async function initConfiguration() {
-            try {
-                const res = await fetch('/configuration');
-                const config = await res.json();
-
-                if (config.notifications && config.notifications.enabled) {
-                    const modal = document.getElementById('notification-docs');
-                    const title = modal.querySelector('h2');
-                    const message = modal.querySelector('p');
-                    const okBtn = modal.querySelector('button[onclick*="none"]');
-                    const sourceBtn = modal.querySelector('a[href*="github"]');
-
-                    title.innerHTML = config.notifications.title.replace('<br>', '<br><span class="text-black">') + '</span>';
-                    message.textContent = config.notifications.message;
-                    okBtn.textContent = config.notifications.buttonText;
-                    sourceBtn.textContent = config.notifications.sourceCodeText;
-                    sourceBtn.href = config.notifications.sourceCodeUrl;
-
-                    setTimeout(() => {
-                        modal.style.display = 'flex';
-                    }, 1500);
-                }
-
-                /* feedbackButton is only on docs page per request */
-                if (config.website) {
-                    document.title = config.website.title || document.title;
-                    if (document.getElementById('nav-title')) document.getElementById('nav-title').textContent = config.website.headerTitle;
-                    if (document.getElementById('nav-subtitle')) document.getElementById('nav-subtitle').textContent = config.website.headerSubtitle;
-                    if (document.getElementById('hero-title')) document.getElementById('hero-title').textContent = config.website.heroTitle;
-                    if (document.getElementById('hero-subtitle')) document.getElementById('hero-subtitle').textContent = config.website.heroSubtitle;
-                    if (document.getElementById('hero-tagline')) document.getElementById('hero-tagline').textContent = config.website.heroTagline;
-                    if (document.getElementById('hero-desc')) document.getElementById('hero-desc').textContent = config.website.description;
-                    if (document.getElementById('footer-text')) document.getElementById('footer-text').textContent = config.website.footerText;
-                }
-            } catch (e) {
-                console.error("Config failed:", e);
-            }
-        }
-        window.addEventListener('DOMContentLoaded', initConfiguration);
     </script>
 </body>
 
