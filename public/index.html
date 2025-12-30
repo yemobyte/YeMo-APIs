@@ -622,10 +622,15 @@
                 option.value = apiData.baseURL;
                 option.textContent = `${apiData.baseURL} - PRODUCTION`;
 
-                document.getElementById('title').textContent = "YeMo API's";
-                document.getElementById('description').textContent = apiData.description;
-                document.getElementById('totalEndpoints').textContent = apiData.endpoints.length;
-                document.getElementById('totalCategories').textContent = Object.keys(categories).length;
+                const titleEl = document.getElementById('page-title');
+                const descEl = document.getElementById('description');
+                const totalEndpointsEl = document.getElementById('totalEndpoints');
+                const totalCategoriesEl = document.getElementById('totalCategories');
+
+                if (titleEl) titleEl.textContent = "YeMo API's";
+                if (descEl) descEl.textContent = apiData.description;
+                if (totalEndpointsEl) totalEndpointsEl.textContent = apiData.endpoints.length;
+                if (totalCategoriesEl) totalCategoriesEl.textContent = Object.keys(categories).length;
 
                 const apiList = document.getElementById('apiList');
                 let categoryIndex = 0;
