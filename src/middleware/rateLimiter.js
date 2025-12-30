@@ -241,7 +241,10 @@ function rateLimiterMiddleware(options = {}) {
       return next();
     }
 
-    const ip = req.ip || req.headers["x-forwarded-for"] || req.connection.remoteAddress || "unknown";
+    let ip = req.ip || req.headers["x-forwarded-for"] || req.connection.remoteAddress || "unknown";
+    if (ip.startsWith('::ffff:')) {
+      ip = ip.substring(7);
+    }
 
     if (whitelist[ip]) {
       return next();

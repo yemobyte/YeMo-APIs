@@ -40,6 +40,5 @@
     "endpointsStatus": {
         "/tools/upload": "online",
         "/downloader/aio": "online"
-    },
-    "attribution": "@YeMo"
+    }
 }
