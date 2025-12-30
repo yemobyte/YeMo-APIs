@@ -22,52 +22,73 @@
                         mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
-                        border: '#18181b',
-                        background: '#ffffff',
-                        surface: '#f4f4f5',
                         primary: '#3b82f6',
                         accent: '#8b5cf6',
-                    },
-                    boxShadow: {
-                        'brutal': '4px 4px 0 0 #18181b',
-                        'brutal-sm': '2px 2px 0 0 #18181b',
                     }
                 }
             }
         }
     </script>
     <style>
-        .card-hover:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0 0 #18181b;
+        .endpoint-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+            border: 2px solid #e5e7eb;
+            border-radius: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .endpoint-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .endpoint-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .endpoint-card:hover {
+            transform: translateY(-4px);
+            border-color: #3b82f6;
+            box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.1), 0 10px 10px -5px rgba(59, 130, 246, 0.04);
         }
 
         .method-badge {
             font-family: 'JetBrains Mono', monospace;
             font-weight: 700;
-            font-size: 0.75rem;
-            padding: 0.25rem 0.6rem;
-            border: 1px solid #18181b;
-            border-radius: 4px;
+            font-size: 0.7rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .method-GET {
-            background-color: #dbeafe;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
             color: #1e40af;
         }
 
         .method-POST {
-            background-color: #dcfce7;
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
             color: #166534;
         }
 
         .method-PUT {
-            background-color: #fef9c3;
+            background: linear-gradient(135deg, #fef9c3 0%, #fde047 100%);
             color: #854d0e;
         }
 
         .method-DELETE {
-            background-color: #fee2e2;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
             color: #991b1b;
         }
 
@@ -87,32 +108,63 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #a1a1aa;
         }
+
+        @media (max-width: 640px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        #endpoints {
+            scroll-margin-top: 80px;
+        }
+
+        @media (max-width: 768px) {
+            #endpoints {
+                scroll-margin-top: 70px;
+            }
+        }
     </style>
 </head>
 
-<body class="bg-gray-50 text-zinc-900 antialiased min-h-screen flex flex-col">
+<body class="bg-gradient-to-br from-gray-50 to-blue-50 text-zinc-900 antialiased min-h-screen flex flex-col">
 
-    <!-- Mobile Menu Overlay -->
     <div id="mobile-menu"
         class="fixed inset-0 bg-white/95 backdrop-blur-xl z-50 transform translate-x-full transition-transform duration-300 md:hidden flex flex-col items-center justify-center space-y-8">
-        <button onclick="toggleMenu()" class="absolute top-6 right-6 p-2 text-2xl hover:text-primary transition-colors">
+        <button onclick="toggleMenu()" class="absolute top-6 right-6 p-2 text-2xl hover:text-primary transition-colors"
+            aria-label="Close menu">
             <i class="fa-solid fa-xmark"></i>
         </button>
         <a href="/" onclick="toggleMenu()"
             class="text-3xl font-black tracking-tight hover:text-primary transition-colors">HOME</a>
         <a href="/stats" onclick="toggleMenu()"
             class="text-3xl font-black tracking-tight hover:text-primary transition-colors">STATS</a>
-        <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank"
+        <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank" rel="noopener"
             class="text-3xl font-black tracking-tight hover:text-primary transition-colors">GITHUB</a>
     </div>
 
-    <!-- Navigation -->
-    <nav class="sticky top-0 z-40 w-full bg-white border-b-2 border-border/10 backdrop-blur-md bg-white/80">
+    <nav class="sticky top-0 z-40 w-full bg-white/80 border-b border-zinc-200 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0 flex items-center gap-3">
                     <div
-                        class="w-10 h-10 bg-zinc-900 text-white flex items-center justify-center rounded-lg font-black text-xl shadow-brutal-sm">
+                        class="w-10 h-10 bg-gradient-to-br from-primary to-accent text-white flex items-center justify-center rounded-xl font-black text-xl shadow-lg">
                         Y</div>
                     <div>
                         <h1 class="font-bold text-xl tracking-tight leading-none">YeMo<span
@@ -125,14 +177,14 @@
                 <div class="hidden md:flex items-center gap-8">
                     <a href="/" class="text-sm font-bold hover:text-primary transition-colors">HOME</a>
                     <a href="/stats" class="text-sm font-bold hover:text-primary transition-colors">STATUS</a>
-                    <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank"
-                        class="flex items-center gap-2 px-4 py-2 bg-zinc-900 text-white text-sm font-bold rounded-lg hover:bg-zinc-800 transition-all shadow-brutal-sm active:translate-y-[2px] active:shadow-none">
+                    <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank" rel="noopener"
+                        class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-accent text-white text-sm font-bold rounded-lg hover:shadow-lg transition-all">
                         <i class="fa-brands fa-github"></i> <span>Star</span>
                     </a>
                 </div>
 
                 <div class="md:hidden">
-                    <button onclick="toggleMenu()" class="p-2 text-xl text-zinc-900">
+                    <button onclick="toggleMenu()" class="p-2 text-xl" aria-label="Toggle menu">
                         <i class="fa-solid fa-bars"></i>
                     </button>
                 </div>
@@ -140,11 +192,11 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="relative overflow-hidden pt-16 pb-12 lg:pt-24 lg:pb-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
+    <header class="relative overflow-hidden pt-12 pb-8 sm:pt-16 sm:pb-12 lg:pt-24 lg:pb-20">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 opacity-50"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative" data-aos="fade-up">
             <div
-                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-8 border border-primary/20">
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-6 sm:mb-8 border border-primary/20">
                 <span class="relative flex h-2 w-2">
                     <span
                         class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -153,50 +205,43 @@
                 v1.0.0 Stable Release
             </div>
 
-            <h1 class="text-5xl md:text-7xl font-black tracking-tight text-zinc-900 mb-6">
-                Build Faster with <br class="hidden md:block" />
-                <span class="inline-block relative">
-                    <span class="relative z-10 text-white px-4 py-1.5 mx-1"
-                        style="transform: skew(-3deg); display: inline-block;">
-                        <span class="absolute inset-0 bg-primary -z-10 shadow-brutal rounded-lg"></span>
-                        YeMo APIs
-                    </span>
-                </span>
+            <h1
+                class="hero-title text-4xl sm:text-5xl md:text-7xl font-black tracking-tight mb-4 sm:mb-6 bg-gradient-to-r from-zinc-900 via-primary to-accent bg-clip-text text-transparent">
+                Build Faster with <br class="hidden sm:block" />
+                YeMo APIs
             </h1>
 
-            <p class="mt-6 text-lg md:text-xl text-zinc-600 max-w-2xl mx-auto leading-relaxed">
+            <p
+                class="mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-zinc-600 max-w-2xl mx-auto leading-relaxed px-4">
                 A high-performance, developer-first API collection tailored for modern applications. Free, open-source,
-                and brutually efficient.
+                and brutally efficient.
             </p>
 
-            <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
                 <a href="#endpoints"
-                    class="px-8 py-3.5 bg-zinc-900 text-white font-bold rounded-lg shadow-brutal hover:translate-y-[-2px] hover:shadow-[6px_6px_0_0_#18181b] transition-all flex items-center justify-center gap-2">
+                    class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2">
                     Start Building <i class="fa-solid fa-arrow-right"></i>
                 </a>
                 <a href="/stats"
-                    class="px-8 py-3.5 bg-white text-zinc-900 font-bold border-2 border-zinc-200 rounded-lg hover:border-zinc-900 hover:bg-zinc-50 transition-all flex items-center justify-center gap-2">
+                    class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 bg-white text-zinc-900 font-bold border-2 border-zinc-200 rounded-xl hover:border-primary transition-all flex items-center justify-center gap-2">
                     <i class="fa-solid fa-chart-line"></i> System Status
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main id="endpoints" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+    <main id="endpoints" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full">
 
-        <!-- Search & Metrics -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-            <!-- Search Box -->
-            <div class="lg:col-span-2 group" data-aos="fade-right">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-12">
+            <div class="lg:col-span-2 group" data-aos="fade-right" data-aos-duration="600">
                 <div class="relative">
                     <div
                         class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-400 group-focus-within:text-primary transition-colors">
                         <i class="fa-solid fa-magnifying-glass text-lg"></i>
                     </div>
                     <input type="text" id="searchInput"
-                        class="block w-full pl-12 pr-4 py-4 bg-white border-2 border-zinc-200 rounded-xl text-zinc-900 placeholder-zinc-400 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all font-medium"
-                        placeholder="Search for endpoints (e.g., /downloader)...">
+                        class="block w-full pl-12 pr-4 py-3 sm:py-4 bg-white border-2 border-zinc-200 rounded-xl text-zinc-900 placeholder-zinc-400 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all font-medium text-sm sm:text-base shadow-sm"
+                        placeholder="Search for endpoints...">
                     <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
                         <kbd
                             class="hidden sm:inline-block px-2 py-1 text-xs font-mono font-bold text-zinc-400 bg-zinc-100 rounded border border-zinc-200">CTRL
@@ -205,42 +250,40 @@
                 </div>
             </div>
 
-            <!-- Total Count Badge -->
-            <div class="bg-zinc-900 text-white rounded-xl p-6 shadow-brutal flex items-center justify-between"
-                data-aos="fade-left">
+            <div class="bg-gradient-to-br from-primary to-accent text-white rounded-xl p-4 sm:p-6 shadow-xl flex items-center justify-between"
+                data-aos="fade-left" data-aos-duration="600">
                 <div>
-                    <p class="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1">Available Endpoints</p>
-                    <p class="text-3xl font-black" id="totalEndpoints">--</p>
+                    <p class="text-white/80 text-xs font-bold uppercase tracking-wider mb-1">Available Endpoints</p>
+                    <p class="text-2xl sm:text-3xl font-black" id="totalEndpoints">--</p>
                 </div>
-                <div class="h-12 w-12 bg-zinc-800 rounded-lg flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-bolt text-yellow-500"></i>
+                <div
+                    class="h-10 w-10 sm:h-12 sm:w-12 bg-white/20 rounded-lg flex items-center justify-center text-lg sm:text-xl backdrop-blur-sm">
+                    <i class="fa-solid fa-bolt"></i>
                 </div>
             </div>
         </div>
 
-        <!-- Endpoints Grid -->
-        <div id="apiList" class="space-y-12"></div>
+        <div id="apiList" class="space-y-8 sm:space-y-12"></div>
 
-        <!-- No Results State -->
-        <div id="noResults" class="hidden text-center py-20">
+        <div id="noResults" class="hidden text-center py-16 sm:py-20">
             <div
-                class="inline-flex items-center justify-center w-20 h-20 bg-zinc-100 rounded-full mb-6 text-3xl text-zinc-400">
+                class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-zinc-100 rounded-full mb-4 sm:mb-6 text-2xl sm:text-3xl text-zinc-400">
                 <i class="fa-solid fa-ghost"></i>
             </div>
-            <h3 class="text-xl font-bold text-zinc-900 mb-2">No endpoints found</h3>
-            <p class="text-zinc-500">Try adjusting your search terms</p>
+            <h3 class="text-lg sm:text-xl font-bold mb-2">No endpoints found</h3>
+            <p class="text-sm sm:text-base text-zinc-500">Try adjusting your search terms</p>
         </div>
 
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-zinc-200 mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="col-span-1 md:col-span-1">
+    <footer class="bg-white border-t border-zinc-200 mt-12 sm:mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+                <div class="col-span-1">
                     <div class="flex items-center gap-2 mb-4">
-                        <div class="w-8 h-8 bg-zinc-900 rounded flex items-center justify-center text-white font-bold">Y
-                        </div>
+                        <div
+                            class="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded flex items-center justify-center text-white font-bold">
+                            Y</div>
                         <span class="font-bold text-lg">YeMo-APIs</span>
                     </div>
                     <p class="text-sm text-zinc-500 leading-relaxed">
@@ -248,7 +291,7 @@
                     </p>
                 </div>
                 <div>
-                    <h4 class="font-bold text-zinc-900 mb-4">Platform</h4>
+                    <h4 class="font-bold mb-4">Platform</h4>
                     <ul class="space-y-2 text-sm text-zinc-500">
                         <li><a href="#" class="hover:text-primary transition-colors">Documentation</a></li>
                         <li><a href="/stats" class="hover:text-primary transition-colors">System Status</a></li>
@@ -256,7 +299,7 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-zinc-900 mb-4">Community</h4>
+                    <h4 class="font-bold mb-4">Community</h4>
                     <ul class="space-y-2 text-sm text-zinc-500">
                         <li><a href="https://github.com/yemobyte/YeMo-APIs"
                                 class="hover:text-primary transition-colors">GitHub</a></li>
@@ -265,7 +308,7 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-zinc-900 mb-4">Legal</h4>
+                    <h4 class="font-bold mb-4">Legal</h4>
                     <ul class="space-y-2 text-sm text-zinc-500">
                         <li><a href="#" class="hover:text-primary transition-colors">Privacy Policy</a></li>
                         <li><a href="#" class="hover:text-primary transition-colors">Terms of Service</a></li>
@@ -273,9 +316,9 @@
                 </div>
             </div>
             <div
-                class="border-t border-zinc-100 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <p class="text-sm text-zinc-400 font-medium">© <span id="year"></span> YeMo-APIs. All rights reserved.
-                </p>
+                class="border-t border-zinc-100 mt-8 sm:mt-12 pt-6 sm:pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p class="text-xs sm:text-sm text-zinc-400 font-medium text-center sm:text-left">© <span
+                        id="year"></span> YeMo-APIs. All rights reserved.</p>
                 <div class="flex items-center gap-4">
                     <span class="flex h-2 w-2 relative">
                         <span
@@ -288,51 +331,51 @@
         </div>
     </footer>
 
-    <!-- Endpoint Try Modal -->
-    <div id="try-modal"
-        class="fixed inset-0 z-50 hidden bg-zinc-900/50 backdrop-blur-sm items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform transition-all scale-100 opacity-100"
+    <div id="try-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden transform transition-all scale-100 opacity-100 border border-zinc-200"
             data-aos="zoom-in">
-            <div class="flex items-center justify-between p-6 border-b border-zinc-100">
-                <div>
-                    <div class="flex items-center gap-3">
-                        <span id="modal-method"
-                            class="text-xs font-bold px-2 py-1 rounded bg-zinc-100 text-zinc-700 font-mono">GET</span>
-                        <h3 id="modal-title" class="text-lg font-bold text-zinc-900">Endpoint Name</h3>
+            <div
+                class="flex items-center justify-between p-4 sm:p-6 border-b border-zinc-200 bg-gradient-to-r from-zinc-50 to-blue-50">
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+                        <span id="modal-method" class="text-xs font-bold px-2 py-1 rounded font-mono">GET</span>
+                        <h3 id="modal-title" class="text-base sm:text-lg font-bold truncate">Endpoint Name</h3>
                     </div>
                 </div>
                 <button onclick="closeModal()"
-                    class="text-zinc-400 hover:text-zinc-900 transition-colors bg-zinc-50 hover:bg-zinc-100 p-2 rounded-lg">
+                    class="ml-4 text-zinc-400 hover:text-zinc-900 transition-colors bg-zinc-100 hover:bg-zinc-200 p-2 rounded-lg flex-shrink-0"
+                    aria-label="Close modal">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
-            <div class="p-6 overflow-y-auto max-h-[70vh]">
+            <div class="p-4 sm:p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
                 <p id="modal-desc" class="text-zinc-600 mb-6 text-sm"></p>
 
-                <form id="try-form" class="space-y-5">
+                <form id="try-form" class="space-y-4 sm:space-y-5">
                     <div id="modal-params" class="space-y-4"></div>
 
                     <div class="pt-4">
                         <button type="submit"
-                            class="w-full py-3 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/30 hover:bg-blue-600 hover:shadow-primary/40 active:translate-y-[1px] transition-all flex items-center justify-center gap-2">
+                            class="w-full py-3 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2">
                             <i class="fa-solid fa-play text-xs"></i> Execute Request
                         </button>
                     </div>
                 </form>
 
-                <div id="modal-response" class="hidden mt-8">
+                <div id="modal-response" class="hidden mt-6 sm:mt-8">
                     <div class="flex items-center justify-between mb-2">
                         <h4 class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Response Body</h4>
                         <span
-                            class="text-xs font-mono text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100">200
+                            class="text-xs font-mono text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-200">200
                             OK</span>
                     </div>
                     <div class="relative group">
                         <pre
-                            class="bg-zinc-900 text-zinc-100 p-4 rounded-xl text-xs font-mono overflow-x-auto border border-zinc-800 custom-scrollbar"><code id="response-code"></code></pre>
+                            class="bg-zinc-900 text-zinc-100 p-3 sm:p-4 rounded-xl text-xs font-mono overflow-x-auto border border-zinc-800"><code id="response-code"></code></pre>
                         <button onclick="copyResponse()"
-                            class="absolute top-3 right-3 p-2 bg-zinc-800 text-zinc-400 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:text-white hover:bg-zinc-700">
+                            class="absolute top-2 sm:top-3 right-2 sm:right-3 p-2 bg-zinc-800 text-zinc-400 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:text-white hover:bg-zinc-700"
+                            aria-label="Copy response">
                             <i class="fa-regular fa-copy"></i>
                         </button>
                     </div>
@@ -343,10 +386,14 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ once: true, duration: 800 });
+        AOS.init({
+            once: false,
+            duration: 800,
+            offset: 50,
+            easing: 'ease-out-cubic'
+        });
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        /* State Manager */
         let endpointsData = [];
 
         function toggleMenu() {
@@ -392,40 +439,51 @@
                 document.getElementById('noResults').classList.add('hidden');
             }
 
+            let delay = 0;
             for (const [category, items] of Object.entries(categories)) {
                 const section = document.createElement('div');
-                section.className = 'bg-white rounded-2xl border border-zinc-200 p-6 md:p-8';
+                section.className = 'bg-white rounded-2xl border border-zinc-200 p-4 sm:p-6 md:p-8 shadow-lg';
                 section.setAttribute('data-aos', 'fade-up');
+                section.setAttribute('data-aos-duration', '800');
+                section.setAttribute('data-aos-delay', delay);
+                delay += 100;
 
+                let cardDelay = 0;
                 let cardsHtml = items.map((ep, idx) => {
                     const methodClass = `method-${ep.methods[0]}`;
                     const statusDot = ep.status === 'online' ? 'bg-green-500' : 'bg-red-500';
+                    const isOffline = ep.status !== 'online';
+                    cardDelay += 50;
 
                     return `
-                    <div class="group relative bg-white border border-zinc-200 rounded-xl p-5 hover:border-zinc-900 transition-all card-hover cursor-pointer" onclick="openTryModal('${category}', ${idx})">
-                        <div class="flex justify-between items-start mb-4">
+                    <div class="endpoint-card p-4 sm:p-5 ${isOffline ? 'opacity-75 grayscale' : 'cursor-pointer'}" 
+                         data-aos="fade-up"
+                         data-aos-duration="600"
+                         data-aos-delay="${cardDelay}"
+                         onclick="${isOffline ? '' : `openTryModal('${category}', ${idx})`}">
+                        <div class="flex justify-between items-start mb-3 sm:mb-4">
                             <span class="method-badge ${methodClass}">${ep.methods[0]}</span>
                             <div class="flex items-center gap-1.5">
-                                <span class="h-2 w-2 rounded-full ${statusDot}"></span>
+                                <span class="h-2 w-2 rounded-full ${statusDot} ${ep.status === 'online' ? 'status-pulse' : ''}"></span>
                                 <span class="text-[0.65rem] font-bold text-zinc-400 uppercase tracking-wide">${ep.status}</span>
                             </div>
                         </div>
-                        <h3 class="font-bold text-zinc-900 mb-1 group-hover:text-primary transition-colors">${ep.name}</h3>
-                        <div class="flex items-center gap-2 mb-3">
-                            <code class="text-xs bg-zinc-100 text-zinc-600 px-1.5 py-0.5 rounded font-mono">${ep.route}</code>
+                        <h3 class="font-bold text-zinc-900 mb-2 text-sm sm:text-base group-hover:text-primary transition-colors">${ep.name}</h3>
+                        <div class="flex items-center gap-2 mb-2 sm:mb-3 overflow-x-auto">
+                            <code class="text-xs bg-zinc-50 text-zinc-600 px-2 py-1 rounded-lg font-mono whitespace-nowrap border border-zinc-200">${ep.route}</code>
                         </div>
-                        <p class="text-sm text-zinc-500 line-clamp-2">${ep.description}</p>
+                        <p class="text-xs sm:text-sm text-zinc-500 line-clamp-2 leading-relaxed">${ep.description}</p>
                     </div>
                     `;
                 }).join('');
 
                 section.innerHTML = `
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="h-10 w-1 bg-gradient-to-b from-primary to-accent rounded-full"></div>
-                        <h2 class="text-2xl font-bold text-zinc-900 tracking-tight">${category}</h2>
-                        <span class="px-2 py-1 bg-zinc-100 text-zinc-600 text-xs font-bold rounded-full">${items.length}</span>
+                    <div class="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6 pb-4 border-b border-zinc-200">
+                        <div class="h-8 sm:h-10 w-1 bg-gradient-to-b from-primary to-accent rounded-full"></div>
+                        <h2 class="text-xl sm:text-2xl font-black tracking-tight">${category}</h2>
+                        <span class="px-2.5 py-1 bg-gradient-to-r from-primary/10 to-accent/10 text-primary text-xs font-bold rounded-full border border-primary/20">${items.length}</span>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                         ${cardsHtml}
                     </div>
                 `;
@@ -433,7 +491,6 @@
             }
         }
 
-        /* Search Functionality */
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const filtered = endpointsData.filter(ep =>
@@ -444,7 +501,6 @@
             renderEndpoints(filtered);
         });
 
-        /* Modal Logic */
         let currentEndpoint = null;
 
         function openTryModal(cat, idx) {
@@ -466,7 +522,7 @@
 
             if (paramKeys.length === 0) {
                 paramsContainer.innerHTML = `
-                    <div class="text-center py-6 bg-zinc-50 rounded-lg border border-zinc-100 border-dashed">
+                    <div class="text-center py-6 bg-zinc-50 rounded-lg border-2 border-dashed border-zinc-200">
                         <p class="text-xs text-zinc-400 font-bold uppercase">No parameters required</p>
                     </div>
                 `;
@@ -479,11 +535,11 @@
                     let inputHtml = '';
                     if (conf.type === 'file') {
                         inputHtml = `
-                        <input type="file" name="${key}" class="block w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-100 file:text-zinc-700 hover:file:bg-zinc-200 cursor-pointer border border-zinc-200 rounded-lg bg-white" ${conf.required ? 'required' : ''}>
+                        <input type="file" name="${key}" class="block w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer border-2 border-zinc-200 rounded-lg bg-white" ${conf.required ? 'required' : ''}>
                         `;
                     } else {
                         inputHtml = `
-                        <input type="text" name="${key}" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white transition-all text-sm" placeholder="Enter value..." ${conf.required ? 'required' : ''}>
+                        <input type="text" name="${key}" class="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-zinc-50 border-2 border-zinc-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" placeholder="Enter value..." ${conf.required ? 'required' : ''}>
                         `;
                     }
 
@@ -504,6 +560,11 @@
             document.getElementById('try-modal').classList.add('hidden');
             document.getElementById('try-modal').classList.remove('flex');
             document.body.style.overflow = '';
+        }
+
+        function copyResponse() {
+            const code = document.getElementById('response-code').textContent;
+            navigator.clipboard.writeText(code);
         }
 
         document.getElementById('try-form').addEventListener('submit', async (e) => {
@@ -539,7 +600,12 @@
                 }
 
                 const res = await fetch(url, options);
-                const data = await res.json();
+                let data;
+                try {
+                    data = await res.json();
+                } catch (e) {
+                    data = { error: 'Invalid JSON response', raw: await res.text() };
+                }
 
                 const codeBlock = document.getElementById('response-code');
                 codeBlock.textContent = JSON.stringify(data, null, 2);
@@ -555,7 +621,6 @@
             }
         });
 
-        /* Shortcuts */
         document.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault();

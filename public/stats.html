@@ -23,15 +23,8 @@
                         mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
-                        border: '#18181b',
-                        background: '#ffffff',
-                        surface: '#f4f4f5',
                         primary: '#3b82f6',
                         accent: '#8b5cf6',
-                    },
-                    boxShadow: {
-                        'brutal': '4px 4px 0 0 #18181b',
-                        'brutal-sm': '2px 2px 0 0 #18181b',
                     }
                 }
             }
@@ -40,7 +33,7 @@
     <style>
         .neo-card {
             background: white;
-            border: 1px solid #e4e4e7;
+            border: 2px solid #e4e4e7;
             border-radius: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
             transition: all 0.2s;
@@ -70,12 +63,12 @@
     </style>
 </head>
 
-<body class="bg-gray-50 text-zinc-900 antialiased min-h-screen flex flex-col">
+<body class="bg-gradient-to-br from-gray-50 to-blue-50 text-zinc-900 antialiased min-h-screen flex flex-col">
 
-    <!-- Mobile Menu Overlay -->
     <div id="mobile-menu"
         class="fixed inset-0 bg-white/95 backdrop-blur-xl z-50 transform translate-x-full transition-transform duration-300 md:hidden flex flex-col items-center justify-center space-y-8">
-        <button onclick="toggleMenu()" class="absolute top-6 right-6 p-2 text-2xl hover:text-primary transition-colors">
+        <button onclick="toggleMenu()" class="absolute top-6 right-6 p-2 text-2xl hover:text-primary transition-colors"
+            aria-label="Close menu">
             <i class="fa-solid fa-xmark"></i>
         </button>
         <a href="/" onclick="toggleMenu()"
@@ -84,13 +77,12 @@
             class="text-3xl font-black tracking-tight hover:text-primary transition-colors">STATS</a>
     </div>
 
-    <!-- Navigation -->
-    <nav class="sticky top-0 z-40 w-full bg-white border-b-2 border-border/10 backdrop-blur-md bg-white/80">
+    <nav class="sticky top-0 z-40 w-full bg-white/80 border-b border-zinc-200 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <a href="/" class="flex-shrink-0 flex items-center gap-3 group cursor-pointer">
                     <div
-                        class="w-10 h-10 bg-zinc-900 group-hover:bg-primary transition-colors text-white flex items-center justify-center rounded-lg font-black text-xl shadow-brutal-sm">
+                        class="w-10 h-10 bg-gradient-to-br from-primary to-accent group-hover:scale-110 transition-transform text-white flex items-center justify-center rounded-xl font-black text-xl shadow-lg">
                         Y</div>
                     <div>
                         <h1 class="font-bold text-xl tracking-tight leading-none">YeMo<span
@@ -106,7 +98,7 @@
                 </div>
 
                 <div class="md:hidden">
-                    <button onclick="toggleMenu()" class="p-2 text-xl text-zinc-900">
+                    <button onclick="toggleMenu()" class="p-2 text-xl" aria-label="Toggle menu">
                         <i class="fa-solid fa-bars"></i>
                     </button>
                 </div>
@@ -114,116 +106,116 @@
         </div>
     </nav>
 
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full space-y-8">
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full space-y-6 sm:space-y-8">
 
-        <header class="mb-10" data-aos="fade-down">
-            <h2 class="text-3xl font-black text-zinc-900 tracking-tight mb-2">System Overview</h2>
+        <header class="mb-6 sm:mb-10" data-aos="fade-down">
+            <h2 class="text-2xl sm:text-3xl font-black tracking-tight mb-2">System Overview</h2>
             <div class="flex items-center gap-3">
                 <span id="global-status-indicator" class="status-dot status-online"></span>
-                <span id="global-status-text" class="text-sm font-bold text-zinc-500 uppercase tracking-wide">All
-                    Systems Operational</span>
+                <span id="global-status-text"
+                    class="text-xs sm:text-sm font-bold text-zinc-500 uppercase tracking-wide">All Systems
+                    Operational</span>
             </div>
         </header>
 
-        <!-- KPI Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-aos="fade-up">
-            <div class="neo-card p-6 border-l-4 border-l-primary">
-                <div class="flex justify-between items-start mb-4 opacity-60">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6" data-aos="fade-up">
+            <div class="neo-card p-4 sm:p-6 border-l-4 border-l-primary">
+                <div class="flex justify-between items-start mb-3 sm:mb-4 opacity-60">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500">Uptime</h3>
-                    <i class="fa-solid fa-clock text-primary"></i>
+                    <i class="fa-solid fa-clock text-primary text-sm sm:text-base"></i>
                 </div>
-                <div id="uptime-text" class="text-2xl font-black font-mono tracking-tight text-zinc-900">--:--:--</div>
+                <div id="uptime-text" class="text-xl sm:text-2xl font-black font-mono tracking-tight">--:--:--</div>
                 <p class="text-xs text-zinc-500 mt-2 font-medium">Since last restart</p>
             </div>
 
-            <div class="neo-card p-6 border-l-4 border-l-accent">
-                <div class="flex justify-between items-start mb-4 opacity-60">
+            <div class="neo-card p-4 sm:p-6 border-l-4 border-l-accent">
+                <div class="flex justify-between items-start mb-3 sm:mb-4 opacity-60">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500">Platform</h3>
-                    <i class="fa-brands fa-linux text-accent"></i>
+                    <i class="fa-brands fa-linux text-accent text-sm sm:text-base"></i>
                 </div>
-                <div id="platform-text" class="text-2xl font-black tracking-tight text-zinc-900 truncate">Detecting...
+                <div id="platform-text" class="text-xl sm:text-2xl font-black tracking-tight truncate">Detecting...
                 </div>
-                <div id="distro-text" class="text-xs text-zinc-500 mt-2 font-bold uppercase">--</div>
+                <div id="distro-text" class="text-xs text-zinc-500 mt-2 font-bold uppercase truncate">--</div>
             </div>
 
-            <div class="neo-card p-6 border-l-4 border-l-yellow-500">
-                <div class="flex justify-between items-start mb-4 opacity-60">
+            <div class="neo-card p-4 sm:p-6 border-l-4 border-l-yellow-500">
+                <div class="flex justify-between items-start mb-3 sm:mb-4 opacity-60">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500">CPU Load</h3>
-                    <i class="fa-solid fa-microchip text-yellow-500"></i>
+                    <i class="fa-solid fa-microchip text-yellow-500 text-sm sm:text-base"></i>
                 </div>
                 <div class="flex items-end gap-2">
-                    <div id="cpu-text" class="text-4xl font-black tracking-tighter text-zinc-900">0%</div>
+                    <div id="cpu-text" class="text-3xl sm:text-4xl font-black tracking-tighter">0%</div>
                 </div>
-                <div class="w-full bg-zinc-100 rounded-full h-1.5 mt-4 overflow-hidden">
+                <div class="w-full bg-zinc-100 rounded-full h-1.5 mt-3 sm:mt-4 overflow-hidden">
                     <div id="cpu-bar" class="bg-yellow-500 h-1.5 rounded-full transition-all duration-500 w-0"></div>
                 </div>
             </div>
 
-            <div class="neo-card p-6 border-l-4 border-l-green-500">
-                <div class="flex justify-between items-start mb-4 opacity-60">
+            <div class="neo-card p-4 sm:p-6 border-l-4 border-l-green-500">
+                <div class="flex justify-between items-start mb-3 sm:mb-4 opacity-60">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500">Memory</h3>
-                    <i class="fa-solid fa-memory text-green-500"></i>
+                    <i class="fa-solid fa-memory text-green-500 text-sm sm:text-base"></i>
                 </div>
                 <div class="flex items-end gap-2">
-                    <div id="mem-text" class="text-4xl font-black tracking-tighter text-zinc-900">0%</div>
+                    <div id="mem-text" class="text-3xl sm:text-4xl font-black tracking-tighter">0%</div>
                 </div>
-                <div class="w-full bg-zinc-100 rounded-full h-1.5 mt-4 overflow-hidden">
+                <div class="w-full bg-zinc-100 rounded-full h-1.5 mt-3 sm:mt-4 overflow-hidden">
                     <div id="mem-bar" class="bg-green-500 h-1.5 rounded-full transition-all duration-500 w-0"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Charts Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" data-aos="fade-up" data-aos-delay="100">
-            <div class="neo-card p-6 bg-white">
-                <div class="flex items-center justify-between mb-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8" data-aos="fade-up" data-aos-delay="100">
+            <div class="neo-card p-4 sm:p-6">
+                <div class="flex items-center justify-between mb-4 sm:mb-6">
                     <div>
-                        <h3 class="font-bold text-lg text-zinc-900">CPU Usage History</h3>
-                        <p class="text-xs text-zinc-500">Real-time load average over last 60s</p>
+                        <h3 class="font-bold text-base sm:text-lg">CPU Usage History</h3>
+                        <p class="text-xs text-zinc-500">Real-time load average</p>
                     </div>
                     <span class="p-2 bg-yellow-50 text-yellow-600 rounded-lg"><i
-                            class="fa-solid fa-wave-square"></i></span>
+                            class="fa-solid fa-wave-square text-sm"></i></span>
                 </div>
-                <div id="cpuChart" class="w-full h-[300px]"></div>
+                <div id="cpuChart" class="w-full h-[250px] sm:h-[300px]"></div>
             </div>
 
-            <div class="neo-card p-6 bg-white">
-                <div class="flex items-center justify-between mb-6">
+            <div class="neo-card p-4 sm:p-6">
+                <div class="flex items-center justify-between mb-4 sm:mb-6">
                     <div>
-                        <h3 class="font-bold text-lg text-zinc-900">Memory Distribution</h3>
+                        <h3 class="font-bold text-base sm:text-lg">Memory Distribution</h3>
                         <p class="text-xs text-zinc-500">Physical RAM allocation</p>
                     </div>
-                    <span class="p-2 bg-green-50 text-green-600 rounded-lg"><i class="fa-solid fa-chart-pie"></i></span>
+                    <span class="p-2 bg-green-50 text-green-600 rounded-lg"><i
+                            class="fa-solid fa-chart-pie text-sm"></i></span>
                 </div>
-                <div id="memChart" class="w-full h-[300px] flex items-center justify-center"></div>
+                <div id="memChart" class="w-full h-[250px] sm:h-[300px] flex items-center justify-center"></div>
             </div>
         </div>
 
-        <!-- System Details Table -->
         <div class="neo-card overflow-hidden" data-aos="fade-up" data-aos-delay="200">
-            <div class="bg-zinc-50 border-b border-zinc-200 p-4 px-6 flex justify-between items-center">
-                <h3 class="font-bold text-zinc-900 text-sm uppercase tracking-wide">Environment Specifications</h3>
+            <div
+                class="bg-zinc-50 border-b border-zinc-200 p-3 sm:p-4 px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                <h3 class="font-bold text-xs sm:text-sm uppercase tracking-wide">Environment Specifications</h3>
                 <span
                     class="text-xs bg-white border border-zinc-200 px-2 py-1 rounded font-mono font-bold text-zinc-500">NODE
                     v20.x</span>
             </div>
-            <div class="p-6">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-zinc-100">
+            <div class="p-4 sm:p-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center divide-x divide-zinc-100">
                     <div>
                         <p class="text-xs text-zinc-400 font-bold uppercase mb-1">Architecture</p>
-                        <p id="spec-arch" class="font-mono font-bold text-zinc-700">x64</p>
+                        <p id="spec-arch" class="font-mono font-bold text-zinc-700 text-sm">x64</p>
                     </div>
                     <div>
                         <p class="text-xs text-zinc-400 font-bold uppercase mb-1">Cores</p>
-                        <p id="spec-cores" class="font-mono font-bold text-zinc-700">--</p>
+                        <p id="spec-cores" class="font-mono font-bold text-zinc-700 text-sm">--</p>
                     </div>
                     <div>
                         <p class="text-xs text-zinc-400 font-bold uppercase mb-1">Total RAM</p>
-                        <p id="spec-ram" class="font-mono font-bold text-zinc-700">-- GB</p>
+                        <p id="spec-ram" class="font-mono font-bold text-zinc-700 text-sm">-- GB</p>
                     </div>
                     <div>
                         <p class="text-xs text-zinc-400 font-bold uppercase mb-1">Hostname</p>
-                        <p id="spec-host" class="font-mono font-bold text-zinc-700 truncate px-2">--</p>
+                        <p id="spec-host" class="font-mono font-bold text-zinc-700 truncate px-2 text-sm">--</p>
                     </div>
                 </div>
             </div>
@@ -252,7 +244,6 @@
             return `${h}h ${m}m ${s}s`;
         }
 
-        /* Chart Config */
         const fontFamily = 'Plus Jakarta Sans, sans-serif';
 
         const cpuOptions = {
@@ -263,7 +254,8 @@
                 fontFamily: fontFamily,
                 animations: { enabled: true, easing: 'linear', dynamicAnimation: { speed: 1000 } },
                 toolbar: { show: false },
-                zoom: { enabled: false }
+                zoom: { enabled: false },
+                background: 'transparent'
             },
             colors: ['#eab308'],
             stroke: { curve: 'smooth', width: 2 },
@@ -271,7 +263,7 @@
             dataLabels: { enabled: false },
             grid: { borderColor: '#f4f4f5', strokeDashArray: 4 },
             xaxis: { labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false } },
-            yaxis: { max: 100, min: 0, tickAmount: 4 },
+            yaxis: { max: 100, min: 0, tickAmount: 4, labels: { style: { colors: '#71717a' } } },
         };
         const cpuChart = new ApexCharts(document.querySelector("#cpuChart"), cpuOptions);
         cpuChart.render();
@@ -279,32 +271,29 @@
         const memOptions = {
             series: [0, 0],
             labels: ['Used', 'Free'],
-            chart: { type: 'donut', height: 300, fontFamily: fontFamily },
+            chart: { type: 'donut', height: 300, fontFamily: fontFamily, background: 'transparent' },
             colors: ['#22c55e', '#f4f4f5'],
             stroke: { show: false },
             plotOptions: {
-                pie: { donut: { size: '75%', labels: { show: true, total: { show: true, label: 'TOTAL RAM', fontWeight: 800, color: '#9ca3af' } } } }
+                pie: { donut: { size: '75%', labels: { show: true, total: { show: true, label: 'TOTAL RAM', fontWeight: 800, color: '#71717a' } } } }
             },
             dataLabels: { enabled: false },
-            legend: { position: 'bottom', markers: { radius: 12 } },
-            tooltip: { enabled: true }
+            legend: { position: 'bottom', markers: { radius: 12 }, labels: { colors: '#71717a' } },
+            tooltip: { enabled: true },
         };
         const memChart = new ApexCharts(document.querySelector("#memChart"), memOptions);
         memChart.render();
 
-        /* Realtime Updates */
         async function fetchStats() {
             try {
                 const res = await fetch('/status');
                 if (!res.ok) throw new Error('Network error');
                 const data = await res.json();
 
-                // Status Header
                 document.getElementById('global-status-indicator').classList.remove('status-offline');
                 document.getElementById('global-status-indicator').classList.add('status-online');
                 document.getElementById('global-status-text').textContent = 'All Systems Operational';
 
-                // Basic Metrics
                 document.getElementById('uptime-text').textContent = formatUptime(data.uptime);
 
                 if (data.os) {
@@ -314,13 +303,11 @@
                     document.getElementById('spec-host').textContent = data.os.hostname;
                 }
 
-                // CPU
                 const cpu = Math.round(data.cpu);
                 document.getElementById('cpu-text').textContent = cpu + "%";
                 document.getElementById('cpu-bar').style.width = cpu + "%";
                 cpuChart.appendData([{ data: [cpu] }]);
 
-                // Memory
                 const totalGB = (data.mem.total / 1073741824).toFixed(1);
                 const usedGB = (data.mem.used / 1073741824).toFixed(1);
                 const freeGB = (data.mem.free / 1073741824).toFixed(1);
