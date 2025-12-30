@@ -85,10 +85,20 @@ function loadWhitelist() {
   try {
     const raw = fs.readFileSync(WHITELIST_FILE, "utf8");
     whitelist = raw ? JSON.parse(raw) : {};
-    if (!whitelist["157.230.33.80"]) {
-      whitelist["157.230.33.80"] = { addedAt: new Date().toISOString(), reason: "Owner/Admin" };
-      saveWhitelist();
+    const localhostv4 = "127.0.0.1";
+    const localhostv6 = "::1";
+    let updated = false;
+
+    if (!whitelist[localhostv4]) {
+      whitelist[localhostv4] = { addedAt: new Date().toISOString(), reason: "Localhost" };
+      updated = true;
     }
+    if (!whitelist[localhostv6]) {
+      whitelist[localhostv6] = { addedAt: new Date().toISOString(), reason: "Localhost" };
+      updated = true;
+    }
+
+    if (updated) saveWhitelist();
   } catch (err) {
     console.error("Failed to load whitelist file:", err);
     whitelist = {};
