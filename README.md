@@ -1,3 +1,13 @@
+---
+title: YeMo APIs
+emoji: 🚀
+colorFrom: red
+colorTo: purple
+sdk: docker
+pinned: false
+app_port: 7860
+---
+
 # YeMo APIs
 
 High-performance, secure, and developer-friendly API engine designed for scalability and ease of integration.
@@ -37,7 +47,7 @@ The application is configured via `configuration.json` in the root directory. Yo
 
 ## API Documentation
 
-Access the full documentation at `/docs` (e.g., `http://localhost:3000/docs`).
+Access the full documentation at `/` (e.g., `http://localhost:7860/`).
 
 ## Tech Stack
 
