@@ -38,25 +38,25 @@ import logger from "./logger.js";
  * and calculate the exact response time from request start to response finish.
  * 
  * @example
- * // Usage in Express application:
+ * /* Usage in Express application: */
  * import logApiRequest from './middleware/logApiRequest.js';
  * app.use(logApiRequest);
  * 
  * @example
- * // Sample log output:
- * // GET /api/users [200] (45ms)
- * // POST /api/login [401] (120ms)
- * // DELETE /api/products/123 [404] (23ms)
+  * /* Sample log output: */
+ * /* GET /api/users [200] (45ms) */
+ * /* POST /api/login [401] (120ms) */
+ * /* DELETE /api/products/123 [404] (23ms) */
  * 
  * @override
- * The middleware temporarily overrides these response methods:
+  * The middleware temporarily overrides these response methods:
  * - res.send()
- * - res.json() 
- * - res.end()
- * 
+  * - res.json()
+  * - res.end()
+  * 
  * @timing
- * Response time is calculated from when the request enters the middleware
- * until when the response is sent to the client.
+  * Response time is calculated from when the request enters the middleware
+    * until when the response is sent to the client.
  */
 const logApiRequest = async (req, res, next) => {
   if (req.path === '/__health' || req.path === '/v1/status' || req.path === '/v1/system-stats') return next();

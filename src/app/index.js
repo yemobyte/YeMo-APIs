@@ -42,10 +42,6 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-/**
- * Express application instance
- * @type {express.Application}
- */
 const app = express();
 
 app.set("trust proxy", true);
@@ -54,24 +50,54 @@ app.set("json spaces", 2);
 setupMiddleware(app);
 setupResponseFormatter(app);
 
-/**
- * Array to store all loaded API endpoints
- * @type {Array<Object>}
- */
+app.use((req, res, next) => {
+  try {
+    const configPath = path.join(process.cwd(), 'configuration.json');
+    if (!fs.existsSync(configPath)) return next();
+
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+
+    if (config.endpointsStatus && config.endpointsStatus[req.path]) {
+      if (config.endpointsStatus[req.path] === 'offline') {
+        return res.status(503).json({
+          status: 'offline',
+          message: 'This endpoint is currently offline'
+        });
+      }
+    }
+
+    next();
+  } catch (err) {
+    next();
+  }
+});
+
 let allEndpoints = [];
 
-/**
- * Initializes the API server by loading endpoints and setting up routes
- * @async
- * @function initializeAPI
- * @returns {Promise<void>}
- */
 const initializationPromise = (async function initializeAPI() {
   try {
     logger.info("Starting server initialization...");
     logger.info("Loading API endpoints...");
 
     allEndpoints = (await loadEndpoints(path.join(process.cwd(), "api"), app)) || [];
+
+    const configPath = path.join(process.cwd(), 'configuration.json');
+    if (fs.existsSync(configPath)) {
+      const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+      if (!config.endpointsStatus) config.endpointsStatus = {};
+
+      let updated = false;
+      allEndpoints.forEach(ep => {
+        if (!config.endpointsStatus[ep.route]) {
+          config.endpointsStatus[ep.route] = "online";
+          updated = true;
+        }
+      });
+
+      if (updated) {
+        fs.writeFileSync(configPath, JSON.stringify(config, null, 4));
+      }
+    }
 
     logger.ready(`Loaded ${allEndpoints.length} endpoints`);
     setupRoutes(app, allEndpoints);
@@ -107,19 +133,21 @@ app.get('/configuration', (req, res) => {
   }
 });
 
-app.get('/docs', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'public', 'docs.html'));
-});
-
 app.get('/stats', (req, res) => {
   res.sendFile(path.join(process.cwd(), 'public', 'stats.html'));
+});
+
+app.get('/legal/privacy', (req, res) => {
+  res.sendFile(path.join(process.cwd(), 'public', 'legal', 'privacy-policy.html'));
+});
+
+app.get('/legal/terms', (req, res) => {
+  res.sendFile(path.join(process.cwd(), 'public', 'legal', 'terms-of-service.html'));
 });
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
 });
-
-
 
 function setupRoutes(app, endpoints) {
   app.get('/system-stats', async (req, res) => {
@@ -149,22 +177,14 @@ function setupRoutes(app, endpoints) {
     }
   });
 
-  /**
-   * GET /openapi.json
-   * @name GET /openapi.json
-   * @description Returns OpenAPI specification with all available endpoints
-   * @route {GET} /openapi.json
-   * @param {express.Request} req - Express request object
-   * @param {express.Response} res - Express response object
-   * @returns {Object} JSON response containing API documentation
-   * @returns {string} returns.title - API title
-   * @returns {string} returns.description - API description
-   * @returns {string} returns.baseURL - Base URL of the API
-   * @returns {Array<Object>} returns.endpoints - Array of endpoint objects with enriched URL information
-   */
   app.get("/openapi.json", async (req, res) => {
     await initializationPromise;
     const baseURL = `${req.protocol}://${req.get("host")}`;
+    const configPath = path.join(process.cwd(), 'configuration.json');
+    let config = {};
+    if (fs.existsSync(configPath)) {
+      config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    }
 
     const enrichedEndpoints = allEndpoints.map((ep) => {
       let url = baseURL + ep.route;
@@ -172,7 +192,8 @@ function setupRoutes(app, endpoints) {
         const query = ep.params.map((p) => `${p}=YOUR_${p.toUpperCase()}`).join("&");
         url += "?" + query;
       }
-      return { ...ep, url };
+      const status = (config.endpointsStatus && config.endpointsStatus[ep.route]) || 'online';
+      return { ...ep, url, status };
     });
 
     res.status(200).json({
@@ -183,38 +204,8 @@ function setupRoutes(app, endpoints) {
     });
   });
 
-  /**
-   * POST /admin/unban
-   * @name POST /admin/unban
-   * @description Unbans a previously blocked IP address. Requires valid admin key.
-   * @route {POST} /admin/unban
-   * @param {express.Request} req - Express request object containing `ip` in body or query
-   * @param {express.Response} res - Express response object
-   * @bodyParam {string} ip - The IP address to unban (required)
-   * @header {string} X-Admin-Key - Admin key for authentication
-   * @returns {Object} JSON response indicating success or failure
-   * @example
-   * {
-   *   "ip": "1.2.3.4"
-   * }
-   * 
-   * {
-   *   "success": true,
-   *   "message": "IP 1.2.3.4 unbanned."
-   * }
-   */
   app.post("/admin/unban", express.json(), rateLimiter.adminUnbanHandler);
 
-
-
-
-  /**
-   * POST /files/upload
-   * @description Upload file ke server (disimpan sementara di folder "files")
-   * @route {POST} /files/upload
-   * @param {Buffer} file - File binary dikirim lewat form-data field "file"
-   * @returns {Object} JSON berisi URL akses file
-   */
   app.post("/files/upload", upload.single("file"), (req, res) => {
     if (!req.file) {
       return res.status(400).json({ success: false, message: "No file uploaded" });
@@ -229,12 +220,6 @@ function setupRoutes(app, endpoints) {
     }, 5 * 60 * 1000);
   });
 
-  /**
-   * GET /files/:filename
-   * @description Access uploaded files
-   * @route {GET} /files/:filename
-   * @returns {file} Sending the requested files
-   */
   app.get("/files/:filename", (req, res) => {
     const filePath = path.join(uploadDir, req.params.filename);
     if (!fs.existsSync(filePath)) {

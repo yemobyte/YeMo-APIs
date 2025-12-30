@@ -129,7 +129,8 @@
                     </ul>
                     <p class="leading-relaxed mt-3">
                         <a href="https://www.gnu.org/licenses/gpl-3.0.html"
-                            class="text-primary-400 hover:text-white underline font-bold" target="_blank">View Full
+                            class="text-primary-400 hover:text-white underline font-bold" target="_blank"
+                            rel="noopener">View Full
                             License</a>
                     </p>
                 </section>
@@ -179,7 +180,7 @@
         </div>
 
         <div class="text-center">
-            <a href="/docs" class="neo-btn py-3 px-6">← RETURN TO DOCS</a>
+            <a href="/" class="neo-btn py-3 px-6">← RETURN TO HOME</a>
         </div>
     </div>
     <script>
@@ -187,7 +188,7 @@
 
         let lastStartTime = null;
         setInterval(() => {
-            fetch('/__health').then(r => r.json()).then(d => {
+            fetch('/status').then(r => r.json()).then(d => {
                 if (!lastStartTime) lastStartTime = d.startTime;
                 else if (lastStartTime !== d.startTime) location.reload();
             }).catch(() => { });

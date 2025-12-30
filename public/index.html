@@ -143,6 +143,28 @@
             box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.5);
         }
 
+        .status-badge {
+            font-size: 0.6rem;
+            padding: 0.15rem 0.4rem;
+            font-weight: 700;
+            border: 2px solid;
+            box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-online {
+            background-color: #059669;
+            border-color: #34d399;
+            color: white;
+        }
+
+        .status-offline {
+            background-color: #dc2626;
+            border-color: #f87171;
+            color: white;
+        }
+
         .method-get {
             background-color: #059669;
             border-color: #34d399;
@@ -586,8 +608,8 @@
                 <div>© <span id="year-footer"></span> <span id="footer-text">YEMO API'S • BEYOND DOCUMENTATION</span>
                 </div>
                 <div class="flex gap-8">
-                    <a href="/legal/privacy-policy.html" class="hover:text-white transition-colors">Privacy</a>
-                    <a href="/legal/terms-of-service.html" class="hover:text-white transition-colors">Terms</a>
+                    <a href="/legal/privacy" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="/legal/terms" class="hover:text-white transition-colors">Terms</a>
                 </div>
             </div>
             <script>document.getElementById("year-footer").textContent = new Date().getFullYear();</script>
@@ -672,7 +694,7 @@
                         }).join(' ');
 
                         categoryContent += `
-                <div class="border-2 border-[#374151] bg-[#111827] p-5 hover:border-primary-500 transition-colors api-item group" 
+                <div class="border-2 border-[#374151] bg-[#111827] p-5 hover:border-primary-500 transition-colors api-item group ${endpoint.status === 'offline' ? 'opacity-75 grayscale-[0.5]' : ''}" 
                      data-method="${endpoint.methods[0]}" 
                      data-path="${endpoint.route}" 
                      data-alias="${endpoint.name}" 
@@ -683,12 +705,14 @@
                         <div class="flex items-center flex-wrap gap-3 mb-2">
                            ${methodBadges}
                            <h3 class="font-mono font-bold text-sm text-gray-200 break-all bg-[#0b0f19] px-2 py-1 border border-[#374151]">${endpoint.route}</h3>
+                           <span class="status-badge ${endpoint.status === 'online' ? 'status-online' : 'status-offline'}">${endpoint.status}</span>
                         </div>
                         <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-gray-700 pl-3">${endpoint.description}</p>
                     </div>
-                    <button onclick="toggleEndpoint(${categoryIndex}, ${endpointIndex})" 
-                            class="neo-btn px-3 py-1 text-xs self-start shrink-0 flex items-center gap-1">
-                      <span>TEST</span>
+                    <button onclick="${endpoint.status === 'online' ? `toggleEndpoint(${categoryIndex}, ${endpointIndex})` : ''}" 
+                            class="neo-btn px-3 py-1 text-xs self-start shrink-0 flex items-center gap-1 ${endpoint.status === 'offline' ? 'cursor-not-allowed opacity-50 bg-gray-700 border-gray-600' : ''}"
+                            ${endpoint.status === 'offline' ? 'disabled' : ''}>
+                      <span>${endpoint.status === 'online' ? 'TEST' : 'OFFLINE'}</span>
                       <span class="material-icons text-sm" id="endpoint-icon-${categoryIndex}-${endpointIndex}">expand_more</span>
                     </button>
                   </div>

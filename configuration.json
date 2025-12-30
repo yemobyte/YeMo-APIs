@@ -1,6 +1,6 @@
 {
     "notifications": {
-        "enabled": false,
+        "enabled": true,
         "title": "READY FOR THE CORE?",
         "message": "Explore the powerful YeMo API Engine. High performance, secure, and built for developers who demand the best.",
         "buttonText": "OK, COOL",
@@ -36,5 +36,8 @@
         "windowMs": 10000,
         "maxRequests": 25,
         "message": "Rate limit exceeded - your IP has been blocked."
+    },
+    "endpointsStatus": {
+        "/tools/upload": "online"
     }
 }

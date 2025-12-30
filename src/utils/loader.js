@@ -42,20 +42,20 @@ import { pathToFileURL } from "url";
  * @fileStructure
  * api/
  * ├── users/
- * │   ├── get.js          // GET /api/users/get
- * │   └── create.js       // POST /api/users/create
- * └── products/
- *     └── list.js         // GET /api/products/list
- * 
+ * │   ├── get.js          /* GET /api/users/get */
+ * │   └── create.js       /* POST /api/users/create */
+  * └── products /
+ *     └── list.js         /* GET /api/products/list */
+  * 
  * @endpointModuleFormat
- * export default {
- *   name: "Get User",
- *   description: "Retrieves user information by ID",
- *   category: "Users",
- *   methods: ["GET"],
- *   params: ["userId"],
- *   run: async (req, res) => {
- *     // Endpoint logic here
+  * export default {
+    *   name: "Get User",
+    *   description: "Retrieves user information by ID",
+    *   category: "Users",
+    *   methods: ["GET"],
+    *   params: ["userId"],
+    *   run: async (req, res) => {
+ *     /* Endpoint logic here */
  *   }
  * }
  */
@@ -99,8 +99,8 @@ export default async function loadEndpoints(dir, app) {
            * Generate the route path from the file system structure
            * @type {string}
            * @example
-           * // File: /project/api/users/get.js
-           * // Route: /api/users/get
+           * /* File: /project/api/users/get.js */
+           * /* Route: /api/users/get */
            */
           const routePath = fullPath
             .replace(path.join(process.cwd(), "api"), "")

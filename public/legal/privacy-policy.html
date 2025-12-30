@@ -197,7 +197,8 @@
                         This project is licensed under the GNU General Public License v3.0 (GPL-3.0). The source code is
                         publicly available.
                         <a href="https://www.gnu.org/licenses/gpl-3.0.html"
-                            class="text-primary-400 hover:text-white underline font-bold" target="_blank">View
+                            class="text-primary-400 hover:text-white underline font-bold" target="_blank"
+                            rel="noopener">View
                             License</a>
                     </p>
                 </section>
@@ -205,7 +206,7 @@
         </div>
 
         <div class="text-center">
-            <a href="/docs" class="neo-btn py-3 px-6">← RETURN TO DOCS</a>
+            <a href="/" class="neo-btn py-3 px-6">← RETURN TO HOME</a>
         </div>
     </div>
     <script>
@@ -213,7 +214,7 @@
 
         let lastStartTime = null;
         setInterval(() => {
-            fetch('/__health').then(r => r.json()).then(d => {
+            fetch('/status').then(r => r.json()).then(d => {
                 if (!lastStartTime) lastStartTime = d.startTime;
                 else if (lastStartTime !== d.startTime) location.reload();
             }).catch(() => { });
