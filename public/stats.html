@@ -194,22 +194,34 @@
         #mobile-menu {
             position: fixed;
             inset: 0;
-            background: rgba(17, 24, 39, 0.95);
-            -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
+            background: rgba(5, 5, 5, 0.98);
             z-index: 110;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 2.5rem;
-            border-left: 8px solid black;
-            transform: translateX(100%);
-            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            gap: 3rem;
+            transform: translateY(-100%);
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
         #mobile-menu.open {
-            transform: translateX(0);
+            transform: translateY(0);
+        }
+
+        #mobile-menu a {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: 3rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        #mobile-menu a:hover {
+            color: #6366f1;
         }
     </style>
     <script>
@@ -297,19 +309,12 @@
 
         <!-- Mobile Menu Overlay -->
         <div id="mobile-menu" class="md:hidden">
-            <button class="absolute top-8 right-8 text-white text-6xl font-black hover:scale-110 transition-transform"
-                onclick="toggleMobileMenu()">&times;</button>
-            <div class="flex flex-col items-center gap-12">
-                <a href="/"
-                    class="text-6xl font-black text-white hover:text-black transition-all tracking-tighter uppercase italic"
-                    onclick="toggleMobileMenu()">Home</a>
-                <a href="/docs"
-                    class="text-6xl font-black text-white hover:text-black transition-all tracking-tighter uppercase italic"
-                    onclick="toggleMobileMenu()">Docs</a>
-                <a href="https://github.com/yemobyte/YeMo-APIs" target="_blank" rel="noopener" title="View Source Code"
-                    class="text-6xl font-black text-white hover:text-black transition-all tracking-tighter uppercase italic"
-                    onclick="toggleMobileMenu()">Github</a>
-            </div>
+            <button class="absolute top-8 right-8 text-white text-4xl hover:text-primary-500 transition-colors"
+                onclick="toggleMobileMenu()"><i class="fas fa-times"></i></button>
+            <nav class="flex flex-col items-center gap-8">
+                <a href="/" onclick="toggleMobileMenu()">Home</a>
+                <a href="/docs" onclick="toggleMobileMenu()">Docs</a>
+            </nav>
         </div>
     </nav>
 
@@ -548,7 +553,7 @@
 
         async function fetchStats() {
             try {
-                const res = await fetch('/v1/system-stats');
+                const res = await fetch('/system-stats');
                 const data = await res.json();
 
                 document.getElementById('server-uptime').textContent = "Up: " + formatUptime(data.uptime);
@@ -604,7 +609,7 @@
 
         async function initConfiguration() {
             try {
-                const res = await fetch('/v1/configuration');
+                const res = await fetch('/configuration');
                 const config = await res.json();
 
                 if (config.website) {

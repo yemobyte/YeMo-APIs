@@ -83,7 +83,7 @@ const initializationPromise = (async function initializeAPI() {
 
 const SERVER_START_TIME = Date.now();
 
-app.get('/v1/status', (req, res) => {
+app.get('/status', (req, res) => {
   const start = process.hrtime();
   const diff = process.hrtime(start);
   const latency = (diff[0] * 1e9 + diff[1]) / 1e6;
@@ -96,7 +96,7 @@ app.get('/v1/status', (req, res) => {
   });
 });
 
-app.get('/v1/configuration', (req, res) => {
+app.get('/configuration', (req, res) => {
   try {
     const configPath = path.join(process.cwd(), 'configuration.json');
     const configData = fs.readFileSync(configPath, 'utf8');
@@ -123,7 +123,7 @@ initializationPromise.then(endpoints => {
 });
 
 function setupRoutes(app, endpoints) {
-  app.get('/v1/system-stats', async (req, res) => {
+  app.get('/system-stats', async (req, res) => {
     try {
       const [cpu, mem, osInfo] = await Promise.all([
         si.currentLoad(),

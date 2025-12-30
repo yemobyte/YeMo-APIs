@@ -66,7 +66,7 @@ export default async function loadEndpoints(dir, app) {
    * @type {Array<fs.Dirent>}
    */
   const files = fs.readdirSync(dir, { withFileTypes: true });
-  
+
   /**
    * Array to collect endpoint metadata
    * @type {Array<Object>}
@@ -103,7 +103,7 @@ export default async function loadEndpoints(dir, app) {
            * // File: /project/api/users/get.js
            * // Route: /api/users/get
            */
-          const routePath = "/api" + fullPath
+          const routePath = fullPath
             .replace(path.join(process.cwd(), "api"), "")
             .replace(/\.js$/, "")
             .replace(/\\/g, "/");
