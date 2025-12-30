@@ -271,8 +271,8 @@
                     class="w-10 h-10 bg-primary-600 flex items-center justify-center border-2 border-white shadow-[3px_3px_0px_0px_white] transition-transform group-hover:-translate-y-1 group-hover:-translate-x-1 group-hover:shadow-[5px_5px_0px_0px_white]">
                     <span class="font-sans font-black text-white text-xl uppercase tracking-tighter italic">Y</span>
                 </div>
-                <span class="font-sans font-black text-2xl tracking-tighter text-white uppercase italic">YeMo <span
-                        class="text-primary-400">API's</span></span>
+                <span class="font-sans font-black text-2xl tracking-tighter text-white uppercase italic"><span
+                        id="nav-title">YeMo</span> <span class="text-primary-400" id="nav-subtitle">API's</span></span>
             </a>
 
             <!-- Desktop Menu -->
@@ -599,6 +599,44 @@
 
         fetchStats();
         setInterval(fetchStats, 2000);
+
+        async function initConfiguration() {
+            try {
+                const res = await fetch('/v1/configuration');
+                const config = await res.json();
+
+                if (config.website) {
+                    if (config.website.title) document.title = config.website.title + " - Stats";
+                    if (document.getElementById('nav-title')) document.getElementById('nav-title').textContent = config.website.headerTitle;
+                    if (document.getElementById('nav-subtitle')) document.getElementById('nav-subtitle').textContent = config.website.headerSubtitle;
+                }
+
+                if (config.notifications && config.notifications.enabled) {
+                    const modal = document.getElementById('notification-docs');
+                    if (modal) {
+                        const title = modal.querySelector('h2');
+                        const message = modal.querySelector('p');
+                        const okBtn = modal.querySelector('button[onclick*="none"]');
+                        const sourceBtn = modal.querySelector('a[href*="github"]');
+
+                        if (title) title.innerHTML = config.notifications.title.replace('<br>', '<br><span class="text-black">') + '</span>';
+                        if (message) message.textContent = config.notifications.message;
+                        if (okBtn) okBtn.textContent = config.notifications.buttonText;
+                        if (sourceBtn) {
+                            sourceBtn.textContent = config.notifications.sourceCodeText;
+                            sourceBtn.href = config.notifications.sourceCodeUrl;
+                        }
+
+                        setTimeout(() => {
+                            modal.style.display = 'flex';
+                        }, 1500);
+                    }
+                }
+            } catch (e) {
+                console.error("Config load failed:", e);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', initConfiguration);
 
 
         function toggleMobileMenu() {

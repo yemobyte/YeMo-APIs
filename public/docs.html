@@ -317,6 +317,14 @@
         const configRes = await fetch('/v1/configuration');
         const config = await configRes.json();
 
+        if (config.website) {
+          document.title = config.website.title || document.title;
+          if (document.getElementById('nav-title')) document.getElementById('nav-title').textContent = config.website.headerTitle;
+          if (document.getElementById('nav-subtitle')) document.getElementById('nav-subtitle').textContent = config.website.headerSubtitle;
+          if (document.getElementById('page-title')) document.getElementById('page-title').textContent = `${config.website.title}`;
+          if (document.getElementById('footer-text')) document.getElementById('footer-text').textContent = config.website.footerText;
+        }
+
         if (config.notifications && config.notifications.enabled) {
           const modal = document.getElementById('notification-docs');
           const title = modal.querySelector('h2');
@@ -384,8 +392,8 @@
           class="w-10 h-10 bg-primary-600 flex items-center justify-center border-2 border-white shadow-[3px_3px_0px_0px_white] transition-transform group-hover:-translate-y-1 group-hover:-translate-x-1 group-hover:shadow-[5px_5px_0px_0px_white]">
           <span class="font-sans font-black text-white text-xl uppercase tracking-tighter italic">Y</span>
         </div>
-        <span class="font-sans font-black text-2xl tracking-tighter text-white uppercase italic">YeMo <span
-            class="text-primary-400">API's</span></span>
+        <span class="font-sans font-black text-2xl tracking-tighter text-white uppercase italic"><span
+            id="nav-title">YeMo</span> <span class="text-primary-400" id="nav-subtitle">API's</span></span>
       </a>
 
       <!-- Desktop Menu -->
@@ -428,7 +436,7 @@
   <main class="w-full max-w-full mx-auto px-4 md:px-12 lg:px-20 py-12 overflow-hidden">
     <div class="text-left mb-12" data-aos="fade-up">
       <h1 class="text-5xl font-black gradient-text mb-4 tracking-tight">
-        <span id="title">YeMo API's</span>
+        <span id="page-title">YeMo API's</span>
       </h1>
       <p class="text-gray-400 text-lg mb-6 border-l-4 border-primary-500 pl-4">
         <span id="description">Loading...</span>
@@ -552,7 +560,7 @@
       </div>
       <div
         class="max-w-full mx-auto mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">
-        <div>© <span id="year-footer"></span> YEMO API'S • BEYOND DOCUMENTATION</div>
+        <div>© <span id="year-footer"></span> <span id="footer-text">YEMO API'S • BEYOND DOCUMENTATION</span></div>
         <div class="flex gap-8">
           <a href="/legal/privacy-policy.html" class="hover:text-white transition-colors">Privacy</a>
           <a href="/legal/terms-of-service.html" class="hover:text-white transition-colors">Terms</a>

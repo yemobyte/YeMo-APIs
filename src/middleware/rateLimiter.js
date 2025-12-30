@@ -36,6 +36,7 @@ const LOG_DIR = path.join(process.cwd(), "logs");
 const BANNED_FILE = path.join(DATA_DIR, "banned-ips.json");
 const WHITELIST_FILE = path.join(DATA_DIR, "whitelist-ips.json");
 const REQUEST_LOG = path.join(LOG_DIR, "request-logs.log");
+const CONFIG_FILE = path.join(process.cwd(), "configuration.json");
 
 /**
  * Time window for rate limiting in milliseconds (default: 10 seconds)
@@ -58,6 +59,7 @@ const CLEANUP_INTERVAL_MS = 60 * 1000;
 const ipTimestamps = new Map();
 let banned = {};
 let whitelist = {};
+let config = {};
 
 function ensureFiles() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
@@ -113,6 +115,24 @@ fs.watch(BANNED_FILE, (eventType) => {
   if (eventType === 'change') {
     console.log('Banned IPs file changed, reloading...');
     loadBanned();
+  }
+});
+
+function loadConfig() {
+  try {
+    const raw = fs.readFileSync(CONFIG_FILE, "utf8");
+    config = raw ? JSON.parse(raw) : {};
+  } catch (err) {
+    console.error("Failed to load configuration file:", err);
+    config = {};
+  }
+}
+loadConfig();
+
+fs.watch(CONFIG_FILE, (eventType) => {
+  if (eventType === 'change') {
+    console.log('Configuration file changed, reloading...');
+    loadConfig();
   }
 });
 
@@ -203,6 +223,14 @@ function rateLimiterMiddleware(options = {}) {
   const windowMs = options.windowMs || WINDOW_MS;
 
   return (req, res, next) => {
+    // Dynamic config overrides defaults
+    const maxReq = (config.rateLimit && config.rateLimit.maxRequests) ? config.rateLimit.maxRequests : (options.maxRequests || MAX_REQUESTS);
+    const windowMs = (config.rateLimit && config.rateLimit.windowMs) ? config.rateLimit.windowMs : (options.windowMs || WINDOW_MS);
+
+    if (config.rateLimit && config.rateLimit.enabled === false) {
+      return next();
+    }
+
     const ip = req.ip || req.headers["x-forwarded-for"] || req.connection.remoteAddress || "unknown";
 
     if (whitelist[ip]) {
@@ -233,9 +261,10 @@ function rateLimiterMiddleware(options = {}) {
 
     if (recent.length > maxReq) {
       banIp(ip, `exceeded_${maxReq}_per_${windowMs}ms`);
+      const customMsg = (config.rateLimit && config.rateLimit.message) ? config.rateLimit.message : null;
       res.status(429).json({
         success: false,
-        error: `Rate limit exceeded - your IP has been blocked. Max ${maxReq} requests per ${windowMs / 1000}s.`,
+        error: customMsg || `Rate limit exceeded - your IP has been blocked. Max ${maxReq} requests per ${windowMs / 1000}s.`,
         note: "Contact the owner to request unblocking.",
       });
       return;

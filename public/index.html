@@ -346,8 +346,8 @@
                     class="w-10 h-10 bg-primary-600 flex items-center justify-center border-2 border-white shadow-[3px_3px_0px_0px_white] transition-transform group-hover:-translate-y-1 group-hover:-translate-x-1 group-hover:shadow-[5px_5px_0px_0px_white]">
                     <span class="font-sans font-black text-white text-xl uppercase tracking-tighter italic">Y</span>
                 </div>
-                <span class="font-sans font-black text-2xl tracking-tighter text-white uppercase italic">YeMo <span
-                        class="text-primary-400">API's</span></span>
+                <span class="font-sans font-black text-2xl tracking-tighter text-white uppercase italic"><span
+                        id="nav-title">YeMo</span> <span class="text-primary-400" id="nav-subtitle">API's</span></span>
             </a>
 
             <!-- Desktop Menu -->
@@ -399,11 +399,11 @@
 
                 <h1
                     class="text-4xl sm:text-6xl md:text-8xl font-sans font-black tracking-tighter leading-none text-white">
-                    YeMo <span class="gradient-text">API'S</span><br>
-                    <span class="text-2xl sm:text-4xl md:text-5xl opacity-80">NEXT-GEN ENGINE</span>
+                    <span id="hero-title">YeMo</span> <span class="gradient-text" id="hero-subtitle">API'S</span><br>
+                    <span class="text-2xl sm:text-4xl md:text-5xl opacity-80" id="hero-tagline">NEXT-GEN ENGINE</span>
                 </h1>
 
-                <p
+                <p id="hero-desc"
                     class="text-lg text-gray-400 font-medium max-w-xl mx-auto lg:mx-0 leading-relaxed border-l-4 border-gray-800 lg:pl-6 pl-0 border-none lg:border-solid">
                     Experience the future of development with YeMo API's. Our high-performance, auto-documented, and
                     secure engine provides the robust foundation your modern applications deserve. Fast, Reliable, and
@@ -586,7 +586,7 @@
         </div>
         <div
             class="max-w-full mx-auto mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] px-4 md:px-12 lg:px-20">
-            <div>© <span id="year"></span> YEMO API'S • BEYOND PERFORMANCE</div>
+            <div>© <span id="year"></span> <span id="footer-text">YEMO API'S • BEYOND PERFORMANCE</span></div>
             <div class="flex gap-8">
                 <a href="/legal/privacy-policy.html" class="hover:text-white transition-colors">Privacy</a>
                 <a href="/legal/terms-of-service.html" class="hover:text-white transition-colors">Terms</a>
@@ -692,6 +692,16 @@
                 }
 
                 /* feedbackButton is only on docs page per request */
+                if (config.website) {
+                    document.title = config.website.title || document.title;
+                    if (document.getElementById('nav-title')) document.getElementById('nav-title').textContent = config.website.headerTitle;
+                    if (document.getElementById('nav-subtitle')) document.getElementById('nav-subtitle').textContent = config.website.headerSubtitle;
+                    if (document.getElementById('hero-title')) document.getElementById('hero-title').textContent = config.website.heroTitle;
+                    if (document.getElementById('hero-subtitle')) document.getElementById('hero-subtitle').textContent = config.website.heroSubtitle;
+                    if (document.getElementById('hero-tagline')) document.getElementById('hero-tagline').textContent = config.website.heroTagline;
+                    if (document.getElementById('hero-desc')) document.getElementById('hero-desc').textContent = config.website.description;
+                    if (document.getElementById('footer-text')) document.getElementById('footer-text').textContent = config.website.footerText;
+                }
             } catch (e) {
                 console.error("Config failed:", e);
             }
