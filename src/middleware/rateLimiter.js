@@ -178,6 +178,11 @@ function appendLog(line) {
  * @param {string} [reason="rate_limit_exceeded"] - Reason for banning
  */
 function banIp(ip, reason = "rate_limit_exceeded") {
+  if (whitelist[ip]) {
+    console.log(`[Protection] Prevented banning of whitelisted IP: ${ip}`);
+    return;
+  }
+
   const now = new Date().toISOString();
   banned[ip] = {
     bannedAt: now,
