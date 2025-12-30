@@ -61,93 +61,122 @@ import { pathToFileURL } from "url";
  */
 export default async function loadEndpoints(dir, app) {
   /**
-   * Read directory contents synchronously
-   * @type {Array<fs.Dirent>}
-   */
-  const files = fs.readdirSync(dir, { withFileTypes: true });
-
-  /**
-   * Array to collect endpoint metadata
-   * @type {Array<Object>}
+   * Load file-based endpoints
    */
   const endpoints = [];
 
-  for (const file of files) {
-    /**
-     * Full path to the current file/directory
-     * @type {string}
-     */
-    const fullPath = path.join(dir, file.name);
+  try {
+    const files = fs.readdirSync(dir, { withFileTypes: true });
 
-    if (file.isDirectory()) {
-      /**
-       * Recursively load endpoints from subdirectory
-       * @type {Array<Object>}
-       */
-      const subEndpoints = await loadEndpoints(fullPath, app);
-      endpoints.push(...subEndpoints);
-    } else if (file.isFile() && file.name.endsWith(".js")) {
-      try {
-        /**
-         * Dynamically import the endpoint module
-         * @type {Object}
-         */
-        const module = (await import(pathToFileURL(fullPath))).default;
+    for (const file of files) {
+      const fullPath = path.join(dir, file.name);
 
-        if (typeof module.run === "function" || Array.isArray(module.run)) {
-          /**
-           * Generate the route path from the file system structure
-           * @type {string}
-           * @example
-           * // File: /project/api/users/get.js
-           * // Route: /api/users/get
-           */
-          const routePath = fullPath
-            .replace(path.join(process.cwd(), "api"), "")
-            .replace(/\.js$/, "")
-            .replace(/\\/g, "/");
+      if (file.isDirectory()) {
+        const subEndpoints = await loadEndpoints(fullPath, app);
+        endpoints.push(...subEndpoints);
+      } else if (file.isFile() && file.name.endsWith(".js")) {
+        try {
+          const module = (await import(pathToFileURL(fullPath))).default;
 
-          /**
-           * Supported HTTP methods for this endpoint
-           * @type {Array<string>}
-           * @default ["GET"]
-           */
-          const methods = module.methods || ["GET"];
+          if (typeof module.run === "function" || Array.isArray(module.run)) {
+            const routePath = fullPath
+              .replace(path.join(process.cwd(), "api"), "")
+              .replace(/\.js$/, "")
+              .replace(/\\/g, "/");
 
-          for (const method of methods) {
             /**
-             * Register the route with Express
-             * @param {string} routePath - The URL path for the endpoint
-             * @param {Function} handler - The endpoint handler function
+             * Check configuration for overrides (e.g. params)
              */
-            if (Array.isArray(module.run)) {
-              app[method.toLowerCase()](routePath, ...module.run);
-            } else {
-              app[method.toLowerCase()](routePath, (req, res) => module.run(req, res));
+            let endpointConfig = {};
+            try {
+              const configPath = path.join(process.cwd(), 'configuration.json');
+              if (fs.existsSync(configPath)) {
+                const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+                if (config.endpointConfig && config.endpointConfig[routePath]) {
+                  endpointConfig = config.endpointConfig[routePath];
+                }
+              }
+            } catch (ignore) { }
+
+            const methods = endpointConfig.methods || module.methods || ["GET"];
+            const params = endpointConfig.params || module.params || [];
+
+            for (const method of methods) {
+              if (Array.isArray(module.run)) {
+                app[method.toLowerCase()](routePath, ...module.run);
+              } else {
+                app[method.toLowerCase()](routePath, (req, res) => module.run(req, res));
+              }
+            }
+
+            console.log(`• endpoint loaded: ${routePath} [${methods.join(", ")}]`);
+
+            endpoints.push({
+              name: endpointConfig.name || module.name || path.basename(file.name, '.js'),
+              description: endpointConfig.description || module.description || "",
+              category: endpointConfig.category || module.category || "General",
+              route: routePath,
+              methods,
+              params,
+              paramsSchema: endpointConfig.paramsSchema || module.paramsSchema || {},
+            });
+          }
+        } catch (error) {
+          console.error(`Error loading endpoint ${fullPath}:`, error);
+        }
+      }
+    }
+  } catch (err) {
+    if (path.resolve(dir) !== path.resolve(path.join(process.cwd(), "api"))) {
+      console.error(`Error reading directory ${dir}:`, err);
+    }
+  }
+
+  /**
+   * Load dynamic endpoints from configuration.json (only at root call)
+   */
+  if (path.resolve(dir) === path.resolve(path.join(process.cwd(), "api"))) {
+    try {
+      const configPath = path.join(process.cwd(), 'configuration.json');
+      if (fs.existsSync(configPath)) {
+        const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+
+        if (config.customEndpoints && Array.isArray(config.customEndpoints)) {
+          for (const ep of config.customEndpoints) {
+            if (ep.route && ep.code) {
+              try {
+                /**
+                 * Create function from string (using Function constructor)
+                 * Note: This assumes the code body has access to req, res, and potentially other globals if passed.
+                 * For simplicity, we wrap it in an async function (req, res).
+                 */
+                const handler = new Function('return async function(req, res) { ' + ep.code + ' }')();
+                const methods = ep.methods || ["GET"];
+
+                for (const method of methods) {
+                  app[method.toLowerCase()](ep.route, handler);
+                }
+
+                console.log(`• dynamic endpoint loaded: ${ep.route} [${methods.join(", ")}]`);
+
+                endpoints.push({
+                  name: ep.name || "Dynamic Endpoint",
+                  description: ep.description || "Loaded from config",
+                  category: ep.category || "Custom",
+                  route: ep.route,
+                  methods,
+                  params: ep.params || [],
+                  paramsSchema: ep.paramsSchema || {},
+                });
+              } catch (e) {
+                console.error(`Failed to load dynamic endpoint ${ep.route}:`, e);
+              }
             }
           }
-
-          console.log(`• endpoint loaded: ${routePath} [${methods.join(", ")}]`);
-
-          /**
-           * Endpoint metadata object for documentation
-           * @type {Object}
-           */
-          const endpointInfo = {
-            name: module.name || path.basename(file.name, '.js'),
-            description: module.description || "",
-            category: module.category || "General",
-            route: routePath,
-            methods,
-            params: module.params || [],
-            paramsSchema: module.paramsSchema || {},
-          };
-
-          endpoints.push(endpointInfo);
         }
-      } catch (error) {
-        console.error(`Error loading endpoint ${fullPath}:`, error);
       }
+    } catch (e) {
+      console.error("Error loading dynamic endpoints:", e);
     }
   }
 
