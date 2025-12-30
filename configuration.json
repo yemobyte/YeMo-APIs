@@ -38,28 +38,6 @@
         "message": "Rate limit exceeded - your IP has been blocked."
     },
     "endpointsStatus": {
-        "/tools/upload": "online",
-        "/downloader/aio": "online",
-        "/test/config-echo": "online"
-    },
-    "endpointConfig": {
-        "/downloader/aio": {
-            "params": [
-                "url"
-            ]
-        }
-    },
-    "customEndpoints": [
-        {
-            "route": "/test/config-echo",
-            "method": "GET",
-            "name": "Config Echo",
-            "description": "Echoes back the input parameter, defined entirely in configuration.json",
-            "category": "Test",
-            "params": [
-                "msg"
-            ],
-            "code": "const msg = req.query.msg || 'Hello from config!'; res.json({ status: true, message: msg });"
-        }
-    ]
+        "/tools/upload": "online"
+    }
 }
